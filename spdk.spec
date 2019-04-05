@@ -3,7 +3,7 @@
 
 Name: spdk
 Version: 18.04
-Release: 1%{?dist}
+Release: 2%{?dist}
 Epoch: 0
 URL: http://spdk.io
 
@@ -92,7 +92,6 @@ BuildArch: noarch
 
 
 %prep
-# add -q
 %autosetup -n spdk-%{version} -p1
 
 
@@ -118,7 +117,7 @@ make -C doc
 %endif
 
 %install
-%make_install -j`nproc` prefix=%{_usr} libdir=%{_libdir} datadir=%{_datadir}
+%make_install %{?_smp_mflags} prefix=%{_prefix} libdir=%{_libdir} datadir=%{_datadir}
 
 # Install tools
 mkdir -p %{install_datadir}
@@ -139,6 +138,10 @@ mkdir -p %{install_sbindir}
 ln -sf -r %{install_datadir}/scripts/rpc.py %{install_sbindir}/%{name}-rpc
 ln -sf -r %{install_datadir}/scripts/spdkcli.py %{install_sbindir}/%{name}-cli
 
+# Install the fio_plugin
+mkdir -p %{install_datadir}/fio_plugin
+cp -r examples/nvme/fio_plugin/fio_plugin %{install_datadir}/fio_plugin/
+
 %if %{with doc}
 # Install doc
 mkdir -p %{install_docdir}
@@ -152,6 +155,7 @@ mv doc/output/html/ %{install_docdir}
 
 %files
 %{_bindir}/spdk_*
+%{_datadir}/%{name}/fio_plugin
 #%{_libdir}/*.so.*
 
 
@@ -173,6 +177,9 @@ mv doc/output/html/ %{install_docdir}
 
 
 %changelog
+* Fri Apr 05 2019 Brian J. Murrell <brian.murrell@intel.com> - 0:18.04-2
+- Include examples/nvme/fio_plugin
+
 * Thu Apr 04 2019 Brian J. Murrell <brian.murrell@intel.com> - 0:18.04-1
 - Initial RPM release
 - Add a patch to catch up from 18.04 to 051297114 until we can advance
