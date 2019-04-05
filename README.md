@@ -1,2 +1,2 @@
-# ompi
-RPM packaging of ompi
+# spdk
+RPM packaging of spdk
