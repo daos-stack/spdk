@@ -3,7 +3,7 @@
 
 Name: spdk
 Version: 18.04
-Release: 2%{?dist}
+Release: 3%{?dist}
 Epoch: 0
 URL: http://spdk.io
 
@@ -45,7 +45,7 @@ BuildRequires: fio-devel, fio-debuginfo
 BuildRequires: python, CUnit-devel
 
 # Install dependencies
-Requires: dpdk >= 17.11, numactl-libs, openssl-libs
+Requires: dpdk = 18.02, numactl-libs, openssl-libs
 Requires: libiscsi, libaio, libuuid
 # NVMe over Fabrics
 Requires: librdmacm, librdmacm
@@ -139,8 +139,9 @@ ln -sf -r %{install_datadir}/scripts/rpc.py %{install_sbindir}/%{name}-rpc
 ln -sf -r %{install_datadir}/scripts/spdkcli.py %{install_sbindir}/%{name}-cli
 
 # Install the fio_plugin
-mkdir -p %{install_datadir}/fio_plugin
-cp -r examples/nvme/fio_plugin/fio_plugin %{install_datadir}/fio_plugin/
+cp examples/nvme/fio_plugin/fio_plugin %{install_datadir}/
+# and the setup tool
+cp scripts/setup.sh %{install_datadir}/scripts/
 
 %if %{with doc}
 # Install doc
@@ -177,6 +178,12 @@ mv doc/output/html/ %{install_docdir}
 
 
 %changelog
+* Fri Apr 05 2019 Brian J. Murrell <brian.murrell@intel.com> - 0:18.04-3
+- examples/nvme/fio_plugin needs to go into /usr/share/spdk/
+- scripts/setup.sh needs to go into /usr/share/spdk/scripts/
+- Requires dpdk = 18.02 to ensure we get the required version
+  until we can get our dependencies caught up and in order
+
 * Fri Apr 05 2019 Brian J. Murrell <brian.murrell@intel.com> - 0:18.04-2
 - Include examples/nvme/fio_plugin
 
