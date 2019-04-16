@@ -3,7 +3,7 @@
 
 Name: spdk
 Version: 18.04
-Release: 3%{?dist}
+Release: 4%{?dist}
 Epoch: 0
 URL: http://spdk.io
 
@@ -52,6 +52,10 @@ Requires: librdmacm, librdmacm
 Requires(post): /sbin/ldconfig
 Requires(postun): /sbin/ldconfig
 
+# Very hacky workaround to rpmbuild not being able to autoprovides
+# for this
+Provides: libspdk.so()(64bit)
+
 %description
 The Storage Performance Development Kit provides a set of tools
 and libraries for writing high performance, scalable, user-mode storage
@@ -96,7 +100,7 @@ BuildArch: noarch
 
 
 %build
-./configure --prefix=%{_prefix} \
+./configure --prefix=%{_prefix}                                 \
 	--with-dpdk=/usr/share/dpdk/x86_64-default-linuxapp-gcc \
 	--with-fio=/usr/src/debug/fio-3.3/
 #	--with-fio=/usr
@@ -158,12 +162,12 @@ mv doc/output/html/ %{install_docdir}
 %{_bindir}/spdk_*
 %{_datadir}/%{name}/fio_plugin
 #%{_libdir}/*.so.*
+%{_libdir}/*.so
 
 
 %files devel
 %{_includedir}/%{name}
 %{_libdir}/*.a
-%{_libdir}/*.so
 
 
 %files tools
@@ -178,6 +182,11 @@ mv doc/output/html/ %{install_docdir}
 
 
 %changelog
+* Tue Apr 16 2019 Brian J. Murrell <brian.murrell@intel.com> - 0:18.04-4
+- Add hack to pseudo-version shared lib
+- Add hack to Provides: libspdk.so()(64bit) until I can figure
+  out why the autoprovides is not working
+
 * Fri Apr 05 2019 Brian J. Murrell <brian.murrell@intel.com> - 0:18.04-3
 - examples/nvme/fio_plugin needs to go into /usr/share/spdk/
 - scripts/setup.sh needs to go into /usr/share/spdk/scripts/
