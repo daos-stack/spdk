@@ -62,6 +62,19 @@ RUN zypper --non-interactive ar https://download.opensuse.org/repositories/devel
     zypper --non-interactive --gpg-auto-import-keys ref 'A project for basic libraries shared among multiple projects (SLE_12_SP3)'
 RUN zypper --non-interactive install libcmocka-devel
 
+# fio
+RUN zypper --non-interactive install libpmem-devel libaio-devel     \
+                                     libpmemblk-devel librbd-devel  \
+                                     libnuma-devel
+
+# isa-l
+RUN zypper --non-interactive install yasm
+
+# spdk
+RUN zypper --non-interactive ar --gpgcheck-allow-unsigned -f https://build.hpdd.intel.com/job/daos-stack/job/dpdk/job/PR-2/lastSuccessfulBuild/artifact/artifacts/sles12.3/ dpdk; \
+    zypper --non-interactive --gpg-auto-import-keys ref dpdk
+RUN zypper --non-interactive install dpdk-devel
+
 # force an upgrade to get any newly built RPMs
 ARG CACHEBUST=1
 RUN zypper --non-interactive up

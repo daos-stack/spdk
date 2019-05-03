@@ -32,7 +32,14 @@ ExclusiveArch: x86_64
 
 BuildRequires: gcc gcc-c++ make
 # dpdk 18.11 is in "extras" so pin it to our version
-BuildRequires: dpdk-devel < 18.11, numactl-devel
+BuildRequires: dpdk-devel < 18.11
+%if (0%{?rhel} >= 7)
+BuildRequires:  numactl-devel
+%else
+%if (0%{?suse_version} > 1315)
+BuildRequires:  libnuma-devel
+%endif
+%endif
 BuildRequires: libiscsi-devel, libaio-devel, openssl-devel, libuuid-devel
 BuildRequires: libibverbs-devel, librdmacm-devel
 %if %{with doc}
