@@ -74,7 +74,7 @@ RUN zypper --non-interactive install yasm
 RUN zypper --non-interactive ar --gpgcheck-allow-unsigned -f https://build.hpdd.intel.com/job/daos-stack/job/dpdk/job/PR-2/lastSuccessfulBuild/artifact/artifacts/sles12.3/ dpdk; \
     zypper --non-interactive ar --gpgcheck-allow-unsigned -f https://build.hpdd.intel.com/job/daos-stack/job/fio/job/PR-3/lastSuccessfulBuild/artifact/artifacts/sles12.3/ fio; \
     zypper --non-interactive --gpg-auto-import-keys ref dpdk fio
-RUN zypper --non-interactive install dpdk-devel fio-src libiscsi-devel
+RUN zypper --non-interactive install dpdk-devel fio-src libiscsi-devel cunit-devel
 
 # force an upgrade to get any newly built RPMs
 ARG CACHEBUST=1

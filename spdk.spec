@@ -43,7 +43,7 @@ BuildRequires: dpdk-devel < 18.11
 BuildRequires:  numactl-devel
 BuildRequires: CUnit-devel
 %else
-%if (0%{?suse_version} > 1315)
+%if (0%{?suse_version} >= 1315)
 BuildRequires:  libnuma-devel
 BuildRequires: cunit-devel
 %endif
