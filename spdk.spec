@@ -1,3 +1,9 @@
+# doesn't seem to work on sles 12.3: %{!?make_build:%define make_build %{__make} %{?_smp_mflags}}
+# so...
+%if 0%{?suse_version} <= 1320
+%define make_build  %{__make} %{?_smp_mflags}
+%endif
+
 # Build documentation package
 %bcond_with doc
 
