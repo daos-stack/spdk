@@ -35,9 +35,11 @@ BuildRequires: gcc gcc-c++ make
 BuildRequires: dpdk-devel < 18.11
 %if (0%{?rhel} >= 7)
 BuildRequires:  numactl-devel
+BuildRequires: CUnit-devel
 %else
 %if (0%{?suse_version} > 1315)
 BuildRequires:  libnuma-devel
+BuildRequires: cunit-devel
 %endif
 %endif
 BuildRequires: libiscsi-devel, libaio-devel, openssl-devel, libuuid-devel
@@ -45,11 +47,11 @@ BuildRequires: libibverbs-devel, librdmacm-devel
 %if %{with doc}
 BuildRequires: doxygen mscgen graphviz
 %endif
-# there is no actual real fio-devel so we hackly use fio-debuginfo's
-# /usr/src/debug/fio-3.3 as the stand-in until we can make a proper
+# there is no actual real fio-devel so we've hacked up an fio-src
+# to provide /usr/src/fio-3.3 as the stand-in until we can make a proper
 # fio-devel, and have spdk actually use it
-BuildRequires: fio-devel, fio-debuginfo
-BuildRequires: python, CUnit-devel
+BuildRequires: fio-src
+BuildRequires: python
 
 # Install dependencies
 Requires: dpdk = 18.02, numactl-libs, openssl-libs
@@ -109,7 +111,7 @@ BuildArch: noarch
 %build
 ./configure --prefix=%{_prefix}                                 \
 	--with-dpdk=/usr/share/dpdk/x86_64-default-linuxapp-gcc \
-	--with-fio=/usr/src/debug/fio-3.3/
+	--with-fio=/usr/src/fio-3.3/
 #	--with-fio=/usr
 #	--without-fio \
 #	--disable-tests \
@@ -189,6 +191,11 @@ mv doc/output/html/ %{install_docdir}
 
 
 %changelog
+* Fri May 03 2019 Brian J. Murrell <brian.murrell@intel.com> - 0:18.04-5
+- Support SLES 12.3
+  - BuildRequires cunit-devel
+  - Use fio-src instead of fio-debuginfo
+
 * Tue Apr 16 2019 Brian J. Murrell <brian.murrell@intel.com> - 0:18.04-4
 - Add hack to pseudo-version shared lib
 - Add hack to Provides: libspdk.so()(64bit) until I can figure
