@@ -67,4 +67,9 @@ gpgcheck = False\n\
 name=protobuf-c\n\
 baseurl=https://build.hpdd.intel.com/job/daos-stack/job/protobuf-c/job/PR-1/lastSuccessfulBuild/artifact/artifacts/centos7/\n\
 enabled=1\n\
+gpgcheck = False\n\
+[fio]\n\
+name=fio\n\
+baseurl=https://build.hpdd.intel.com/job/daos-stack/job/fio/job/PR-3/lastSuccessfulBuild/artifact/artifacts/centos7/\n\
+enabled=1\n\
 gpgcheck = False\n\"\"\"" >> /etc/mock/default.cfg
