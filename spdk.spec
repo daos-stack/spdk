@@ -9,7 +9,7 @@
 
 Name: spdk
 Version: 18.04
-Release: 4%{?dist}
+Release: 5%{?dist}
 Epoch: 0
 URL: http://spdk.io
 
