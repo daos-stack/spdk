@@ -9,7 +9,7 @@
 
 Name: spdk
 Version: 18.04
-Release: 6%{?dist}
+Release: 5%{?dist}
 Epoch: 0
 URL: http://spdk.io
 
@@ -61,7 +61,14 @@ BuildRequires: python
 
 # Install dependencies
 Requires: dpdk = 18.02, numactl-libs, openssl-libs
-Requires: libiscsi, libaio, libuuid
+%if (0%{?rhel} >= 7)
+Requires: libiscsi
+%else
+%if (0%{?suse_version} >= 1315)
+Requires: libiscsi7
+%endif
+%endif
+Requires: libaio, libuuid
 # NVMe over Fabrics
 Requires: librdmacm, librdmacm
 Requires(post): /sbin/ldconfig
@@ -203,16 +210,14 @@ mv doc/output/html/ %{install_docdir}
 
 
 %changelog
-* Fri May 03 2019 Brian J. Murrell <brian.murrell@intel.com> - 0:18.04-6
-- SLES 12.3:
-  - Requires for python-configshell
-  - Remove Requires for pexpect because trying to get a pexpect
-    package for SLES 12.3 is just ridiculous
-
 * Fri May 03 2019 Brian J. Murrell <brian.murrell@intel.com> - 0:18.04-5
 - Support SLES 12.3
   - BuildRequires cunit-devel
   - Use fio-src instead of fio-debuginfo
+  - Requires for python-configshell
+  - Remove Requires for pexpect because trying to get a pexpect
+    package for SLES 12.3 is just ridiculous
+  - libiscsi -> libiscsi7
 
 * Tue Apr 16 2019 Brian J. Murrell <brian.murrell@intel.com> - 0:18.04-4
 - Add hack to pseudo-version shared lib
