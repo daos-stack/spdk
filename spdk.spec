@@ -62,13 +62,12 @@ BuildRequires: python
 # Install dependencies
 Requires: dpdk = 18.02, numactl-libs, openssl-libs
 %if (0%{?rhel} >= 7)
-Requires: libiscsi
+Requires:libaio, libuuid, libiscsi
 %else
 %if (0%{?suse_version} >= 1315)
-Requires: libiscsi7
+Requires: libaio1, libuuid1, libiscsi7
 %endif
 %endif
-Requires: libaio, libuuid
 # NVMe over Fabrics
 Requires: librdmacm, librdmacm
 Requires(post): /sbin/ldconfig
@@ -210,7 +209,7 @@ mv doc/output/html/ %{install_docdir}
 
 
 %changelog
-* Fri May 03 2019 Brian J. Murrell <brian.murrell@intel.com> - 0:18.04-5
+* Tue May 07 2019 Brian J. Murrell <brian.murrell@intel.com> - 0:18.04-5
 - Support SLES 12.3
   - BuildRequires cunit-devel
   - Use fio-src instead of fio-debuginfo
@@ -218,6 +217,8 @@ mv doc/output/html/ %{install_docdir}
   - Remove Requires for pexpect because trying to get a pexpect
     package for SLES 12.3 is just ridiculous
   - libiscsi -> libiscsi7
+  - libuuid -> libuuid1
+  - libaio -> libaio1
 
 * Tue Apr 16 2019 Brian J. Murrell <brian.murrell@intel.com> - 0:18.04-4
 - Add hack to pseudo-version shared lib
