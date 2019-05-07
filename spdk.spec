@@ -9,7 +9,7 @@
 
 Name: spdk
 Version: 18.04
-Release: 5%{?dist}
+Release: 6%{?dist}
 Epoch: 0
 URL: http://spdk.io
 
@@ -89,10 +89,16 @@ developing applications with the Storage Performance Development Kit.
 
 %package tools
 Summary: Storage Performance Development Kit tools files
+%if (0%{?rhel} >= 7)
 %if "%{use_python2}" == "0"
 Requires: %{name}%{?_isa} = %{package_version} python3 python3-configshell python3-pexpect
 %else
 Requires: %{name}%{?_isa} = %{package_version} python python-configshell pexpect
+%endif
+%else
+%if (0%{?suse_version} >= 1315)
+Requires: %{name}%{?_isa} = %{package_version} python python-configshell # pexpect
+%endif
 %endif
 BuildArch: noarch
 
@@ -197,6 +203,12 @@ mv doc/output/html/ %{install_docdir}
 
 
 %changelog
+* Fri May 03 2019 Brian J. Murrell <brian.murrell@intel.com> - 0:18.04-6
+- SLES 12.3:
+  - Requires for python-configshell
+  - Remove Requires for pexpect because trying to get a pexpect
+    package for SLES 12.3 is just ridiculous
+
 * Fri May 03 2019 Brian J. Murrell <brian.murrell@intel.com> - 0:18.04-5
 - Support SLES 12.3
   - BuildRequires cunit-devel
