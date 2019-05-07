@@ -97,7 +97,7 @@ Requires: %{name}%{?_isa} = %{package_version} python python-configshell pexpect
 %endif
 %else
 %if (0%{?suse_version} >= 1315)
-Requires: %{name}%{?_isa} = %{package_version} python python-configshell # pexpect
+Requires: %{name}%{?_isa} = %{package_version} python python-configshell
 %endif
 %endif
 BuildArch: noarch
