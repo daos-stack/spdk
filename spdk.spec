@@ -9,7 +9,7 @@
 
 Name: spdk
 Version: 18.04
-Release: 5%{?dist}
+Release: 6%{?dist}
 Epoch: 0
 URL: http://spdk.io
 
@@ -211,7 +211,7 @@ mv doc/output/html/ %{install_docdir}
 
 
 %changelog
-* Tue May 07 2019 Brian J. Murrell <brian.murrell@intel.com> - 0:18.04-5
+* Tue May 07 2019 Brian J. Murrell <brian.murrell@intel.com> - 0:18.04-6
 - Support SLES 12.3
   - BuildRequires cunit-devel
   - Use fio-src instead of fio-debuginfo
