@@ -66,7 +66,7 @@ Requires: numactl-libs, openssl-libs
 Requires:libaio, libuuid, libiscsi
 %else
 %if (0%{?suse_version} >= 1315)
-Requires: libnuma1, libopenssl1
+Requires: libnuma1, libopenssl1_0_0
 Requires: libaio1, libuuid1, libiscsi7
 %endif
 %endif
@@ -222,7 +222,7 @@ mv doc/output/html/ %{install_docdir}
   - libuuid -> libuuid1
   - libaio -> libaio1
   - numactl-libs -> libnuma1
-  - openssl-libs -> libopenssl1
+  - openssl-libs -> libopenssl1_0_0
 
 * Tue Apr 16 2019 Brian J. Murrell <brian.murrell@intel.com> - 0:18.04-4
 - Add hack to pseudo-version shared lib
