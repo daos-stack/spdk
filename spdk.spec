@@ -60,11 +60,13 @@ BuildRequires: fio-src
 BuildRequires: python
 
 # Install dependencies
-Requires: dpdk = 18.02, numactl-libs, openssl-libs
+Requires: dpdk = 18.02
 %if (0%{?rhel} >= 7)
+Requires: numactl-libs, openssl-libs
 Requires:libaio, libuuid, libiscsi
 %else
 %if (0%{?suse_version} >= 1315)
+Requires: libnuma1, libopenssl1
 Requires: libaio1, libuuid1, libiscsi7
 %endif
 %endif
@@ -219,6 +221,8 @@ mv doc/output/html/ %{install_docdir}
   - libiscsi -> libiscsi7
   - libuuid -> libuuid1
   - libaio -> libaio1
+  - numactl-libs -> libnuma1
+  - openssl-libs -> libopenssl1
 
 * Tue Apr 16 2019 Brian J. Murrell <brian.murrell@intel.com> - 0:18.04-4
 - Add hack to pseudo-version shared lib
