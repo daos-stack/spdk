@@ -64,14 +64,16 @@ Requires: dpdk = 18.02
 %if (0%{?rhel} >= 7)
 Requires: numactl-libs, openssl-libs
 Requires:libaio, libuuid, libiscsi
+# NVMe over Fabrics
+Requires: librdmacm
 %else
 %if (0%{?suse_version} >= 1315)
 Requires: libnuma1, libopenssl1_0_0
 Requires: libaio1, libuuid1, libiscsi7
-%endif
-%endif
 # NVMe over Fabrics
-Requires: librdmacm, librdmacm
+Requires: librdmacm1
+%endif
+%endif
 Requires(post): /sbin/ldconfig
 Requires(postun): /sbin/ldconfig
 
@@ -223,6 +225,7 @@ mv doc/output/html/ %{install_docdir}
   - libaio -> libaio1
   - numactl-libs -> libnuma1
   - openssl-libs -> libopenssl1_0_0
+  - librdmacm -> librdmacm1
 
 * Tue Apr 16 2019 Brian J. Murrell <brian.murrell@intel.com> - 0:18.04-4
 - Add hack to pseudo-version shared lib
