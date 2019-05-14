@@ -1,9 +1,15 @@
+# doesn't seem to work on sles 12.3: %{!?make_build:%define make_build %{__make} %{?_smp_mflags}}
+# so...
+%if 0%{?suse_version} <= 1320
+%define make_build  %{__make} %{?_smp_mflags}
+%endif
+
 # Build documentation package
 %bcond_with doc
 
 Name: spdk
 Version: 18.04
-Release: 4%{?dist}
+Release: 6%{?dist}
 Epoch: 0
 URL: http://spdk.io
 
@@ -32,23 +38,42 @@ ExclusiveArch: x86_64
 
 BuildRequires: gcc gcc-c++ make
 # dpdk 18.11 is in "extras" so pin it to our version
-BuildRequires: dpdk-devel < 18.11, numactl-devel
+BuildRequires: dpdk-devel < 18.11
+%if (0%{?rhel} >= 7)
+BuildRequires:  numactl-devel
+BuildRequires: CUnit-devel
+%else
+%if (0%{?suse_version} >= 1315)
+BuildRequires:  libnuma-devel
+BuildRequires: cunit-devel
+%endif
+%endif
 BuildRequires: libiscsi-devel, libaio-devel, openssl-devel, libuuid-devel
 BuildRequires: libibverbs-devel, librdmacm-devel
 %if %{with doc}
 BuildRequires: doxygen mscgen graphviz
 %endif
-# there is no actual real fio-devel so we hackly use fio-debuginfo's
-# /usr/src/debug/fio-3.3 as the stand-in until we can make a proper
+# there is no actual real fio-devel so we've hacked up an fio-src
+# to provide /usr/src/fio-3.3 as the stand-in until we can make a proper
 # fio-devel, and have spdk actually use it
-BuildRequires: fio-devel, fio-debuginfo
-BuildRequires: python, CUnit-devel
+BuildRequires: fio-src
+BuildRequires: python
 
 # Install dependencies
-Requires: dpdk = 18.02, numactl-libs, openssl-libs
-Requires: libiscsi, libaio, libuuid
+Requires: dpdk = 18.02
+%if (0%{?rhel} >= 7)
+Requires: numactl-libs, openssl-libs
+Requires:libaio, libuuid, libiscsi
 # NVMe over Fabrics
-Requires: librdmacm, librdmacm
+Requires: librdmacm
+%else
+%if (0%{?suse_version} >= 1315)
+Requires: libnuma1, libopenssl1_0_0
+Requires: libaio1, libuuid1, libiscsi7
+# NVMe over Fabrics
+Requires: librdmacm1
+%endif
+%endif
 Requires(post): /sbin/ldconfig
 Requires(postun): /sbin/ldconfig
 
@@ -74,10 +99,16 @@ developing applications with the Storage Performance Development Kit.
 
 %package tools
 Summary: Storage Performance Development Kit tools files
+%if (0%{?rhel} >= 7)
 %if "%{use_python2}" == "0"
 Requires: %{name}%{?_isa} = %{package_version} python3 python3-configshell python3-pexpect
 %else
 Requires: %{name}%{?_isa} = %{package_version} python python-configshell pexpect
+%endif
+%else
+%if (0%{?suse_version} >= 1315)
+Requires: %{name}%{?_isa} = %{package_version} python python-configshell
+%endif
 %endif
 BuildArch: noarch
 
@@ -102,7 +133,7 @@ BuildArch: noarch
 %build
 ./configure --prefix=%{_prefix}                                 \
 	--with-dpdk=/usr/share/dpdk/x86_64-default-linuxapp-gcc \
-	--with-fio=/usr/src/debug/fio-3.3/
+	--with-fio=/usr/src/fio-3.3/
 #	--with-fio=/usr
 #	--without-fio \
 #	--disable-tests \
@@ -182,6 +213,20 @@ mv doc/output/html/ %{install_docdir}
 
 
 %changelog
+* Tue May 07 2019 Brian J. Murrell <brian.murrell@intel.com> - 0:18.04-6
+- Support SLES 12.3
+  - BuildRequires cunit-devel
+  - Use fio-src instead of fio-debuginfo
+  - Requires for python-configshell
+  - Remove Requires for pexpect because trying to get a pexpect
+    package for SLES 12.3 is just ridiculous
+  - libiscsi -> libiscsi7
+  - libuuid -> libuuid1
+  - libaio -> libaio1
+  - numactl-libs -> libnuma1
+  - openssl-libs -> libopenssl1_0_0
+  - librdmacm -> librdmacm1
+
 * Tue Apr 16 2019 Brian J. Murrell <brian.murrell@intel.com> - 0:18.04-4
 - Add hack to pseudo-version shared lib
 - Add hack to Provides: libspdk.so()(64bit) until I can figure
