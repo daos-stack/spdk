@@ -31,7 +31,7 @@ RUN zypper --non-interactive ar --gpgcheck-allow-unsigned -f https://build.hpdd.
 RUN zypper --non-interactive install dpdk-devel fio-src libiscsi-devel       \
                                      cunit-devel libnuma-devel openssl-devel \
                                      libaio-devel libuuid-devel              \
-                                     rdma-core-devel
+                                     rdma-core-devel gcc-c++
 
 # force an upgrade to get any newly built RPMs
 ARG CACHEBUST=1
