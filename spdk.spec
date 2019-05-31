@@ -176,7 +176,9 @@ ln -sf -r %{install_datadir}/scripts/spdkcli.py %{install_sbindir}/%{name}-cli
 # Install the fio_plugin
 cp examples/nvme/fio_plugin/fio_plugin %{install_datadir}/
 # and the setup tool
-cp scripts/setup.sh %{install_datadir}/scripts/
+cp scripts/{setup,common}.sh %{install_datadir}/scripts/
+mkdir -p %{install_datadir}/include/spdk/
+cp include/spdk/pci_ids.h %{install_datadir}/include/spdk/
 
 %if %{with doc}
 # Install doc
@@ -202,6 +204,7 @@ mv doc/output/html/ %{install_docdir}
 
 
 %files tools
+%{_datadir}/%{name}/include
 %{_datadir}/%{name}/scripts
 %{_sbindir}/%{name}-rpc
 %{_sbindir}/%{name}-cli
@@ -213,6 +216,9 @@ mv doc/output/html/ %{install_docdir}
 
 
 %changelog
+* Wed May 29 2019 Brian J. Murrell <brian.murrell@intel.com> - 0:18.04-7
+- tools package needs to have scripts/common.sh and include/spdk/pci_ids.h
+
 * Tue May 07 2019 Brian J. Murrell <brian.murrell@intel.com> - 0:18.04-6
 - Support SLES 12.3
   - BuildRequires cunit-devel
