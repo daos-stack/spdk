@@ -25,8 +25,11 @@ RUN zypper --non-interactive install make rpm-build curl createrepo git    \
                                      lsb-release autoconf automake libtool \
                                      ca-certificates-mozilla
 # spdk
-RUN zypper --non-interactive ar --gpgcheck-allow-unsigned -f https://build.hpdd.intel.com/job/daos-stack/job/dpdk/job/master/lastSuccessfulBuild/artifact/artifacts/sles12.3/ dpdk; \
-    zypper --non-interactive ar --gpgcheck-allow-unsigned -f https://build.hpdd.intel.com/job/daos-stack/job/fio/job/master/lastSuccessfulBuild/artifact/artifacts/sles12.3/ fio;   \
+ARG JENKINS_URL=""
+RUN zypper --non-interactive ar --gpgcheck-allow-unsigned -f \
+    ${JENKINS_URL}job/daos-stack/job/dpdk/job/master/lastSuccessfulBuild/artifact/artifacts/sles12.3/ dpdk; \
+    zypper --non-interactive ar --gpgcheck-allow-unsigned -f \
+    ${JENKINS_URL}job/daos-stack/job/fio/job/master/lastSuccessfulBuild/artifact/artifacts/sles12.3/ fio;   \
     zypper --non-interactive --gpg-auto-import-keys ref dpdk fio
 RUN zypper --non-interactive install dpdk-devel fio-src libiscsi-devel       \
                                      cunit-devel libnuma-devel openssl-devel \
