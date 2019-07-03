@@ -1,0 +1,40 @@
+#
+# Copyright 2019, Intel Corporation
+#
+# 'recipe' for Docker to build an Debian package
+#
+# Pull base image
+FROM ubuntu:18.04
+Maintainer John.E.Malmberg <John.E.Malmberg@intel.com>
+
+# Install basic tools
+RUN apt-get update && DEBIAN_FRONTEND=noninteractive apt-get install -y \
+            autoconf bash curl debhelper dh-make dpkg-dev doxygen gcc \
+            git git-buildpackage locales make patch rpm wget
+
+# SPDK
+RUN apt-get update && DEBIAN_FRONTEND=noninteractive apt-get install -y \
+            dh-python doxygen graphviz g++ mscgen \
+            libaio-dev libcunit1-dev libibverbs-dev libiscsi-dev \
+            libnuma-dev librdmacm-dev libssl-dev \
+            python python3 quilt uuid-dev fio
+
+ARG JENKINS_URL=""
+ENV JENKINS_PATH="${JENKINS_URL}/job/daos-stack/job"
+ENV JENKINS_ART="lastSuccessfulBuild/artifact/artifacts"
+
+ARG DPDKBRANCH="PR-4"
+ENV DPDK_ART=\
+"${JENKINS_PATH}/dpdk/job/${DPDKBRANCH}/${JENKINS_ART}/ubuntu18.04"
+
+RUN curl -sS -f -L -O ${DPDK_ART}/dpdk_18.02-1_amd64.deb; \
+    curl -sS -f -L -O ${DPDK_ART}/dpdk1_18.02-1_amd64.deb; \
+    curl -sS -f -L -O ${DPDK_ART}/dpdk-dev_18.02-1_amd64.deb ; \
+    apt-get update && DEBIAN_FRONTEND=noninteractive apt-get install -y \
+      ./dpdk*_amd64.deb
+
+
+# force an upgrade to get any newly built packages
+ARG CACHEBUST=1
+RUN apt-get update && DEBIAN_FRONTEND=noninteractive apt-get upgrade -y; \
+    apt-get autoremove -y

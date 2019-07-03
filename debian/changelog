@@ -1,0 +1,7 @@
+spdk (18.04-1) unstable; urgency=medium
+
+  [ John Malmberg ]
+  * Patched Upstream release v18.04-634-g0512971
+  * Experimental build for daos-stack project
+
+ -- John Malmberg <john.e.malmberg@intel.com>  Mon, 01 Jul 2019 14:19:41 +0000
