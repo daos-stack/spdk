@@ -1,0 +1,82 @@
+#!/usr/bin/make -f
+# See debhelper(7) (uncomment to enable)
+# output every command that modifies files on the build system.
+#export DH_VERBOSE = 1
+
+
+# see FEATURE AREAS in dpkg-buildflags(1)
+#export DEB_BUILD_MAINT_OPTIONS = hardening=+all
+
+# see ENVIRONMENT in dpkg-buildflags(1)
+# package maintainers to append CFLAGS
+#export DEB_CFLAGS_MAINT_APPEND  = -Wall -pedantic
+# package maintainers to append LDFLAGS
+#export DEB_LDFLAGS_MAINT_APPEND = -Wl,--as-needed
+
+name := spdk
+prefix := /usr
+datadir := $(prefix)/share
+sbindir := $(prefix)/sbin
+includedir := $(prefix)/include
+libdir := $(prefix)/lib/$(DEB_BUILD_MULTIARCH)
+buildroot := debian/tmp
+install_datadir := $(buildroot)$(datadir)/$(name)
+install_sbindir := $(buildroot)$(sbindir)
+install_includedir := $(buildroot)$(includedir)
+install_libdir := $(buildroot)$(libdir)
+fio_src := $(shell pwd)/../fio
+
+%:
+	dh $@ --with python2,python3
+
+override_dh_build:
+	make all
+
+override_dh_auto_install:
+	mkdir -p $(install_datadir)
+	find scripts -type f \
+	  -regextype egrep -regex '.*(spdkcli|rpc).*[.]py' \
+          -exec cp --parents -t $(install_datadir) {} ";"
+	find $(install_datadir)/scripts -type f \
+	  -regextype egrep -regex '.*([.]py|[.]sh)' \
+          -exec sed -i -E '1s@#!/usr/bin/env (.*)@#!/usr/bin/\1@' {} +
+	mkdir -p $(install_sbindir)
+	ln -sf -r $(install_datadir)/scripts/rpc.py \
+	  $(install_sbindir)/$(name)-rpc
+	ln -sf -r $(install_datadir)/scripts/spdkcli.py \
+	  $(install_sbindir)/$(name)-cli
+	cp examples/nvme/fio_plugin/fio_plugin \
+	  $(install_datadir)/$(DEB_BUILD_MULTIARCH)-fio_nvme_plugin
+	ln -sf -r $(install_datadir)/$(DEB_BUILD_MULTIARCH)-fio_nvme_plugin \
+	  $(install_datadir)/fio_plugin
+	cp scripts/common.sh $(install_datadir)/scripts/
+	cp scripts/setup.sh $(install_datadir)/scripts/
+	mkdir -p $(install_datadir)/include/spdk/
+	cp include/spdk/pci_ids.h $(install_datadir)/include/spdk/
+	mkdir -p $(install_includedir)/spdk
+	cp include/spdk/* $(install_includedir)/spdk
+	mkdir -p $(install_libdir)
+	cp build/lib/libspdk.so $(install_libdir)
+	cp build/lib/*.a $(install_libdir)
+	chmod 644 $(install_datadir)/scripts/rpc/*.py
+
+override_dh_auto_configure:
+	./configure \
+	    --prefix=/usr \
+	    --with-dpdk=/usr/share/dpdk/x86_64-default-linuxapp-gcc \
+	    --with-fio=$(fio_src)
+
+override_dh_auto_clean:
+	if [ -e intel-ipsec-mb ] ;then chmod 700 intel-ipsec-mb ;fi
+	if [ -e .pc/intel-ipsec-mb ] ;then chmod 700 .pc/intel-ipsec-mb ;fi
+	rm -f lib/virtio/virtio_user/vhost_user.o
+	rm -f CONFIG.local
+	rm -f PYTHON_COMMAND
+	rm -f lib/virtio/virtio_user/vhost_user.d
+	rm -f examples/bdev/fio_plugin/fio_plugin
+	rm -f examples/bdev/fio_plugin/fio_plugin.o
+	rm -f examples/nvme/fio_plugin/fio_plugin
+	rm -f examples/nvme/fio_plugin/fio_plugin.o
+	rm -f examples/bdev/fio_plugin/fio_plugin.d
+	rm -f examples/nvme/fio_plugin/fio_plugin.d
+	dh_auto_clean

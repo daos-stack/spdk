@@ -1,0 +1,4 @@
+usr/share/spdk/include
+usr/share/spdk/scripts
+usr/sbin/spdk-rpc
+usr/sbin/spdk-cli
