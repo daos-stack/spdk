@@ -1,4 +1,4 @@
-# doesn't seem to work on sles 12.3: %{!?make_build:%define make_build %{__make} %{?_smp_mflags}}
+# doesn't seem to work on sles 12.3: #{!?make_build:#define make_build #{__make} #{?_smp_mflags}}
 # so...
 %if 0%{?suse_version} <= 1320
 %define make_build  %{__make} %{?_smp_mflags}
@@ -9,7 +9,7 @@
 
 Name: spdk
 Version: 18.04
-Release: 6%{?dist}
+Release: 8%{?dist}
 Epoch: 0
 URL: http://spdk.io
 
@@ -53,27 +53,12 @@ BuildRequires: libibverbs-devel, librdmacm-devel
 %if %{with doc}
 BuildRequires: doxygen mscgen graphviz
 %endif
-# there is no actual real fio-devel so we've hacked up an fio-src
-# to provide /usr/src/fio-3.3 as the stand-in until we can make a proper
+# this isn't really a -devel package.  we've hacked up a fio-devel
+# to provide /usr/src/fio-3.3 as the stand-in until there is a proper
 # fio-devel, and have spdk actually use it
-BuildRequires: fio-src
+BuildRequires: fio-devel
 BuildRequires: python
 
-# Install dependencies
-Requires: dpdk = 18.02
-%if (0%{?rhel} >= 7)
-Requires: numactl-libs, openssl-libs
-Requires:libaio, libuuid, libiscsi
-# NVMe over Fabrics
-Requires: librdmacm
-%else
-%if (0%{?suse_version} >= 1315)
-Requires: libnuma1, libopenssl1_0_0
-Requires: libaio1, libuuid1, libiscsi7
-# NVMe over Fabrics
-Requires: librdmacm1
-%endif
-%endif
 Requires(post): /sbin/ldconfig
 Requires(postun): /sbin/ldconfig
 
@@ -99,15 +84,20 @@ developing applications with the Storage Performance Development Kit.
 
 %package tools
 Summary: Storage Performance Development Kit tools files
+Requires: %{name}%{?_isa} = %{package_version}
 %if (0%{?rhel} >= 7)
 %if "%{use_python2}" == "0"
-Requires: %{name}%{?_isa} = %{package_version} python3 python3-configshell python3-pexpect
+Requires: python3 python3-configshell python3-pexpect
 %else
-Requires: %{name}%{?_isa} = %{package_version} python python-configshell pexpect
+Requires: python python-configshell pexpect
 %endif
 %else
+%if (0%{?suse_version} >= 1500)
+Requires: python2-configshell-fb
+%else
 %if (0%{?suse_version} >= 1315)
-Requires: %{name}%{?_isa} = %{package_version} python python-configshell
+Requires: python python-configshell
+%endif
 %endif
 %endif
 BuildArch: noarch
@@ -194,7 +184,7 @@ mv doc/output/html/ %{install_docdir}
 %files
 %{_bindir}/spdk_*
 %{_datadir}/%{name}/fio_plugin
-#%{_libdir}/*.so.*
+#{_libdir}/*.so.*
 %{_libdir}/*.so
 
 
@@ -216,6 +206,8 @@ mv doc/output/html/ %{install_docdir}
 
 
 %changelog
+* Wed Oct 23 2019 Brian J. Murrell <brian.murrell@intel.com> - 0:18.04-8
+- fio-src -> fio-devel
 * Wed May 29 2019 Brian J. Murrell <brian.murrell@intel.com> - 0:18.04-7
 - tools package needs to have scripts/common.sh and include/spdk/pci_ids.h
 
