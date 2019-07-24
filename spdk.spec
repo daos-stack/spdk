@@ -8,13 +8,13 @@
 %bcond_with doc
 
 Name: spdk
-Version: 18.04
-Release: 8%{?dist}
+Version: 19.04.1
+Release: 1%{?dist}
 Epoch: 0
 URL: http://spdk.io
 
-Source: https://github.com/spdk/spdk/archive/v%{version}.tar.gz
-Patch1: %{name}-051297114.patch
+Source: https://github.com/%{name}/%{name}/archive/v%{version}.tar.gz
+Patch1: %{name}-export-set-thread.patch
 
 Summary: Set of libraries and utilities for high performance user-mode storage
 
@@ -38,7 +38,7 @@ ExclusiveArch: x86_64
 
 BuildRequires: gcc gcc-c++ make
 # dpdk 18.11 is in "extras" so pin it to our version
-BuildRequires: dpdk-devel < 18.11
+BuildRequires: dpdk-devel = 19.02
 %if (0%{?rhel} >= 7)
 BuildRequires:  numactl-devel
 BuildRequires: CUnit-devel
@@ -59,12 +59,11 @@ BuildRequires: doxygen mscgen graphviz
 BuildRequires: fio-devel
 BuildRequires: python
 
+# Install dependencies
+Requires: dpdk = 19.02
+
 Requires(post): /sbin/ldconfig
 Requires(postun): /sbin/ldconfig
-
-# Very hacky workaround to rpmbuild not being able to autoprovides
-# for this
-Provides: libspdk.so()(64bit)
 
 %description
 The Storage Performance Development Kit provides a set of tools
@@ -75,6 +74,7 @@ applications.
 %package devel
 Summary: Storage Performance Development Kit development files
 Requires: %{name}%{?_isa} = %{package_version}
+Requires: dpdk-devel = 19.02
 Provides: %{name}-static%{?_isa} = %{package_version}
 
 %description devel
@@ -121,19 +121,16 @@ BuildArch: noarch
 
 
 %build
-./configure --prefix=%{_prefix}                                 \
-	--with-dpdk=/usr/share/dpdk/x86_64-default-linuxapp-gcc \
-	--with-fio=/usr/src/fio-3.3/
-#	--with-fio=/usr
-#	--without-fio \
-#	--disable-tests \
-#	--with-vhost \
-#	--without-pmdk \
-#	--without-vpp \
-#	--without-rbd \
-#	--with-rdma \
-#	--with-iscsi-initiator \
-#	--without-vtune
+./configure --with-dpdk=/usr/share/dpdk/x86_64-default-linuxapp-gcc \
+            --with-fio=/usr/src/fio-3.3/ \
+            --with-vhost \
+            --without-pmdk \
+            --without-vpp \
+            --without-rbd \
+            --with-rdma \
+            --with-shared \
+            --with-iscsi-initiator \
+            --without-vtune
 
 %make_build all
 
@@ -183,14 +180,15 @@ mv doc/output/html/ %{install_docdir}
 
 %files
 %{_bindir}/spdk_*
+%dir %{_datadir}/%{name}
 %{_datadir}/%{name}/fio_plugin
-#{_libdir}/*.so.*
-%{_libdir}/*.so
+%{_libdir}/*.so.*
 
 
 %files devel
 %{_includedir}/%{name}
 %{_libdir}/*.a
+%{_libdir}/*.so
 
 
 %files tools
@@ -206,8 +204,13 @@ mv doc/output/html/ %{install_docdir}
 
 
 %changelog
+* Fri Oct 25 2019 Brian J. Murrell <brian.murrell@intel.com> - 0:19.04.1-1
+- New upstream release
+- Add spdk-export-set-thread.patch
+
 * Wed Oct 23 2019 Brian J. Murrell <brian.murrell@intel.com> - 0:18.04-8
 - fio-src -> fio-devel
+
 * Wed May 29 2019 Brian J. Murrell <brian.murrell@intel.com> - 0:18.04-7
 - tools package needs to have scripts/common.sh and include/spdk/pci_ids.h
 
