@@ -14,7 +14,6 @@ Epoch: 0
 URL: http://spdk.io
 
 Source: https://github.com/%{name}/%{name}/archive/v%{version}.tar.gz
-Patch1: %{name}-export-set-thread.patch
 
 Summary: Set of libraries and utilities for high performance user-mode storage
 
@@ -206,7 +205,6 @@ mv doc/output/html/ %{install_docdir}
 %changelog
 * Fri Oct 25 2019 Brian J. Murrell <brian.murrell@intel.com> - 0:19.04.1-1
 - New upstream release
-- Add spdk-export-set-thread.patch
 
 * Wed Oct 23 2019 Brian J. Murrell <brian.murrell@intel.com> - 0:18.04-8
 - fio-src -> fio-devel
