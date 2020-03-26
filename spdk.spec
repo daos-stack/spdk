@@ -8,7 +8,7 @@
 %bcond_with doc
 
 Name: spdk
-Version: 19.04.1
+Version: 20.10.1
 Release: 1%{?dist}
 Epoch: 0
 URL: http://spdk.io
@@ -36,8 +36,7 @@ License: BSD
 ExclusiveArch: x86_64
 
 BuildRequires: gcc gcc-c++ make
-# dpdk 18.11 is in "extras" so pin it to our version
-BuildRequires: dpdk-devel = 19.02
+BuildRequires: dpdk-devel = 19.11
 %if (0%{?rhel} >= 7)
 BuildRequires:  numactl-devel
 BuildRequires: CUnit-devel
@@ -52,14 +51,10 @@ BuildRequires: libibverbs-devel, librdmacm-devel
 %if %{with doc}
 BuildRequires: doxygen mscgen graphviz
 %endif
-# this isn't really a -devel package.  we've hacked up a fio-devel
-# to provide /usr/src/fio-3.3 as the stand-in until there is a proper
-# fio-devel, and have spdk actually use it
-BuildRequires: fio-devel
 BuildRequires: python
 
 # Install dependencies
-Requires: dpdk = 19.02
+Requires: dpdk = 19.11
 
 Requires(post): /sbin/ldconfig
 Requires(postun): /sbin/ldconfig
@@ -73,7 +68,7 @@ applications.
 %package devel
 Summary: Storage Performance Development Kit development files
 Requires: %{name}%{?_isa} = %{package_version}
-Requires: dpdk-devel = 19.02
+Requires: dpdk-devel = 19.11
 Provides: %{name}-static%{?_isa} = %{package_version}
 
 %description devel
@@ -121,8 +116,7 @@ BuildArch: noarch
 
 %build
 ./configure --with-dpdk=/usr/share/dpdk/x86_64-default-linuxapp-gcc \
-            --with-fio=/usr/src/fio-3.3/ \
-            --with-vhost \
+            --without-vhost \
             --without-pmdk \
             --without-vpp \
             --without-rbd \
@@ -159,9 +153,7 @@ mkdir -p %{install_sbindir}
 ln -sf -r %{install_datadir}/scripts/rpc.py %{install_sbindir}/%{name}-rpc
 ln -sf -r %{install_datadir}/scripts/spdkcli.py %{install_sbindir}/%{name}-cli
 
-# Install the fio_plugin
-cp examples/nvme/fio_plugin/fio_plugin %{install_datadir}/
-# and the setup tool
+# install the setup tool
 cp scripts/{setup,common}.sh %{install_datadir}/scripts/
 mkdir -p %{install_datadir}/include/spdk/
 cp include/spdk/pci_ids.h %{install_datadir}/include/spdk/
@@ -180,7 +172,6 @@ mv doc/output/html/ %{install_docdir}
 %files
 %{_bindir}/spdk_*
 %dir %{_datadir}/%{name}
-%{_datadir}/%{name}/fio_plugin
 %{_libdir}/*.so.*
 
 
@@ -203,6 +194,10 @@ mv doc/output/html/ %{install_docdir}
 
 
 %changelog
+* Thu Mar 26 2020 Tom Nabarro <tom.nabarro@intel.com> - 0:20.10.1-1
+- Upgrade to enable SPDK via VFIO as non-root w/ CentOS 7.7.
+- Remove fio_plugin from build.
+
 * Fri Oct 25 2019 Brian J. Murrell <brian.murrell@intel.com> - 0:19.04.1-1
 - New upstream release
 
