@@ -36,6 +36,7 @@ License: BSD
 ExclusiveArch: x86_64
 
 BuildRequires: gcc gcc-c++ make
+# dpdk 18.11 is in "extras" so pin it to our version
 BuildRequires: dpdk-devel = 19.11
 %if (0%{?rhel} >= 7)
 BuildRequires:  numactl-devel
