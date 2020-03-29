@@ -116,7 +116,7 @@ BuildArch: noarch
 
 
 %build
-./configure --with-dpdk=/usr/share/dpdk/x86_64-default-linuxapp-gcc \
+./configure --with-dpdk=/usr/share/dpdk/x86_64-native-linuxapp-gcc \
             --without-vhost \
             --without-pmdk \
             --without-vpp \
