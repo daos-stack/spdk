@@ -138,23 +138,23 @@ make -C doc
 %make_install %{?_smp_mflags} prefix=%{_prefix} libdir=%{_libdir} datadir=%{_datadir}
 
 # Install tools
-mkdir -p %{install_datadir}
-find scripts -type f -regextype egrep -regex '.*(spdkcli|rpc).*[.]py' \
-	-exec cp --parents -t %{install_datadir} {} ";"
+mkdir -p %{install_datadir}/scripts
+#find scripts -type f -regextype egrep -regex '.*(spdkcli|rpc).*[.]py' \
+#	-exec cp --parents -t %{install_datadir} {} ";"
 
 # env is banned - replace '/usr/bin/env anything' with '/usr/bin/anything'
-find %{install_datadir}/scripts -type f -regextype egrep -regex '.*([.]py|[.]sh)' \
-	-exec sed -i -E '1s@#!/usr/bin/env (.*)@#!/usr/bin/\1@' {} +
+#find %{install_datadir}/scripts -type f -regextype egrep -regex '.*([.]py|[.]sh)' \
+#	-exec sed -i -E '1s@#!/usr/bin/env (.*)@#!/usr/bin/\1@' {} +
 
-%if "%{use_python2}" == "1"
-find %{install_datadir}/scripts -type f -regextype egrep -regex '.*([.]py)' \
-	-exec sed -i -E '1s@#!/usr/bin/python3@#!/usr/bin/python2@' {} +
-%endif
+#%if "%{use_python2}" == "1"
+#find %{install_datadir}/scripts -type f -regextype egrep -regex '.*([.]py)' \
+#	-exec sed -i -E '1s@#!/usr/bin/python3@#!/usr/bin/python2@' {} +
+#%endif
 
 # synlinks to tools
-mkdir -p %{install_sbindir}
-ln -sf -r %{install_datadir}/scripts/rpc.py %{install_sbindir}/%{name}-rpc
-ln -sf -r %{install_datadir}/scripts/spdkcli.py %{install_sbindir}/%{name}-cli
+#mkdir -p %{install_sbindir}
+#ln -sf -r %{install_datadir}/scripts/rpc.py %{install_sbindir}/%{name}-rpc
+#ln -sf -r %{install_datadir}/scripts/spdkcli.py %{install_sbindir}/%{name}-cli
 
 # install the setup tool
 cp scripts/{setup,common}.sh %{install_datadir}/scripts/
@@ -187,8 +187,8 @@ mv doc/output/html/ %{install_docdir}
 %files tools
 %{_datadir}/%{name}/include
 %{_datadir}/%{name}/scripts
-%{_sbindir}/%{name}-rpc
-%{_sbindir}/%{name}-cli
+#%{_sbindir}/%{name}-rpc
+#%{_sbindir}/%{name}-cli
 
 %if %{with doc}
 %files doc
