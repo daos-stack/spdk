@@ -116,7 +116,9 @@ BuildArch: noarch
 
 
 %build
-./configure --with-dpdk=/usr/share/dpdk/x86_64-default-linux-gcc \
+./configure --prefix=%{_prefix} \
+            --disable-tests \
+            --with-dpdk=/usr/share/dpdk/x86_64-default-linux-gcc \
             --without-vhost \
             --without-crypto \
             --without-pmdk \
@@ -139,22 +141,6 @@ make -C doc
 
 # Install tools
 mkdir -p %{install_datadir}/scripts
-#find scripts -type f -regextype egrep -regex '.*(spdkcli|rpc).*[.]py' \
-#	-exec cp --parents -t %{install_datadir} {} ";"
-
-# env is banned - replace '/usr/bin/env anything' with '/usr/bin/anything'
-#find %{install_datadir}/scripts -type f -regextype egrep -regex '.*([.]py|[.]sh)' \
-#	-exec sed -i -E '1s@#!/usr/bin/env (.*)@#!/usr/bin/\1@' {} +
-
-#%if "%{use_python2}" == "1"
-#find %{install_datadir}/scripts -type f -regextype egrep -regex '.*([.]py)' \
-#	-exec sed -i -E '1s@#!/usr/bin/python3@#!/usr/bin/python2@' {} +
-#%endif
-
-# synlinks to tools
-#mkdir -p %{install_sbindir}
-#ln -sf -r %{install_datadir}/scripts/rpc.py %{install_sbindir}/%{name}-rpc
-#ln -sf -r %{install_datadir}/scripts/spdkcli.py %{install_sbindir}/%{name}-cli
 
 # install the setup tool
 cp scripts/{setup,common}.sh %{install_datadir}/scripts/
@@ -187,8 +173,6 @@ mv doc/output/html/ %{install_docdir}
 %files tools
 %{_datadir}/%{name}/include
 %{_datadir}/%{name}/scripts
-#%{_sbindir}/%{name}-rpc
-#%{_sbindir}/%{name}-cli
 
 %if %{with doc}
 %files doc
@@ -200,6 +184,7 @@ mv doc/output/html/ %{install_docdir}
 * Thu Mar 26 2020 Tom Nabarro <tom.nabarro@intel.com> - 0:20.01.1-1
 - Upgrade to enable SPDK via VFIO as non-root w/ CentOS 7.7.
 - Remove fio_plugin from build.
+- Remove unused cli/rpc tool scripts from build.
 
 * Fri Oct 25 2019 Brian J. Murrell <brian.murrell@intel.com> - 0:19.04.1-1
 - New upstream release
