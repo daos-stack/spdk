@@ -118,12 +118,14 @@ BuildArch: noarch
 %build
 ./configure --with-dpdk=/usr/share/dpdk/x86_64-default-linux-gcc \
             --without-vhost \
+            --without-crypto \
             --without-pmdk \
             --without-vpp \
             --without-rbd \
             --with-rdma \
             --with-shared \
-            --with-iscsi-initiator \
+            --without-iscsi-initiator \
+            --without-isal \
             --without-vtune
 
 %make_build all
