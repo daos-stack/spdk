@@ -142,6 +142,15 @@ make -C doc
 # Install tools
 mkdir -p %{install_datadir}/scripts
 
+## env is banned - replace '/usr/bin/env anything' with '/usr/bin/anything'
+#find %{install_datadir}/scripts -type f -regextype egrep -regex '.*([.]py|[.]sh)' \
+#       -exec sed -i -E '1s@#!/usr/bin/env (.*)@#!/usr/bin/\1@' {} +
+
+#%if "%{use_python2}" == "1"
+#find %{install_datadir}/scripts -type f -regextype egrep -regex '.*([.]py)' \
+#       -exec sed -i -E '1s@#!/usr/bin/python3@#!/usr/bin/python2@' {} +
+#%endif
+
 # install the setup tool
 cp scripts/{setup,common}.sh %{install_datadir}/scripts/
 mkdir -p %{install_datadir}/include/spdk/
@@ -181,7 +190,7 @@ mv doc/output/html/ %{install_docdir}
 
 
 %changelog
-* Thu Mar 26 2020 Tom Nabarro <tom.nabarro@intel.com> - 0:20.01.1-1
+* Fri Apr 03 2020 Tom Nabarro <tom.nabarro@intel.com> - 0:20.01.1-1
 - Upgrade to enable SPDK via VFIO as non-root w/ CentOS 7.7.
 - Remove fio_plugin from build.
 - Remove unused cli/rpc tool scripts from build.
