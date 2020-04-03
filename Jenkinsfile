@@ -41,5 +41,4 @@
 //@Library(value="pipeline-lib@your_branch") _
 
 // centos8: No matching package to install: 'fio-devel'
-packageBuildingPipelineDAOS(['distros': ['centos7', 'leap15'],
-                             'daos_test_branch': 'tanabarr/spdk-upgrade-v20_01'])
+packageBuildingPipelineDAOS(['distros': ['centos7', 'leap15']])
