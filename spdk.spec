@@ -9,7 +9,7 @@
 
 Name: spdk
 Version: 19.04.1
-Release: 1%{?dist}
+Release: 2%{?dist}
 Epoch: 0
 URL: http://spdk.io
 
@@ -30,7 +30,11 @@ Summary: Set of libraries and utilities for high performance user-mode storage
 %define use_python2 0
 %endif
 
+%if (0%{?suse_version} > 0)
+License: BSD-3-Clause
+%else
 License: BSD
+%endif
 
 # Only x86_64 is supported
 ExclusiveArch: x86_64
@@ -178,6 +182,7 @@ mv doc/output/html/ %{install_docdir}
 
 
 %files
+%license LICENSE
 %{_bindir}/spdk_*
 %dir %{_datadir}/%{name}
 %{_datadir}/%{name}/fio_plugin
@@ -185,12 +190,14 @@ mv doc/output/html/ %{install_docdir}
 
 
 %files devel
+%license LICENSE
 %{_includedir}/%{name}
 %{_libdir}/*.a
 %{_libdir}/*.so
 
 
 %files tools
+%license LICENSE
 %{_datadir}/%{name}/include
 %{_datadir}/%{name}/scripts
 %{_sbindir}/%{name}-rpc
@@ -198,11 +205,16 @@ mv doc/output/html/ %{install_docdir}
 
 %if %{with doc}
 %files doc
+%license LICENSE
 %{_docdir}/%{name}
 %endif
 
 
 %changelog
+* Tue Jun 16 2020 Brian J. Murrell <brian.murrell@intel.com> - 0:19.04.1-2
+- Add %license macro to packages
+- Update License: for SUSE builds
+
 * Fri Oct 25 2019 Brian J. Murrell <brian.murrell@intel.com> - 0:19.04.1-1
 - New upstream release
 
