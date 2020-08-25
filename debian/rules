@@ -1,0 +1,48 @@
+#!/usr/bin/make -f
+
+#export DH_VERBOSE = 1
+
+export DEB_BUILD_MAINT_OPTIONS = hardening=+all
+
+%:
+	dh $@
+
+override_dh_auto_clean:
+	# initial make distclean fails due to:
+	if [ ! -f mk/config.mk ]; then     \
+	    echo "Skipping dh_auto_clean"; \
+	else                               \
+	    dh_auto_clean;                 \
+	fi
+
+#override_dh_installchangelogs:
+#	dh_installchangelogs Release_notes.txt
+#
+#ifeq (,$(findstring nocheck, $(DEB_BUILD_OPTIONS)))
+#override_dh_auto_test:
+#	$(MAKE) check
+#endif
+#
+override_dh_auto_configure:
+	./configure --prefix=/usr \
+	            --disable-tests \
+	            --without-vhost \
+	            --without-crypto \
+	            --without-pmdk \
+	            --without-vpp \
+	            --without-rbd \
+	            --with-rdma \
+	            --with-shared \
+	            --without-iscsi-initiator \
+	            --without-isal \
+	            --without-vtune \
+	            --with-dpdk # =$$PWD/dpdk
+
+#override_dh_auto_build:
+#	make V=1 # -j 8
+
+override_dh_auto_install:
+	dh_auto_install -- prefix=/usr libdir=/lib/x86_64-linux-gnu/ datadir=/usr/share
+
+override_dh_missing:
+	dh_missing --fail-missing
