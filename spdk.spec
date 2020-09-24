@@ -15,6 +15,8 @@ URL: http://spdk.io
 
 Source: https://github.com/%{name}/%{name}/archive/v%{version}.tar.gz
 
+Patch0: spdk-build-with-installed-dpkg.patch
+
 Summary: Set of libraries and utilities for high performance user-mode storage
 
 %define package_version %{epoch}:%{version}-%{release}
