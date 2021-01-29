@@ -192,7 +192,7 @@ mv doc/output/html/ %{install_docdir}
 
 
 %changelog
-* Thu Jan 28 2021 Tom Nabarro <tom.nabarro@intel.com> - 0:21.01.rc1-1
+* Thu Jan 28 2021 Tom Nabarro <tom.nabarro@intel.com> - 0:21.01~rc1-1
 - Upgrade to pull in DPDK update to fix CVEs.
 
 * Fri Apr 03 2020 Tom Nabarro <tom.nabarro@intel.com> - 0:20.01.1-1
