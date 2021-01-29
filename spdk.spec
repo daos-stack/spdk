@@ -8,7 +8,7 @@
 %bcond_with doc
 
 Name: spdk
-Version: 21.01-rc1
+Version: 21.01~rc1
 Release: 1%{?dist}
 Epoch: 0
 URL: http://spdk.io
