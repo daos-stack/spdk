@@ -8,7 +8,7 @@
 %bcond_with doc
 
 Name: spdk
-Version: 21.01~rc1
+Version: 21.01
 Release: 1%{?dist}
 Epoch: 0
 URL: http://spdk.io
@@ -192,7 +192,7 @@ mv doc/output/html/ %{install_docdir}
 
 
 %changelog
-* Thu Jan 28 2021 Tom Nabarro <tom.nabarro@intel.com> - 0:21.01~rc1-1
+* Wed Feb 03 2021 Tom Nabarro <tom.nabarro@intel.com> - 0:21.01-1
 - Upgrade to pull in DPDK update to fix CVEs.
 
 * Fri Apr 03 2020 Tom Nabarro <tom.nabarro@intel.com> - 0:20.01.1-1
