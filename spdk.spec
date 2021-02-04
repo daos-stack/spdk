@@ -15,8 +15,6 @@ URL: http://spdk.io
 
 Source: https://github.com/%{name}/%{name}/archive/v%{version}.tar.gz
 
-Patch0: spdk-build-with-installed-dpkg.patch
-
 Summary: Set of libraries and utilities for high performance user-mode storage
 
 %define package_version %{epoch}:%{version}-%{release}
@@ -114,13 +112,13 @@ BuildArch: noarch
 
 
 %prep
-%autosetup -n spdk-%{version} -p1
+%autosetup -n spdk-%{version}
 
 
 %build
 ./configure --prefix=%{_prefix} \
             --disable-tests \
-            --with-dpdk=/usr/share/dpdk/x86_64-default-linux-gcc \
+            #--with-dpdk=/usr/share/dpdk/x86_64-default-linux-gcc \
             --without-vhost \
             --without-crypto \
             --without-pmdk \
