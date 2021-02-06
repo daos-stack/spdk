@@ -139,23 +139,23 @@ endif
 
 $(DL_NAME)-$(DL_VERSION).tar.$(SRC_EXT).asc: $(SPEC) $(CALLING_MAKEFILE)
 	rm -f ./$(DL_NAME)-*.tar.{gz,bz*,xz}.asc
-	curl -f -L -O '$(SOURCE).asc'
+	$(SPECTOOL) -g $(SPEC)
 
 $(DL_NAME)-$(DL_VERSION).tar.$(SRC_EXT).sig: $(SPEC) $(CALLING_MAKEFILE)
 	rm -f ./$(DL_NAME)-*.tar.{gz,bz*,xz}.sig
-	curl -f -L -O '$(SOURCE).sig'
+	$(SPECTOOL) -g $(SPEC)
 
 $(DL_NAME)-$(DL_VERSION).tar.$(SRC_EXT): $(SPEC) $(CALLING_MAKEFILE)
 	rm -f ./$(DL_NAME)-*.tar.{gz,bz*,xz}
-	curl -f -L -O '$(SOURCE)'
+	$(SPECTOOL) -g $(SPEC)
 
 v$(DL_VERSION).tar.$(SRC_EXT): $(SPEC) $(CALLING_MAKEFILE)
 	rm -f ./v*.tar.{gz,bz*,xz}
-	curl -f -L -O '$(SOURCE)'
+	$(SPECTOOL) -g $(SPEC)
 
 $(DL_VERSION).tar.$(SRC_EXT): $(SPEC) $(CALLING_MAKEFILE)
 	rm -f ./*.tar.{gz,bz*,xz}
-	curl -f -L -O '$(SOURCE)'
+	$(SPECTOOL) -g $(SPEC)
 
 $(DEB_TOP)/%: % | $(DEB_TOP)/
 
@@ -361,6 +361,7 @@ packaging_check:
 	          --exclude \*.code-workspace                   \
 	          --exclude install                             \
 	          --exclude packaging                           \
+	          --exclude utils                               \
 	          -bur $(PACKAGING_CHECK_DIR)/ packaging/; then \
 	    exit 1;                                             \
 	fi

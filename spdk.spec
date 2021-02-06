@@ -15,6 +15,7 @@ URL: http://spdk.io
 
 Source: https://github.com/%{name}/%{name}/archive/v%{version}.tar.gz
 
+Patch0: spdk-21.01-build-dpdk-do-not-assume-libdir-is-always-lib.patch
 Summary: Set of libraries and utilities for high performance user-mode storage
 
 %define package_version %{epoch}:%{version}-%{release}
@@ -36,7 +37,7 @@ License: BSD
 ExclusiveArch: x86_64
 
 BuildRequires: gcc gcc-c++ make
-# dpdk 20.11 is in "extras" so pin it to our version
+# dpdk 18.11 is in "extras" so pin it to our version
 BuildRequires: dpdk-devel = 20.11
 %if (0%{?rhel} >= 7)
 BuildRequires:  numactl-devel
@@ -112,17 +113,16 @@ BuildArch: noarch
 
 
 %prep
-%autosetup -n spdk-%{version}
+%autosetup -n spdk-%{version} -p1
 
 
 %build
 ./configure --prefix=%{_prefix} \
             --disable-tests \
-            #--with-dpdk=/usr/share/dpdk/x86_64-default-linux-gcc \
+            --with-dpdk=/usr \
             --without-vhost \
             --without-crypto \
             --without-pmdk \
-            --without-vpp \
             --without-rbd \
             --with-rdma \
             --with-shared \
