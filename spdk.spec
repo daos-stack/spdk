@@ -25,11 +25,7 @@ Summary: Set of libraries and utilities for high performance user-mode storage
 %define install_docdir %{buildroot}/%{_docdir}/%{name}
 
 # Distros that don't support python3 will use python2
-%if "%{dist}" == ".el7"
-%define use_python2 1
-%else
 %define use_python2 0
-%endif
 
 License: BSD
 

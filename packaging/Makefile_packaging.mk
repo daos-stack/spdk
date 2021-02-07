@@ -139,33 +139,23 @@ endif
 
 $(DL_NAME)-$(DL_VERSION).tar.$(SRC_EXT).asc: $(SPEC) $(CALLING_MAKEFILE)
 	rm -f ./$(DL_NAME)-*.tar.{gz,bz*,xz}.asc
-	if ! $(SPECTOOL) -g $(SPEC); then
-	    cat $@;
-	fi;
+	$(SPECTOOL) -g $(SPEC)
 
 $(DL_NAME)-$(DL_VERSION).tar.$(SRC_EXT).sig: $(SPEC) $(CALLING_MAKEFILE)
 	rm -f ./$(DL_NAME)-*.tar.{gz,bz*,xz}.sig
-	if ! $(SPECTOOL) -g $(SPEC); then
-	    cat $@;
-	fi;
+	$(SPECTOOL) -g $(SPEC)
 
 $(DL_NAME)-$(DL_VERSION).tar.$(SRC_EXT): $(SPEC) $(CALLING_MAKEFILE)
 	rm -f ./$(DL_NAME)-*.tar.{gz,bz*,xz}
-	if ! $(SPECTOOL) -g $(SPEC); then
-	    cat $@;
-	fi;
+	$(SPECTOOL) -g $(SPEC)
 
 v$(DL_VERSION).tar.$(SRC_EXT): $(SPEC) $(CALLING_MAKEFILE)
 	rm -f ./v*.tar.{gz,bz*,xz}
-	if ! $(SPECTOOL) -g $(SPEC); then
-	    cat $@;
-	fi;
+	$(SPECTOOL) -g $(SPEC)
 
 $(DL_VERSION).tar.$(SRC_EXT): $(SPEC) $(CALLING_MAKEFILE)
 	rm -f ./*.tar.{gz,bz*,xz}
-	if ! $(SPECTOOL) -g $(SPEC); then
-	    cat $@;
-	fi;
+	$(SPECTOOL) -g $(SPEC)
 
 $(DEB_TOP)/%: % | $(DEB_TOP)/
 
