@@ -49,7 +49,11 @@ BuildRequires: libibverbs-devel, librdmacm-devel
 %if %{with doc}
 BuildRequires: doxygen mscgen graphviz
 %endif
+%if (0%{?rhel} >= 7)
+BuildRequires: python36
+%else
 BuildRequires: python
+%endif
 
 # Install dependencies
 Requires: dpdk = 20.11
