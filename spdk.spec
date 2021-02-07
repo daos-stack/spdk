@@ -117,6 +117,7 @@ BuildArch: noarch
 
 
 %build
+rpm -qvl dpdk-devel
 ./configure --prefix=%{_prefix} \
             --disable-tests \
             --with-dpdk=/usr \
