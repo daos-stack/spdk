@@ -54,6 +54,7 @@ BuildRequires: python36
 %else
 BuildRequires: python
 %endif
+BuildRequires: ncurses-devel
 
 # Install dependencies
 Requires: dpdk = 20.11
