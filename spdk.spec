@@ -8,7 +8,7 @@
 %bcond_with doc
 
 Name: spdk
-Version: 20.01.1
+Version: 20.01.2
 Release: 1%{?dist}
 Epoch: 0
 URL: http://spdk.io
@@ -192,6 +192,9 @@ mv doc/output/html/ %{install_docdir}
 
 
 %changelog
+* Thu Feb 11 2021 Brian J. Murrell <brian.murrell@intel.com> - 0:20.01.2-1
+- Update to 20.01.2
+
 * Fri Apr 03 2020 Tom Nabarro <tom.nabarro@intel.com> - 0:20.01.1-1
 - Upgrade to enable SPDK via VFIO as non-root w/ CentOS 7.7.
 - Remove fio_plugin from build.
