@@ -39,7 +39,7 @@ ExclusiveArch: x86_64
 
 BuildRequires: gcc gcc-c++ make
 # dpdk 18.11 is in "extras" so pin it to our version
-BuildRequires: dpdk-devel = 19.11
+BuildRequires: dpdk-devel = 19.11.6
 %if (0%{?rhel} >= 7)
 BuildRequires:  numactl-devel
 BuildRequires: CUnit-devel
@@ -57,7 +57,7 @@ BuildRequires: doxygen mscgen graphviz
 BuildRequires: python
 
 # Install dependencies
-Requires: dpdk = 19.11
+Requires: dpdk = 19.11.6
 
 Requires(post): /sbin/ldconfig
 Requires(postun): /sbin/ldconfig
@@ -71,7 +71,7 @@ applications.
 %package devel
 Summary: Storage Performance Development Kit development files
 Requires: %{name}%{?_isa} = %{package_version}
-Requires: dpdk-devel = 19.11
+Requires: dpdk-devel = 19.11.6
 Provides: %{name}-static%{?_isa} = %{package_version}
 
 %description devel
