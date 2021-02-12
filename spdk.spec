@@ -194,6 +194,7 @@ mv doc/output/html/ %{install_docdir}
 %changelog
 * Thu Feb 11 2021 Brian J. Murrell <brian.murrell@intel.com> - 0:20.01.2-1
 - Update to 20.01.2
+- BR: dpdk-devel and R: dpdk = 19.11.6
 
 * Fri Apr 03 2020 Tom Nabarro <tom.nabarro@intel.com> - 0:20.01.1-1
 - Upgrade to enable SPDK via VFIO as non-root w/ CentOS 7.7.
