@@ -8,7 +8,7 @@
 %bcond_with doc
 
 Name: spdk
-Version: 20.01.1
+Version: 20.01.2
 Release: 1%{?dist}
 Epoch: 0
 URL: http://spdk.io
@@ -39,7 +39,7 @@ ExclusiveArch: x86_64
 
 BuildRequires: gcc gcc-c++ make
 # dpdk 18.11 is in "extras" so pin it to our version
-BuildRequires: dpdk-devel = 19.11
+BuildRequires: dpdk-devel = 19.11.6
 %if (0%{?rhel} >= 7)
 BuildRequires:  numactl-devel
 BuildRequires: CUnit-devel
@@ -57,7 +57,7 @@ BuildRequires: doxygen mscgen graphviz
 BuildRequires: python
 
 # Install dependencies
-Requires: dpdk = 19.11
+Requires: dpdk = 19.11.6
 
 Requires(post): /sbin/ldconfig
 Requires(postun): /sbin/ldconfig
@@ -71,7 +71,7 @@ applications.
 %package devel
 Summary: Storage Performance Development Kit development files
 Requires: %{name}%{?_isa} = %{package_version}
-Requires: dpdk-devel = 19.11
+Requires: dpdk-devel = 19.11.6
 Provides: %{name}-static%{?_isa} = %{package_version}
 
 %description devel
@@ -192,6 +192,10 @@ mv doc/output/html/ %{install_docdir}
 
 
 %changelog
+* Thu Feb 11 2021 Brian J. Murrell <brian.murrell@intel.com> - 0:20.01.2-1
+- Update to 20.01.2
+- BR: dpdk-devel and R: dpdk = 19.11.6
+
 * Fri Apr 03 2020 Tom Nabarro <tom.nabarro@intel.com> - 0:20.01.1-1
 - Upgrade to enable SPDK via VFIO as non-root w/ CentOS 7.7.
 - Remove fio_plugin from build.
