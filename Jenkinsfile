@@ -38,7 +38,6 @@
  */
 // To use a test branch (i.e. PR) until it lands to master
 // I.e. for testing library changes
-//@Library(value="pipeline-lib@your_branch") _
+@Library(value="pipeline-lib@bmurrell/pr-repos-el8_support") _
 
-// centos8: No matching package to install: 'fio-devel'
 packageBuildingPipelineDAOS(['distros': ['centos7', 'centos8', 'leap15', 'ubuntu20.04']])
