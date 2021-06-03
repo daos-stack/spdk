@@ -9,13 +9,14 @@
 
 Name: spdk
 Version: 20.01.2
-Release: 1%{?dist}
+Release: 2%{?dist}
 Epoch: 0
 URL: http://spdk.io
 
 Source: https://github.com/%{name}/%{name}/archive/v%{version}.tar.gz
 
 Patch0: spdk-build-with-installed-dpkg.patch
+Patch1: remove_get_feature.patch
 
 Summary: Set of libraries and utilities for high performance user-mode storage
 
@@ -196,6 +197,9 @@ mv doc/output/html/ %{install_docdir}
 
 
 %changelog
+* Thu Jun 03 2021 Johann Lombardi <johann.lombardi@intel.com> - 0:20.01.2-2
+- Remove Get Num Queues initialization step
+
 * Thu Feb 11 2021 Brian J. Murrell <brian.murrell@intel.com> - 0:20.01.2-1
 - Update to 20.01.2
 - BR: dpdk-devel and R: dpdk = 19.11.6
