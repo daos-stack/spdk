@@ -8,7 +8,7 @@
 %bcond_with doc
 
 Name: spdk
-Version: 21.01
+Version: 21.07
 Release: 1%{?dist}
 Epoch: 0
 URL: http://spdk.io
@@ -37,7 +37,7 @@ ExclusiveArch: x86_64
 
 BuildRequires: gcc gcc-c++ make
 # dpdk 20.11 is in "extras" so pin it to our version
-BuildRequires: dpdk-devel = 20.11
+BuildRequires: dpdk-devel = 21.02
 %if (0%{?rhel} >= 7)
 BuildRequires:  numactl-devel
 BuildRequires: CUnit-devel
@@ -55,7 +55,7 @@ BuildRequires: doxygen mscgen graphviz
 BuildRequires: python
 
 # Install dependencies
-Requires: dpdk = 20.11
+Requires: dpdk = 21.02
 
 Requires(post): /sbin/ldconfig
 Requires(postun): /sbin/ldconfig
@@ -118,14 +118,15 @@ BuildArch: noarch
 %build
 ./configure --prefix=%{_prefix} \
             --disable-tests \
+            --disable-unit-tests \
             #--with-dpdk=/usr/share/dpdk/x86_64-default-linux-gcc \
+            --disable-examples \
+            --disable-apps \
             --without-vhost \
             --without-crypto \
             --without-pmdk \
-            --without-vpp \
             --without-rbd \
             --with-rdma \
-            --with-shared \
             --without-iscsi-initiator \
             --without-isal \
             --without-vtune
@@ -190,8 +191,8 @@ mv doc/output/html/ %{install_docdir}
 
 
 %changelog
-* Wed Feb 03 2021 Tom Nabarro <tom.nabarro@intel.com> - 0:21.01-1
-- Upgrade to pull in DPDK update to fix CVEs.
+* Mon Jun 07 2021 Tom Nabarro <tom.nabarro@intel.com> - 0:21.07-1
+- Upgrade SPDK to v21.
 
 * Fri Apr 03 2020 Tom Nabarro <tom.nabarro@intel.com> - 0:20.01.1-1
 - Upgrade to enable SPDK via VFIO as non-root w/ CentOS 7.7.
