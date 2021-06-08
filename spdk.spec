@@ -7,18 +7,24 @@
 # Build documentation package
 %bcond_with doc
 
-Name: spdk
-Version: 21.07
-Release: 1%{?dist}
-Epoch: 0
-URL: http://spdk.io
+%global shortcommit %(c=%{commit};echo ${c:0:7})
 
-Source: https://github.com/%{name}/%{name}/archive/v%{version}.tar.gz
+Name:		spdk
+Version:	21.04
+Release:	1%{?commit:.g%{shortcommit}}%{?dist}
+Epoch:		0
+
+Summary:	Set of libraries and utilities for high performance user-mode storage
+
+License:	BSD
+URL:		http://spdk.io
+Source:		https://github.com/%{name}/%{name}/archive/v%{version}.tar.gz
 
 Patch0: spdk-build-with-installed-dpkg.patch
 Patch1: remove_get_feature.patch
-
-Summary: Set of libraries and utilities for high performance user-mode storage
+%if "%{?commit}" != ""
+Patch2: %{version}..%{commit}.patch
+%endif
 
 %define package_version %{epoch}:%{version}-%{release}
 
@@ -32,8 +38,6 @@ Summary: Set of libraries and utilities for high performance user-mode storage
 %else
 %define use_python2 0
 %endif
-
-License: BSD
 
 # Only x86_64 is supported
 ExclusiveArch: x86_64
@@ -197,7 +201,7 @@ mv doc/output/html/ %{install_docdir}
 
 
 %changelog
-* Mon Jun 07 2021 Tom Nabarro <tom.nabarro@intel.com> - 0:21.07-1
+* Mon Jun 07 2021 Tom Nabarro <tom.nabarro@intel.com> - 0:21.04-1
 - Upgrade SPDK to v21.
 - BR: dpdk-devel and R: dpdk = 21.02
 
