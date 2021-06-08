@@ -15,6 +15,9 @@ URL: http://spdk.io
 
 Source: https://github.com/%{name}/%{name}/archive/v%{version}.tar.gz
 
+Patch0: spdk-build-with-installed-dpkg.patch
+Patch1: remove_get_feature.patch
+
 Summary: Set of libraries and utilities for high performance user-mode storage
 
 %define package_version %{epoch}:%{version}-%{release}
@@ -36,7 +39,6 @@ License: BSD
 ExclusiveArch: x86_64
 
 BuildRequires: gcc gcc-c++ make
-# dpdk 20.11 is in "extras" so pin it to our version
 BuildRequires: dpdk-devel = 21.02
 %if (0%{?rhel} >= 7)
 BuildRequires:  numactl-devel
@@ -52,7 +54,11 @@ BuildRequires: libibverbs-devel, librdmacm-devel
 %if %{with doc}
 BuildRequires: doxygen mscgen graphviz
 %endif
+%if (0%{?rhel} >= 8)
+BuildRequires: python36
+%else
 BuildRequires: python
+%endif
 
 # Install dependencies
 Requires: dpdk = 21.02
@@ -193,6 +199,14 @@ mv doc/output/html/ %{install_docdir}
 %changelog
 * Mon Jun 07 2021 Tom Nabarro <tom.nabarro@intel.com> - 0:21.07-1
 - Upgrade SPDK to v21.
+- BR: dpdk-devel and R: dpdk = 21.02
+
+* Thu Jun 03 2021 Johann Lombardi <johann.lombardi@intel.com> - 0:20.01.2-2
+- Remove Get Num Queues initialization step
+
+* Thu Feb 11 2021 Brian J. Murrell <brian.murrell@intel.com> - 0:20.01.2-1
+- Update to 20.01.2
+- BR: dpdk-devel and R: dpdk = 19.11.6
 
 * Fri Apr 03 2020 Tom Nabarro <tom.nabarro@intel.com> - 0:20.01.1-1
 - Upgrade to enable SPDK via VFIO as non-root w/ CentOS 7.7.
