@@ -20,10 +20,8 @@ License:	BSD
 URL:		http://spdk.io
 Source:		https://github.com/%{name}/%{name}/archive/v%{version}.tar.gz
 
-Patch0: spdk-build-with-installed-dpkg.patch
-Patch1: remove_get_feature.patch
 %if "%{?commit}" != ""
-Patch2: %{version}..%{commit}.patch
+Patch0: %{version}..%{commit}.patch
 %endif
 
 %define package_version %{epoch}:%{version}-%{release}
@@ -122,7 +120,7 @@ BuildArch: noarch
 
 
 %prep
-%autosetup -n spdk-%{version}
+%autosetup -n spdk-%{version} -p1
 
 
 %build
