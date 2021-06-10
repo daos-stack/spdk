@@ -10,7 +10,7 @@
 %global shortcommit %(c=%{commit};echo ${c:0:7})
 
 Name:		spdk
-Version:	21.04-rc1
+Version:	21.04
 Release:	1%{?commit:.g%{shortcommit}}%{?dist}
 Epoch:		0
 
