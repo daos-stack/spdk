@@ -1,8 +1,8 @@
 NAME    := spdk
 SRC_EXT := gz
-SOURCE   = https://github.com/spdk/$(NAME)/archive/v$(VERSION).tar.$(SRC_EXT)
+SOURCE     = https://github.com/spdk/$(NAME)/archive/v$(VERSION).tar.$(SRC_EXT)
 
-#GIT_COMMIT := 5e4fe0adc81c0fd2d5c70fb9ddd3ee3a3082bdc4
+GIT_COMMIT := 5e4fe0adc81c0fd2d5c70fb9ddd3ee3a3082bdc4
 
 # this needs to be formalized into packaging/Makefile_packaging.mk
 BUILD_DEFINES := --define "commit $(GIT_COMMIT)"
@@ -18,13 +18,13 @@ include packaging/Makefile_packaging.mk
 # be committed.
 # Should figure out a way to formalize this into
 # packaging/Makefile_packaging.mk
-#$(VERSION)..$(GIT_COMMIT).patch:
-#	# it really sucks that GitHub's "compare" returns such dirty patches
-#	#curl -O 'https://github.com/hpc/$(NAME)/compare/$@'
-#	git clone git@github.com:spdk/$(NAME).git
-#	pushd $(NAME) &&                                \
-#	trap 'popd && rm -rf $(NAME)' EXIT;             \
-#	git diff $(VERSION)..$(GIT_COMMIT) --stat       \
-#	git diff $(VERSION)..$(GIT_COMMIT)              \
-#	    > ../$@
-#	git add $@
+$(VERSION)..$(GIT_COMMIT).patch:
+	# it really sucks that GitHub's "compare" returns such dirty patches
+	#curl -O 'https://github.com/hpc/$(NAME)/compare/$@'
+	git clone git@github.com:spdk/$(NAME).git
+	pushd $(NAME) &&                                \
+	trap 'popd && rm -rf $(NAME)' EXIT;             \
+	git diff $(VERSION)..$(GIT_COMMIT) --stat       \
+	git diff $(VERSION)..$(GIT_COMMIT)              \
+	    > ../$@
+	git add $@
