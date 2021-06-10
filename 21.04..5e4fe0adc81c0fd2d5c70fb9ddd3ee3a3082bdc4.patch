@@ -1685,13 +1685,6 @@ index a44454fd3..6282bbc2d 100644
  ## Hot-attach/hot-detach {#vhost_hotattach}
  
  Hotplug/hotremove within a vhost controller is called hot-attach/detach. This is to
-diff --git a/dpdk b/dpdk
-index eb1678683..56963a26a 160000
---- a/dpdk
-+++ b/dpdk
-@@ -1 +1 @@
--Subproject commit eb16786836e3a8380bb86fde67efa2ee0d9d3852
-+Subproject commit 56963a26a45cba28e9a613b4a8cfee75f792564e
 diff --git a/dpdkbuild/Makefile b/dpdkbuild/Makefile
 index b540d2fa0..d4af3a0a4 100644
 --- a/dpdkbuild/Makefile
@@ -15889,13 +15882,6 @@ index 60eb8e0f3..031ca6b36 100644
  				task->used_len, ' ');
  		blk_request_finish(true, task);
  		break;
-diff --git a/libvfio-user b/libvfio-user
-index 3acb97477..8ac2360a8 160000
---- a/libvfio-user
-+++ b/libvfio-user
-@@ -1 +1 @@
--Subproject commit 3acb97477f261bf11c866b5764deabe693607bc3
-+Subproject commit 8ac2360a8aefbd2dd11c65f2b2e21565c36c0ee6
 diff --git a/mk/spdk.app.mk b/mk/spdk.app.mk
 index 61a23d5e7..5020a20ab 100644
 --- a/mk/spdk.app.mk
