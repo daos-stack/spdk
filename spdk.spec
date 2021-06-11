@@ -20,8 +20,9 @@ License:	BSD
 URL:		http://spdk.io
 Source:		https://github.com/%{name}/%{name}/archive/v%{version}.tar.gz
 
+Patch0: spdk-build-with-installed-dpkg.patch
 %if "%{?commit}" != ""
-Patch0: %{version}..%{commit}.patch
+Patch1: %{version}..%{commit}.patch
 %endif
 
 %define package_version %{epoch}:%{version}-%{release}

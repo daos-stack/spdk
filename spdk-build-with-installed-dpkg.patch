@@ -1,0 +1,138 @@
+commit 01459e070e2c1a036dceb1d033d89d6ea9ed0920
+Author: Brian J. Murrell <brian.murrell@intel.com>
+Date:   Mon Aug 24 12:29:00 2020 -0400
+
+    Use installed DPDK
+    
+    Using pkg-config.
+
+diff --git a/CONFIG b/CONFIG
+index cc450e8e7..eb8e1b762 100644
+--- a/CONFIG
++++ b/CONFIG
+@@ -81,6 +81,11 @@ CONFIG_ENV=
+ # installation.
+ CONFIG_DPDK_DIR=
+ 
++# Alternatively, this should contain the cflags to use for DPDK
++CONFIG_DPDK_CFLAGS=
++# and the linker lib flags
++CONFIG_DPDK_LIBS_FLAGS=
++
+ # Build SPDK FIO plugin. Requires CONFIG_FIO_SOURCE_DIR set to a valid
+ # fio source code directory.
+ CONFIG_FIO_PLUGIN=n
+diff --git a/configure b/configure
+index e2c0448d1..0edb888d7 100755
+--- a/configure
++++ b/configure
+@@ -206,6 +206,9 @@ for i in "$@"; do
+ 		--disable-werror)
+ 			CONFIG[WERROR]=n
+ 			;;
++		--with-dpdk)
++			CONFIG[DPDK_DIR]=use-pkg-config
++			;;
+ 		--with-dpdk=*)
+ 			check_dir "$i"
+ 			CONFIG[DPDK_DIR]=$(readlink -f ${i#*=})
+@@ -411,7 +414,10 @@ fi
+ if [ -z "${CONFIG[ENV]}" ]; then
+ 	CONFIG[ENV]=$rootdir/lib/env_dpdk
+ 	echo "Using default SPDK env in ${CONFIG[ENV]}"
+-	if [ -z "${CONFIG[DPDK_DIR]}" ]; then
++	if [ "${CONFIG[DPDK_DIR]}" = "use-pkg-config" ]; then
++		CONFIG[DPDK_CFLAGS]=$(pkg-config --cflags-only-I libdpdk)
++		CONFIG[DPDK_LIBS_FLAGS]=$(pkg-config --libs libdpdk)
++        elif [ -z "${CONFIG[DPDK_DIR]}" ]; then
+ 		if [ ! -f "$rootdir"/dpdk/config/common_base ]; then
+ 			echo "DPDK not found; please specify --with-dpdk=<path> or run:"
+ 			echo
+diff --git a/lib/env_dpdk/env.mk b/lib/env_dpdk/env.mk
+index 4a2371dcc..3c07739d1 100644
+--- a/lib/env_dpdk/env.mk
++++ b/lib/env_dpdk/env.mk
+@@ -40,7 +40,23 @@
+ DPDK_DIR = $(CONFIG_DPDK_DIR)
+ 
+ export DPDK_ABS_DIR = $(abspath $(DPDK_DIR))
++export DPDK_ABS_LIBDIR = $(abspath $(DPDK_DIR))/lib
+ 
++ifeq ($(DPDK_DIR),use-pkg-config)
++DPDK_INC := $(CONFIG_DPDK_CFLAGS)
++DPDK_LIB_EXT = .so
++DPDK_LIB_LIST := $(subst -l,,$(CONFIG_DPDK_LIBS_FLAGS))
++# add private DPDK library
++DPDK_LIB_LIST += rte_bus_pci
++export DPDK_ABS_LIBDIR = /usr/lib/x86_64-linux-gnu
++define dpdk_lib_list_to_libs
++$(1:%=-l%)
++endef
++# -L because private DPDK library is used
++define dpdk_env_linker_args
++$(ENV_DPDK_FILE) -L /usr/lib/x86_64-linux-gnu/dpdk/pmds-20.0/ -Wl,--whole-archive,--no-as-needed $(call dpdk_lib_list_to_libs,$1) -Wl,--no-whole-archive
++endef
++else
+ ifneq (, $(wildcard $(DPDK_ABS_DIR)/include/rte_config.h))
+ DPDK_INC_DIR := $(DPDK_ABS_DIR)/include
+ else
+@@ -48,7 +64,7 @@ DPDK_INC_DIR := $(DPDK_ABS_DIR)/include/dpdk
+ endif
+ DPDK_INC := -I$(DPDK_INC_DIR)
+ 
+-ifneq (, $(wildcard $(DPDK_ABS_DIR)/lib/librte_eal.a))
++ifneq (, $(wildcard $(DPDK_ABS_LIBDIR)/librte_eal.a))
+ DPDK_LIB_EXT = .a
+ else
+ DPDK_LIB_EXT = .so
+@@ -58,23 +74,23 @@ DPDK_LIB_LIST = rte_eal rte_mempool rte_ring rte_mbuf
+ 
+ # librte_mempool_ring was new added from DPDK 17.05. Link this library used for
+ #   ring based mempool management API.
+-ifneq (, $(wildcard $(DPDK_ABS_DIR)/lib/librte_mempool_ring.*))
++ifneq (, $(wildcard $(DPDK_ABS_LIBDIR)/librte_mempool_ring.*))
+ DPDK_LIB_LIST += rte_mempool_ring
+ endif
+ 
+ # librte_malloc was removed after DPDK 2.1.  Link this library conditionally based on its
+ #  existence to maintain backward compatibility.
+-ifneq ($(wildcard $(DPDK_ABS_DIR)/lib/librte_malloc.*),)
++ifneq ($(wildcard $(DPDK_ABS_LIBDIR)/librte_malloc.*),)
+ DPDK_LIB_LIST += rte_malloc
+ endif
+ 
+ # librte_pci and librte_bus_pci were added in DPDK 17.11. Link these libraries conditionally
+ # based on their existence to maintain backward compatibility.
+-ifneq (, $(wildcard $(DPDK_ABS_DIR)/lib/librte_pci.*))
++ifneq (, $(wildcard $(DPDK_ABS_LIBDIR)/librte_pci.*))
+ DPDK_LIB_LIST += rte_pci
+ endif
+ 
+-ifneq (, $(wildcard $(DPDK_ABS_DIR)/lib/librte_bus_pci.*))
++ifneq (, $(wildcard $(DPDK_ABS_LIBDIR)/librte_bus_pci.*))
+ DPDK_LIB_LIST += rte_bus_pci
+ endif
+ 
+@@ -96,12 +112,12 @@ ifeq ($(DPDK_FRAMEWORK),y)
+ DPDK_LIB_LIST += rte_cryptodev rte_compressdev rte_bus_vdev rte_pmd_qat
+ endif
+ 
+-ifneq (, $(wildcard $(DPDK_ABS_DIR)/lib/librte_kvargs.*))
++ifneq (, $(wildcard $(DPDK_ABS_LIBDIR)/librte_kvargs.*))
+ DPDK_LIB_LIST += rte_kvargs
+ endif
+ 
+ ifneq ($(CONFIG_VHOST_INTERNAL_LIB),y)
+-ifneq (, $(wildcard $(DPDK_ABS_DIR)/lib/librte_vhost.*))
++ifneq (, $(wildcard $(DPDK_ABS_LIBDIR)/librte_vhost.*))
+ DPDK_LIB_LIST += rte_vhost rte_net rte_hash
+ ifneq ($(DPDK_FRAMEWORK),y)
+ DPDK_LIB_LIST += rte_cryptodev
+@@ -116,6 +132,7 @@ endef
+ define dpdk_env_linker_args
+ $(ENV_DPDK_FILE) -Wl,--whole-archive,--no-as-needed $(call dpdk_lib_list_to_libs,$1) -Wl,--no-whole-archive
+ endef
++endif
+ 
+ DPDK_LIB = $(call dpdk_lib_list_to_libs,$(DPDK_LIB_LIST))
+ 
