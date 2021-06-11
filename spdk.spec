@@ -23,7 +23,7 @@ Source:		https://github.com/%{name}/%{name}/archive/v%{version}.tar.gz
 %if "%{?commit}" != ""
 Patch0: %{version}..%{commit}.patch
 %endif
-#Patch1: spdk-build-with-installed-dpkg.patch
+Patch1: 0001-configure-WIP-Build-against-installed-DPDK-instance.patch
 
 %define package_version %{epoch}:%{version}-%{release}
 
@@ -124,7 +124,7 @@ BuildArch: noarch
 
 
 %build
-./configure --with-dpdk=/usr/share/dpdk \
+./configure --with-dpdk \
             --prefix=%{_prefix} \
             --disable-tests \
             --disable-unit-tests \
