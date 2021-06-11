@@ -2,7 +2,7 @@ NAME    := spdk
 SRC_EXT := gz
 SOURCE   = https://github.com/spdk/$(NAME)/archive/v$(VERSION).tar.$(SRC_EXT)
 
-GIT_COMMIT := 5e4fe0adc81c0fd2d5c70fb9ddd3ee3a3082bdc4
+GIT_COMMIT := 9d4fbc135d6136b84b992c9ef373160eb7f0d6f5
 
 # this needs to be formalized into packaging/Makefile_packaging.mk
 BUILD_DEFINES := --define "commit $(GIT_COMMIT)"

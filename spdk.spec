@@ -11,7 +11,7 @@
 
 Name:		spdk
 Version:	21.04
-Release:	1%{?commit:.g%{shortcommit}}%{?dist}
+Release:	2%{?commit:.g%{shortcommit}}%{?dist}
 Epoch:		0
 
 Summary:	Set of libraries and utilities for high performance user-mode storage
@@ -41,7 +41,7 @@ Patch1: 0001-configure-WIP-Build-against-installed-DPDK-instance.patch
 ExclusiveArch: x86_64
 
 BuildRequires: gcc gcc-c++ make
-BuildRequires: dpdk-devel = 21.02
+BuildRequires: dpdk-devel = 21.05
 %if (0%{?rhel} >= 7)
 BuildRequires: numactl-devel
 BuildRequires: CUnit-devel
@@ -63,7 +63,7 @@ BuildRequires: python
 %endif
 
 # Install dependencies
-Requires: dpdk = 21.02
+Requires: dpdk = 21.05
 
 Requires(post): /sbin/ldconfig
 Requires(postun): /sbin/ldconfig
@@ -77,7 +77,7 @@ applications.
 %package devel
 Summary: Storage Performance Development Kit development files
 Requires: %{name}%{?_isa} = %{package_version}
-Requires: dpdk-devel = 21.02
+Requires: dpdk-devel = 21.05
 Provides: %{name}-static%{?_isa} = %{package_version}
 
 %description devel
@@ -192,9 +192,10 @@ mv doc/output/html/ %{install_docdir}
 
 
 %changelog
-* Wed Jun 16 2021 Tom Nabarro <tom.nabarro@intel.com> - 0:21.04-1
+* Mon Jun 21 2021 Tom Nabarro <tom.nabarro@intel.com> - 0:21.04-2
 - Upgrade SPDK to 21.04 + patch to custom githash on 21.07-pre
-- BR: dpdk-devel and R: dpdk = 21.02
+- BR: dpdk-devel and R: dpdk = 21.05
+- Set bare --with-dpdk in configure to use libdpdk.pc
 
 * Thu Jun 03 2021 Johann Lombardi <johann.lombardi@intel.com> - 0:20.01.2-2
 - Remove Get Num Queues initialization step
