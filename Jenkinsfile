@@ -42,4 +42,5 @@
 
 // centos8: No matching package to install: 'fio-devel'
 packageBuildingPipelineDAOS(['distros': ['centos7', 'centos8', 'leap15',
-                                         'ubuntu20']])
+                                         'ubuntu20'],
+                             'test_repos': 'dpdk@PR-15'])
