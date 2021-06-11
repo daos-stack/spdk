@@ -23,12 +23,11 @@ Source:		https://github.com/%{name}/%{name}/archive/v%{version}.tar.gz
 %if "%{?commit}" != ""
 Patch0: %{version}..%{commit}.patch
 %endif
-Patch1: spdk-build-with-installed-dpkg.patch
+#Patch1: spdk-build-with-installed-dpkg.patch
 
 %define package_version %{epoch}:%{version}-%{release}
 
 %define install_datadir %{buildroot}/%{_datadir}/%{name}
-%define install_sbindir %{buildroot}/%{_sbindir}
 %define install_docdir %{buildroot}/%{_docdir}/%{name}
 
 # Distros that don't support python3 will use python2
@@ -44,11 +43,11 @@ ExclusiveArch: x86_64
 BuildRequires: gcc gcc-c++ make
 BuildRequires: dpdk-devel = 21.02
 %if (0%{?rhel} >= 7)
-BuildRequires:  numactl-devel
+BuildRequires: numactl-devel
 BuildRequires: CUnit-devel
 %else
 %if (0%{?suse_version} >= 1315)
-BuildRequires:  libnuma-devel
+BuildRequires: libnuma-devel
 BuildRequires: cunit-devel
 %endif
 %endif
@@ -78,7 +77,7 @@ applications.
 %package devel
 Summary: Storage Performance Development Kit development files
 Requires: %{name}%{?_isa} = %{package_version}
-Requires: dpdk-devel = 20.11
+Requires: dpdk-devel = 21.02
 Provides: %{name}-static%{?_isa} = %{package_version}
 
 %description devel
@@ -125,12 +124,10 @@ BuildArch: noarch
 
 
 %build
-./configure --prefix=%{_prefix} \
+./configure --with-dpdk=/usr/share/dpdk \
+            --prefix=%{_prefix} \
             --disable-tests \
             --disable-unit-tests \
-            #--with-dpdk=use-pkg-config \
-            #--with-dpdk=/usr/share/dpdk/x86_64-default-linux-gcc \
-	    --with-dpdk=/usr/share/dpdk/mk/exec-env/linuxapp \
             --disable-examples \
             --disable-apps \
             --without-vhost \
@@ -140,7 +137,8 @@ BuildArch: noarch
             --with-rdma \
             --without-iscsi-initiator \
             --without-isal \
-            --without-vtune
+            --without-vtune \
+            --with-shared
 
 %make_build all
 
@@ -153,15 +151,6 @@ make -C doc
 
 # Install tools
 mkdir -p %{install_datadir}/scripts
-
-## env is banned - replace '/usr/bin/env anything' with '/usr/bin/anything'
-#find %{install_datadir}/scripts -type f -regextype egrep -regex '.*([.]py|[.]sh)' \
-#       -exec sed -i -E '1s@#!/usr/bin/env (.*)@#!/usr/bin/\1@' {} +
-
-#%if "%{use_python2}" == "1"
-#find %{install_datadir}/scripts -type f -regextype egrep -regex '.*([.]py)' \
-#       -exec sed -i -E '1s@#!/usr/bin/python3@#!/usr/bin/python2@' {} +
-#%endif
 
 # install the setup tool
 cp scripts/{setup,common}.sh %{install_datadir}/scripts/
@@ -180,15 +169,16 @@ mv doc/output/html/ %{install_docdir}
 
 
 %files
-%{_bindir}/spdk_*
 %dir %{_datadir}/%{name}
 %{_libdir}/*.so.*
+%exclude %{_libdir}/pkgconfig
 
 
 %files devel
 %{_includedir}/%{name}
 %{_libdir}/*.a
 %{_libdir}/*.so
+%{_libdir}/pkgconfig
 
 
 %files tools
@@ -202,8 +192,8 @@ mv doc/output/html/ %{install_docdir}
 
 
 %changelog
-* Mon Jun 07 2021 Tom Nabarro <tom.nabarro@intel.com> - 0:21.04-1
-- Upgrade SPDK to v21.
+* Wed Jun 16 2021 Tom Nabarro <tom.nabarro@intel.com> - 0:21.04-1
+- Upgrade SPDK to 21.04 + patch to custom githash on 21.07-pre
 - BR: dpdk-devel and R: dpdk = 21.02
 
 * Thu Jun 03 2021 Johann Lombardi <johann.lombardi@intel.com> - 0:20.01.2-2
