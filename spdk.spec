@@ -127,7 +127,7 @@ BuildArch: noarch
 ./configure --prefix=%{_prefix} \
             --disable-tests \
             --disable-unit-tests \
-            #--with-dpdk=/usr/share/dpdk/x86_64-default-linux-gcc \
+            --with-dpdk=/usr/share/dpdk/x86_64-default-linux-gcc \
             --disable-examples \
             --disable-apps \
             --without-vhost \
