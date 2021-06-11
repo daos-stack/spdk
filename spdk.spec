@@ -20,10 +20,10 @@ License:	BSD
 URL:		http://spdk.io
 Source:		https://github.com/%{name}/%{name}/archive/v%{version}.tar.gz
 
-Patch0: spdk-build-with-installed-dpkg.patch
 %if "%{?commit}" != ""
-Patch1: %{version}..%{commit}.patch
+Patch0: %{version}..%{commit}.patch
 %endif
+Patch1: spdk-build-with-installed-dpkg.patch
 
 %define package_version %{epoch}:%{version}-%{release}
 
@@ -128,8 +128,9 @@ BuildArch: noarch
 ./configure --prefix=%{_prefix} \
             --disable-tests \
             --disable-unit-tests \
-            --with-dpdk=use-pkg-config \
+            #--with-dpdk=use-pkg-config \
             #--with-dpdk=/usr/share/dpdk/x86_64-default-linux-gcc \
+	    --with-dpdk=/usr/share/dpdk/mk/exec-env/linuxapp \
             --disable-examples \
             --disable-apps \
             --without-vhost \
