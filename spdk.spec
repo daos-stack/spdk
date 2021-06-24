@@ -23,7 +23,6 @@ Source:		https://github.com/%{name}/%{name}/archive/v%{version}.tar.gz
 %if "%{?commit}" != ""
 Patch0: %{version}..%{commit}.patch
 %endif
-Patch1: 0001-configure-WIP-Build-against-installed-DPDK-instance.patch
 
 %define package_version %{epoch}:%{version}-%{release}
 
@@ -146,6 +145,7 @@ BuildArch: noarch
 make -C doc
 %endif
 
+
 %install
 %make_install %{?_smp_mflags} prefix=%{_prefix} libdir=%{_libdir} datadir=%{_datadir}
 
@@ -169,9 +169,7 @@ mv doc/output/html/ %{install_docdir}
 
 
 %files
-%dir %{_datadir}/%{name}
 %{_libdir}/*.so.*
-%exclude %{_libdir}/pkgconfig
 
 
 %files devel
@@ -182,8 +180,10 @@ mv doc/output/html/ %{install_docdir}
 
 
 %files tools
+%dir %{_datadir}/%{name}
 %{_datadir}/%{name}/include
 %{_datadir}/%{name}/scripts
+
 
 %if %{with doc}
 %files doc
@@ -192,7 +192,7 @@ mv doc/output/html/ %{install_docdir}
 
 
 %changelog
-* Mon Jun 21 2021 Tom Nabarro <tom.nabarro@intel.com> - 0:21.04-1
+* Tue Jun 29 2021 Tom Nabarro <tom.nabarro@intel.com> - 0:21.04-1
 - Upgrade SPDK to 21.04 + patch to custom githash on 21.07-pre
 - BR: dpdk-devel and R: dpdk = 21.05
 - Set bare --with-dpdk in configure to use libdpdk.pc
