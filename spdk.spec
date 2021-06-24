@@ -11,7 +11,7 @@
 
 Name:		spdk
 Version:	21.04
-Release:	2%{?commit:.g%{shortcommit}}%{?dist}
+Release:	1%{?commit:.g%{shortcommit}}%{?dist}
 Epoch:		0
 
 Summary:	Set of libraries and utilities for high performance user-mode storage
@@ -192,7 +192,7 @@ mv doc/output/html/ %{install_docdir}
 
 
 %changelog
-* Mon Jun 21 2021 Tom Nabarro <tom.nabarro@intel.com> - 0:21.04-2
+* Mon Jun 21 2021 Tom Nabarro <tom.nabarro@intel.com> - 0:21.04-1
 - Upgrade SPDK to 21.04 + patch to custom githash on 21.07-pre
 - BR: dpdk-devel and R: dpdk = 21.05
 - Set bare --with-dpdk in configure to use libdpdk.pc
