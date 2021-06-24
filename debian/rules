@@ -3,6 +3,8 @@
 #export DH_VERBOSE = 1
 
 export DEB_BUILD_MAINT_OPTIONS = hardening=+all
+# https://github.com/spdk/spdk/issues/2011
+export DEB_CFLAGS_MAINT_APPEND = $(shell pkg-config --cflags libdpdk)
 
 %:
 	dh $@
@@ -29,7 +31,6 @@ override_dh_auto_configure:
 	            --without-vhost \
 	            --without-crypto \
 	            --without-pmdk \
-	            --without-vpp \
 	            --without-rbd \
 	            --with-rdma \
 	            --with-shared \

@@ -4,12 +4,14 @@ Maintainer: daos-stack <daos@daos.groups.io>
 Build-Depends:
  debhelper,
  python,
- libdpdk-dev,
+ libdpdk-dev (= 21.05-1),
  librdmacm-dev,
  libibverbs-dev,
  uuid-dev,
  libaio-dev,
- pkg-config
+ pkg-config,
+ libcunit1-dev,
+ libncurses-dev
 Standards-Version: 4.3.0
 Section: libs
 Homepage: http://spdk.io

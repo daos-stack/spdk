@@ -1,3 +1,12 @@
+spdk (21.04-1) unstable; urgency=medium
+
+  [ Tom Nabarro ]
+  * Upgrade SPDK to 21.04 + patch to custom githash on 21.07-pre
+  * BR: dpdk-devel and R: dpdk = 21.05
+  * Set bare --with-dpdk in configure to use libdpdk.pc
+
+ --  Tom Nabarro <tom.nabarro@intel.com>  Mon, 21 Jun 2021 00:00:00 +0000
+
 spdk (20.01.2-2) unstable; urgency=medium
 
   [ Johann Lombardi ]
