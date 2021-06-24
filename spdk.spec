@@ -62,7 +62,7 @@ BuildRequires: python
 %endif
 
 # Install dependencies
-Requires: dpdk = 21.05
+Requires: dpdk
 
 Requires(post): /sbin/ldconfig
 Requires(postun): /sbin/ldconfig
@@ -76,7 +76,7 @@ applications.
 %package devel
 Summary: Storage Performance Development Kit development files
 Requires: %{name}%{?_isa} = %{package_version}
-Requires: dpdk-devel = 21.05
+Requires: dpdk-devel
 Provides: %{name}-static%{?_isa} = %{package_version}
 
 %description devel
