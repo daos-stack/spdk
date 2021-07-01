@@ -169,6 +169,7 @@ mv doc/output/html/ %{install_docdir}
 
 
 %files
+%dir %{_datadir}/%{name}
 %{_libdir}/*.so.*
 
 
@@ -180,7 +181,6 @@ mv doc/output/html/ %{install_docdir}
 
 
 %files tools
-%dir %{_datadir}/%{name}
 %{_datadir}/%{name}/include
 %{_datadir}/%{name}/scripts
 
