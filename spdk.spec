@@ -7,23 +7,26 @@
 # Build documentation package
 %bcond_with doc
 
-Name: spdk
-Version: 20.01.2
-Release: 2%{?dist}
-Epoch: 0
-URL: http://spdk.io
+%global shortcommit %(c=%{commit};echo ${c:0:7})
 
-Source: https://github.com/%{name}/%{name}/archive/v%{version}.tar.gz
+Name:		spdk
+Version:	21.04
+Release:	1%{?commit:.g%{shortcommit}}%{?dist}
+Epoch:		0
 
-Patch0: spdk-build-with-installed-dpkg.patch
-Patch1: remove_get_feature.patch
+Summary:	Set of libraries and utilities for high performance user-mode storage
 
-Summary: Set of libraries and utilities for high performance user-mode storage
+License:	BSD
+URL:		http://spdk.io
+Source:		https://github.com/%{name}/%{name}/archive/v%{version}.tar.gz
+
+%if "%{?commit}" != ""
+Patch0: %{version}..%{commit}.patch
+%endif
 
 %define package_version %{epoch}:%{version}-%{release}
 
 %define install_datadir %{buildroot}/%{_datadir}/%{name}
-%define install_sbindir %{buildroot}/%{_sbindir}
 %define install_docdir %{buildroot}/%{_docdir}/%{name}
 
 # Distros that don't support python3 will use python2
@@ -33,20 +36,17 @@ Summary: Set of libraries and utilities for high performance user-mode storage
 %define use_python2 0
 %endif
 
-License: BSD
-
 # Only x86_64 is supported
 ExclusiveArch: x86_64
 
 BuildRequires: gcc gcc-c++ make
-# dpdk 18.11 is in "extras" so pin it to our version
-BuildRequires: dpdk-devel = 19.11.6
+BuildRequires: dpdk-devel = 21.05
 %if (0%{?rhel} >= 7)
-BuildRequires:  numactl-devel
+BuildRequires: numactl-devel
 BuildRequires: CUnit-devel
 %else
 %if (0%{?suse_version} >= 1315)
-BuildRequires:  libnuma-devel
+BuildRequires: libnuma-devel
 BuildRequires: cunit-devel
 %endif
 %endif
@@ -62,7 +62,7 @@ BuildRequires: python
 %endif
 
 # Install dependencies
-Requires: dpdk = 19.11.6
+Requires: dpdk
 
 Requires(post): /sbin/ldconfig
 Requires(postun): /sbin/ldconfig
@@ -76,7 +76,7 @@ applications.
 %package devel
 Summary: Storage Performance Development Kit development files
 Requires: %{name}%{?_isa} = %{package_version}
-Requires: dpdk-devel = 19.11.6
+Requires: dpdk-devel
 Provides: %{name}-static%{?_isa} = %{package_version}
 
 %description devel
@@ -123,19 +123,21 @@ BuildArch: noarch
 
 
 %build
-./configure --prefix=%{_prefix} \
+./configure --with-dpdk \
+            --prefix=%{_prefix} \
             --disable-tests \
-            --with-dpdk=/usr/share/dpdk/x86_64-default-linux-gcc \
+            --disable-unit-tests \
+            --disable-examples \
+            --disable-apps \
             --without-vhost \
             --without-crypto \
             --without-pmdk \
-            --without-vpp \
             --without-rbd \
             --with-rdma \
-            --with-shared \
             --without-iscsi-initiator \
             --without-isal \
-            --without-vtune
+            --without-vtune \
+            --with-shared
 
 %make_build all
 
@@ -143,20 +145,12 @@ BuildArch: noarch
 make -C doc
 %endif
 
+
 %install
 %make_install %{?_smp_mflags} prefix=%{_prefix} libdir=%{_libdir} datadir=%{_datadir}
 
 # Install tools
 mkdir -p %{install_datadir}/scripts
-
-## env is banned - replace '/usr/bin/env anything' with '/usr/bin/anything'
-#find %{install_datadir}/scripts -type f -regextype egrep -regex '.*([.]py|[.]sh)' \
-#       -exec sed -i -E '1s@#!/usr/bin/env (.*)@#!/usr/bin/\1@' {} +
-
-#%if "%{use_python2}" == "1"
-#find %{install_datadir}/scripts -type f -regextype egrep -regex '.*([.]py)' \
-#       -exec sed -i -E '1s@#!/usr/bin/python3@#!/usr/bin/python2@' {} +
-#%endif
 
 # install the setup tool
 cp scripts/{setup,common}.sh %{install_datadir}/scripts/
@@ -175,7 +169,6 @@ mv doc/output/html/ %{install_docdir}
 
 
 %files
-%{_bindir}/spdk_*
 %dir %{_datadir}/%{name}
 %{_libdir}/*.so.*
 
@@ -184,11 +177,13 @@ mv doc/output/html/ %{install_docdir}
 %{_includedir}/%{name}
 %{_libdir}/*.a
 %{_libdir}/*.so
+%{_libdir}/pkgconfig
 
 
 %files tools
 %{_datadir}/%{name}/include
 %{_datadir}/%{name}/scripts
+
 
 %if %{with doc}
 %files doc
@@ -197,6 +192,11 @@ mv doc/output/html/ %{install_docdir}
 
 
 %changelog
+* Tue Jun 29 2021 Tom Nabarro <tom.nabarro@intel.com> - 0:21.04-1
+- Upgrade SPDK to 21.04 + patch to custom githash on 21.07-pre
+- BR: dpdk-devel and R: dpdk = 21.05
+- Set bare --with-dpdk in configure to use libdpdk.pc
+
 * Thu Jun 03 2021 Johann Lombardi <johann.lombardi@intel.com> - 0:20.01.2-2
 - Remove Get Num Queues initialization step
 
