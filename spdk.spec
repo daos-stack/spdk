@@ -127,7 +127,6 @@ BuildArch: noarch
             --prefix=%{_prefix} \
             --disable-tests \
             --disable-unit-tests \
-            --disable-examples \
             --disable-apps \
             --without-vhost \
             --without-crypto \
