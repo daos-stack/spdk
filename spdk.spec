@@ -102,7 +102,7 @@ Requires: python python-configshell
 %endif
 %endif
 %endif
-BuildArch: x86_64
+BuildArch: noarch
 
 %description tools
 %{summary}
@@ -170,6 +170,7 @@ mv doc/output/html/ %{install_docdir}
 %files
 %dir %{_datadir}/%{name}
 %{_libdir}/*.so.*
+%{_bindir}
 
 
 %files devel
@@ -182,7 +183,6 @@ mv doc/output/html/ %{install_docdir}
 %files tools
 %{_datadir}/%{name}/include
 %{_datadir}/%{name}/scripts
-%{_bindir}
 
 
 %if %{with doc}
@@ -193,7 +193,7 @@ mv doc/output/html/ %{install_docdir}
 
 %changelog
 * Tue Jul 20 2021 Tom Nabarro <tom.nabarro@intel.com> - 0:21.04-2
-- Add example binaries to tools package.
+- Add example binaries to main package.
 
 * Tue Jun 29 2021 Tom Nabarro <tom.nabarro@intel.com> - 0:21.04-1
 - Upgrade SPDK to 21.04 + patch to custom githash on 21.07-pre
