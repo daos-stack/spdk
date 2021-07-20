@@ -170,7 +170,7 @@ mv doc/output/html/ %{install_docdir}
 %files
 %dir %{_datadir}/%{name}
 %{_libdir}/*.so.*
-%{_bindir}
+%{_bindir}/
 
 
 %files devel
