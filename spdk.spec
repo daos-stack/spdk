@@ -11,7 +11,7 @@
 
 Name:		spdk
 Version:	21.04
-Release:	1%{?commit:.g%{shortcommit}}%{?dist}
+Release:	2%{?commit:.g%{shortcommit}}%{?dist}
 Epoch:		0
 
 Summary:	Set of libraries and utilities for high performance user-mode storage
@@ -127,7 +127,6 @@ BuildArch: noarch
             --prefix=%{_prefix} \
             --disable-tests \
             --disable-unit-tests \
-            --disable-examples \
             --disable-apps \
             --without-vhost \
             --without-crypto \
@@ -183,6 +182,7 @@ mv doc/output/html/ %{install_docdir}
 %files tools
 %{_datadir}/%{name}/include
 %{_datadir}/%{name}/scripts
+%{_bindir}
 
 
 %if %{with doc}
@@ -192,6 +192,9 @@ mv doc/output/html/ %{install_docdir}
 
 
 %changelog
+* Tue Jul 20 2021 Tom Nabarro <tom.nabarro@intel.com> - 0:21.04-2
+- Add example binaries to tools package.
+
 * Tue Jun 29 2021 Tom Nabarro <tom.nabarro@intel.com> - 0:21.04-1
 - Upgrade SPDK to 21.04 + patch to custom githash on 21.07-pre
 - BR: dpdk-devel and R: dpdk = 21.05
