@@ -102,7 +102,7 @@ Requires: python python-configshell
 %endif
 %endif
 %endif
-BuildArch: noarch
+BuildArch: x86_64
 
 %description tools
 %{summary}
