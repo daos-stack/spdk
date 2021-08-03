@@ -41,4 +41,4 @@
 //@Library(value="pipeline-lib@your_branch") _
 
 // centos8: No matching package to install: 'fio-devel'
-packageBuildingPipelineDAOS(['distros': ['centos7', 'centos8', 'leap15'])
+packageBuildingPipelineDAOS(['distros': ['centos7', 'centos8', 'leap15']])
