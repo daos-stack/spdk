@@ -7,12 +7,9 @@
 # Build documentation package
 %bcond_with doc
 
-#%global shortcommit %(c=%{commit};echo ${c:0:7})
-
 Name:		spdk
 Version:	21.07
 Release:	1%{?dist}
-#Release:	1%{?commit:.g%{shortcommit}}%{?dist}
 Epoch:		0
 
 Summary:	Set of libraries and utilities for high performance user-mode storage
@@ -20,10 +17,6 @@ Summary:	Set of libraries and utilities for high performance user-mode storage
 License:	BSD
 URL:		http://spdk.io
 Source:		https://github.com/%{name}/%{name}/archive/v%{version}.tar.gz
-
-#%if "%{?commit}" != ""
-#Patch0: %{version}..%{commit}.patch
-#%endif
 
 %define package_version %{epoch}:%{version}-%{release}
 
