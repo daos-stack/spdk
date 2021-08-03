@@ -10,8 +10,8 @@
 %global shortcommit %(c=%{commit};echo ${c:0:7})
 
 Name:		spdk
-Version:	21.04
-Release:	2%{?commit:.g%{shortcommit}}%{?dist}
+Version:	21.07
+Release:	1%{?commit:.g%{shortcommit}}%{?dist}
 Epoch:		0
 
 Summary:	Set of libraries and utilities for high performance user-mode storage
@@ -192,6 +192,9 @@ mv doc/output/html/ %{install_docdir}
 
 
 %changelog
+* Tue Aug 03 2021 Tom Nabarro <tom.nabarro@intel.com> - 0:21.07-1
+- Upgrade SPDK to 21.07 release.
+
 * Tue Jul 20 2021 Tom Nabarro <tom.nabarro@intel.com> - 0:21.04-2
 - Add example binaries to main package.
 
