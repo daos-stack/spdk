@@ -9,7 +9,7 @@
 
 Name:		spdk
 Version:	21.07
-Release:	1%{?dist}
+Release:	2%{?dist}
 Epoch:		0
 
 Summary:	Set of libraries and utilities for high performance user-mode storage
@@ -17,6 +17,8 @@ Summary:	Set of libraries and utilities for high performance user-mode storage
 License:	BSD
 URL:		http://spdk.io
 Source:		https://github.com/%{name}/%{name}/archive/v%{version}.tar.gz
+
+Patch0:		0001-env_dpdk-tokenize-env_context.patch
 
 %define package_version %{epoch}:%{version}-%{release}
 
@@ -186,6 +188,9 @@ mv doc/output/html/ %{install_docdir}
 
 
 %changelog
+* Tue Aug 10 2021 Tom Nabarro <tom.nabarro@intel.com> - 0:21.07-2
+- Add patch to enable multiple dpdk cli opts on init.
+
 * Tue Aug 03 2021 Tom Nabarro <tom.nabarro@intel.com> - 0:21.07-1
 - Upgrade SPDK to 21.07 release.
 
