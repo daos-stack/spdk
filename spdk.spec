@@ -9,7 +9,7 @@
 
 Name:		spdk
 Version:	21.07
-Release:	2%{?dist}
+Release:	3%{?dist}
 Epoch:		0
 
 Summary:	Set of libraries and utilities for high performance user-mode storage
@@ -25,6 +25,8 @@ Patch0:		0001-env_dpdk-tokenize-env_context.patch
 %define install_datadir %{buildroot}/%{_datadir}/%{name}
 %define install_docdir %{buildroot}/%{_docdir}/%{name}
 
+%global dpdk_version 21.05
+
 # Distros that don't support python3 will use python2
 %if "%{dist}" == ".el7"
 %define use_python2 1
@@ -36,7 +38,7 @@ Patch0:		0001-env_dpdk-tokenize-env_context.patch
 ExclusiveArch: x86_64
 
 BuildRequires: gcc gcc-c++ make
-BuildRequires: dpdk-devel = 21.05
+BuildRequires: dpdk-devel >= %{dpdk_version}
 %if (0%{?rhel} >= 7)
 BuildRequires: numactl-devel
 BuildRequires: CUnit-devel
@@ -58,7 +60,7 @@ BuildRequires: python
 %endif
 
 # Install dependencies
-Requires: dpdk
+Requires: dpdk >= %{dpdk_version}
 
 Requires(post): /sbin/ldconfig
 Requires(postun): /sbin/ldconfig
@@ -72,7 +74,7 @@ applications.
 %package devel
 Summary: Storage Performance Development Kit development files
 Requires: %{name}%{?_isa} = %{package_version}
-Requires: dpdk-devel
+Requires: dpdk-devel >= %{dpdk_version}
 Provides: %{name}-static%{?_isa} = %{package_version}
 
 %description devel
@@ -188,6 +190,9 @@ mv doc/output/html/ %{install_docdir}
 
 
 %changelog
+* Fri Aug 13 2021 John Malmberg <john.e.malmberg@intel.com> - 0:21.07-3
+- Require dpdk >= 21.05
+
 * Tue Aug 10 2021 Tom Nabarro <tom.nabarro@intel.com> - 0:21.07-2
 - Add patch to enable multiple dpdk cli opts on init.
 
