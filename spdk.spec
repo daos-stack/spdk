@@ -9,7 +9,7 @@
 
 Name:		spdk
 Version:	21.07
-Release:	3%{?dist}
+Release:	4%{?dist}
 Epoch:		0
 
 Summary:	Set of libraries and utilities for high performance user-mode storage
@@ -19,6 +19,7 @@ URL:		http://spdk.io
 Source:		https://github.com/%{name}/%{name}/archive/v%{version}.tar.gz
 
 Patch0:		0001-env_dpdk-tokenize-env_context.patch
+Patch2:		0002-vmd-update-for-changes-in-IceLake-platform.patch
 
 %define package_version %{epoch}:%{version}-%{release}
 
@@ -190,6 +191,9 @@ mv doc/output/html/ %{install_docdir}
 
 
 %changelog
+* Tue Sep 07 2021 Tom Nabarro <tom.nabarro@intel.com> - 0:21.07-4
+- Add patch for ICX VMD driver update.
+
 * Fri Aug 13 2021 John Malmberg <john.e.malmberg@intel.com> - 0:21.07-3
 - Require dpdk >= 21.05
 
