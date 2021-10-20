@@ -161,10 +161,9 @@ ls %{install_datadir}/../..
 ls %{install_datadir}/../../..
 ls %{install_datadir}/../../../..
 ls ./
-ls build/
-ls build/examples/
-ls examples/
-cp examples/lsvmd %{buildroot}/%{_bindir}/
+ls build/examples
+ls %{buildroot}/%{_bindir}/
+cp build/examples/lsvmd %{buildroot}/%{_bindir}/
 
 %if %{with doc}
 # Install doc
