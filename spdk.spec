@@ -160,7 +160,7 @@ ls %{install_datadir}/..
 ls %{install_datadir}/../..
 ls %{install_datadir}/../../..
 ls %{install_datadir}/../../../..
-ls %{install_prefix}
+ls ./
 ls examples/
 cp examples/lsvmd %{buildroot}/%{_bindir}/
 
