@@ -161,6 +161,8 @@ ls %{install_datadir}/../..
 ls %{install_datadir}/../../..
 ls %{install_datadir}/../../../..
 ls ./
+ls build/
+ls build/examples/
 ls examples/
 cp examples/lsvmd %{buildroot}/%{_bindir}/
 
