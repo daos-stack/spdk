@@ -155,15 +155,6 @@ mkdir -p %{install_datadir}/scripts
 cp scripts/{setup,common}.sh %{install_datadir}/scripts/
 mkdir -p %{install_datadir}/include/spdk/
 cp include/spdk/pci_ids.h %{install_datadir}/include/spdk/
-ls %{buildroot}/
-ls %{install_datadir}/..
-ls %{install_datadir}/../..
-ls %{install_datadir}/../../..
-ls %{install_datadir}/../../../..
-ls ./
-ls build/examples
-ls %{buildroot}/%{_bindir}/
-cp build/examples/lsvmd %{buildroot}/%{_bindir}/
 
 %if %{with doc}
 # Install doc
