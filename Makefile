@@ -2,11 +2,10 @@ NAME    := spdk
 SRC_EXT := gz
 SOURCE   = https://github.com/spdk/$(NAME)/archive/v$(VERSION).tar.$(SRC_EXT)
 
-#GIT_COMMIT := 7232c450f97cf925a521a60ef2561eca4b65c41a
-
 # this needs to be formalized into packaging/Makefile_packaging.mk
-BUILD_DEFINES := --define "commit $(GIT_COMMIT)"
-RPM_BUILD_OPTIONS := $(BUILD_DEFINES)
+#GIT_COMMIT := 7232c450f97cf925a521a60ef2561eca4b65c41a
+#BUILD_DEFINES := --define "commit $(GIT_COMMIT)"
+#RPM_BUILD_OPTIONS := $(BUILD_DEFINES)
 
 #https://github.com/rpm-software-management/mock/issues/384
 override MOCK_OPTIONS += --disablerepo=sclo*
