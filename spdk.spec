@@ -9,7 +9,7 @@
 
 Name:		spdk
 Version:	21.07
-Release:	5%{?dist}
+Release:	6%{?dist}
 Epoch:		0
 
 Summary:	Set of libraries and utilities for high performance user-mode storage
@@ -155,6 +155,7 @@ mkdir -p %{install_datadir}/scripts
 cp scripts/{setup,common}.sh %{install_datadir}/scripts/
 mkdir -p %{install_datadir}/include/spdk/
 cp include/spdk/pci_ids.h %{install_datadir}/include/spdk/
+cp build/examples/lsvmd %{buildroot}/%{_bindir}/
 
 %if %{with doc}
 # Install doc
@@ -192,6 +193,9 @@ mv doc/output/html/ %{install_docdir}
 
 
 %changelog
+* Wed Oct 20 2021 Saurabh Tandan <saurabh.tandan@intel.com> - 0:21.07-6
+- Adding lsvmd to the binary dir
+
 * Mon Oct 11 2021 Sydney Vanda <sydney.m.vanda@intel.com> - 0:21.07-5
 - Add patch for performance degradation after repeated format.
 
