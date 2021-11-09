@@ -1,0 +1,102 @@
+From 148a9ab0c06346f9fec109a1df00651c1f5a0499 Mon Sep 17 00:00:00 2001
+From: Tom Nabarro <tom.nabarro@intel.com>
+Date: Thu, 4 Nov 2021 15:25:54 -0400
+Subject: [PATCH] env/dpdk: retry SO_RCVBUF if SO_RCVBUFFORCE fails
+
+PCI event module currently requires use of SO_RCVBUFFORCE socket option
+which is restricted to CAP_NET_ADMIN. Retry with SO_RCVBUF for non-root
+(unprivileged) processes where this capability is not available.
+
+Return -ENOSPC if receive buffer is not of sufficient size.
+
+Fixes issue #2224
+
+Signed-off-by: Tom Nabarro <tom.nabarro@intel.com>
+Change-Id: I0bed1b1eac0c7e8601d3d172d8027380ec8be391
+Reviewed-on: https://review.spdk.io/gerrit/c/spdk/spdk/+/10126
+Community-CI: Broadcom CI <spdk-ci.pdl@broadcom.com>
+Community-CI: Mellanox Build Bot
+Reviewed-by: Jim Harris <james.r.harris@intel.com>
+Reviewed-by: Changpeng Liu <changpeng.liu@intel.com>
+Reviewed-by: Dong Yi <dongx.yi@intel.com>
+Tested-by: SPDK CI Jenkins <sys_sgci@intel.com>
+---
+ lib/env_dpdk/pci_event.c | 36 ++++++++++++++++++++++++++----------
+ 1 file changed, 26 insertions(+), 10 deletions(-)
+
+diff --git a/lib/env_dpdk/pci_event.c b/lib/env_dpdk/pci_event.c
+index 63f85cd06..563b00b80 100644
+--- a/lib/env_dpdk/pci_event.c
++++ b/lib/env_dpdk/pci_event.c
+@@ -50,6 +50,8 @@ spdk_pci_event_listen(void)
+ 	struct sockaddr_nl addr;
+ 	int netlink_fd;
+ 	int size = SPDK_UEVENT_RECVBUF_SIZE;
++	int buf_size;
++	socklen_t opt_size;
+ 	int flag, rc;
+ 
+ 	memset(&addr, 0, sizeof(addr));
+@@ -64,35 +66,49 @@ spdk_pci_event_listen(void)
+ 	}
+ 
+ 	if (setsockopt(netlink_fd, SOL_SOCKET, SO_RCVBUFFORCE, &size, sizeof(size)) < 0) {
+-		rc = errno;
+-		SPDK_ERRLOG("Failed to set socket option\n");
+-		close(netlink_fd);
+-		return -rc;
++		if (setsockopt(netlink_fd, SOL_SOCKET, SO_RCVBUF, &size, sizeof(size)) < 0) {
++			rc = errno;
++			SPDK_ERRLOG("Failed to set socket option SO_RCVBUF\n");
++			goto error;
++		}
++		opt_size = sizeof(buf_size);
++		if (getsockopt(netlink_fd, SOL_SOCKET, SO_RCVBUF, &buf_size, &opt_size) < 0) {
++			rc = errno;
++			SPDK_ERRLOG("Failed to get socket option SO_RCVBUF\n");
++			goto error;
++		}
++		if (buf_size < SPDK_UEVENT_RECVBUF_SIZE) {
++			SPDK_ERRLOG("Socket recv buffer is too small (< %d), see SO_RCVBUF "
++				    "section in socket(7) man page for specifics on how to "
++				    "adjust the system setting.", SPDK_UEVENT_RECVBUF_SIZE);
++			rc = ENOSPC;
++			goto error;
++		}
+ 	}
+ 
+ 	flag = fcntl(netlink_fd, F_GETFL);
+ 	if (flag < 0) {
+ 		rc = errno;
+ 		SPDK_ERRLOG("Failed to get socket flag, fd: %d\n", netlink_fd);
+-		close(netlink_fd);
+-		return -rc;
++		goto error;
+ 	}
+ 
+ 	if (fcntl(netlink_fd, F_SETFL, flag | O_NONBLOCK) < 0) {
+ 		rc = errno;
+ 		SPDK_ERRLOG("Fcntl can't set nonblocking mode for socket, fd: %d\n", netlink_fd);
+-		close(netlink_fd);
+-		return -rc;
++		goto error;
+ 	}
+ 
+ 	if (bind(netlink_fd, (struct sockaddr *) &addr, sizeof(addr)) < 0) {
+ 		rc = errno;
+ 		SPDK_ERRLOG("Failed to bind the netlink\n");
+-		close(netlink_fd);
+-		return -rc;
++		goto error;
+ 	}
+ 
+ 	return netlink_fd;
++error:
++	close(netlink_fd);
++	return -rc;
+ }
+ 
+ /* Note: We parse the event from uio and vfio subsystem and will ignore
+-- 
+2.27.0
+

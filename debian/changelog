@@ -1,9 +1,16 @@
-spdk (21.07-3) unstable; urgency=medium
-  [ John Malmberg ]
-  * Upgrade SPDK to 21.07 release + patch to enable multiple dpdk cli
-   opts on init.
+spdk (21.07-7) unstable; urgency=medium
 
- --  John Malmberg <John.e.malmberg@intel.com>  Fri, 13 Aug 2021 19:00:00 +0000
+  [ Tom Nabarro ]
+  * Add patch to enable use of PCI event module with non-root process.
+
+ --  Tom Nabarro <tom.nabarro@intel.com>  Tue, 09 Nov 2021 00:00:00 +0000
+
+spdk (21.07-2) unstable; urgency=medium
+  [ Tom Nabarro ]
+  * Upgrade SPDK to 21.07 release + patch to enable multiple dpdk cli
+    opts on init.
+
+ --  Tom Nabarro <tom.nabarro@intel.com>  Fri, 10 Aug 2021 00:00:00 +0000
 
 spdk (21.04-1) unstable; urgency=medium
 
