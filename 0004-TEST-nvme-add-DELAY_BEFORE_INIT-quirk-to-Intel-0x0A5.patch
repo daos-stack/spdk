@@ -1,0 +1,31 @@
+From 813db8a8ca4fa8b0160eab2a0018b89331b0480d Mon Sep 17 00:00:00 2001
+From: Jim Harris <james.r.harris@intel.com>
+Date: Tue, 9 Nov 2021 14:03:41 +0000
+Subject: [PATCH] [TEST] nvme: add DELAY_BEFORE_INIT quirk to Intel 0x0A54 SSD
+
+This quirk was already applied to the 0x0A53 SSD, but is
+likely needed on 0x0A54 as well.
+
+Possible fix for issue #2231.
+
+Signed-off-by: Jim Harris <james.r.harris@intel.com>
+Change-Id: I36a48ab92d1698a411472f714b5108413bbc3c56
+---
+ lib/nvme/nvme_quirks.c | 1 +
+ 1 file changed, 1 insertion(+)
+
+diff --git a/lib/nvme/nvme_quirks.c b/lib/nvme/nvme_quirks.c
+index 9065467d3..92ac8d940 100644
+--- a/lib/nvme/nvme_quirks.c
++++ b/lib/nvme/nvme_quirks.c
+@@ -60,6 +60,7 @@ static const struct nvme_quirk nvme_quirks[] = {
+ 		NVME_INTEL_QUIRK_WRITE_LATENCY |
+ 		NVME_INTEL_QUIRK_STRIPING |
+ 		NVME_QUIRK_READ_ZERO_AFTER_DEALLOCATE |
++		NVME_QUIRK_DELAY_BEFORE_INIT |
+ 		NVME_QUIRK_MINIMUM_IO_QUEUE_SIZE
+ 	},
+ 	{	{SPDK_PCI_CLASS_NVME, SPDK_PCI_VID_INTEL, 0x0A55, SPDK_PCI_ANY_ID, SPDK_PCI_ANY_ID},
+-- 
+2.27.0
+

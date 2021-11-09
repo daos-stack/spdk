@@ -9,7 +9,7 @@
 
 Name:		spdk
 Version:	21.07
-Release:	6%{?dist}
+Release:	7%{?dist}
 Epoch:		0
 
 Summary:	Set of libraries and utilities for high performance user-mode storage
@@ -21,6 +21,7 @@ Source:		https://github.com/%{name}/%{name}/archive/v%{version}.tar.gz
 Patch0:		0001-env_dpdk-tokenize-env_context.patch
 Patch2:		0002-vmd-update-for-changes-in-IceLake-platform.patch
 Patch3:		0003-blob-chunk-clear-operations-in-IU-aligned-chunks.patch
+Patch4:		0004-TEST-nvme-add-DELAY_BEFORE_INIT-quirk-to-Intel-0x0A5.patch
 
 %define package_version %{epoch}:%{version}-%{release}
 
@@ -193,6 +194,9 @@ mv doc/output/html/ %{install_docdir}
 
 
 %changelog
+* Tue Nov 09 2021 Signed-off-by: Tom Nabarro <tom.nabarro@intel.com> - 0:21.07-7
+- Add test fix for quirky SSD models.
+
 * Wed Oct 20 2021 Saurabh Tandan <saurabh.tandan@intel.com> - 0:21.07-6
 - Adding lsvmd to the binary dir
 
