@@ -1,3 +1,9 @@
+spdk (21.07-7) unstable; urgency=medium
+  [ Tom Nabarro ]
+  * Add test fix for quirky SSD models
+
+ --  Tom Nabarro <tom.nabarro@intel.com>  Tue, 09 Nov 2021 00:00:00 +0000
+
 spdk (21.07-3) unstable; urgency=medium
   [ John Malmberg ]
   * Upgrade SPDK to 21.07 release + patch to enable multiple dpdk cli
