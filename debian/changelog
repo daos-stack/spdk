@@ -5,12 +5,54 @@ spdk (21.07-7) unstable; urgency=medium
 
  --  Tom Nabarro <tom.nabarro@intel.com>  Tue, 09 Nov 2021 00:00:00 +0000
 
-spdk (21.07-2) unstable; urgency=medium
+spdk (21.07-6) unstable; urgency=medium
+
+  [ Saurabh Tandan ]
+  * Adding lsvmd to the binary dir
+
+ --  Saurabh Tandan <saurabh.tandan@intel.com>  Wed, 20 Oct 2021 00:00:00 +0000
+
+spdk (21.07-5) unstable; urgency=medium
+
+  [ Sydney Vanda ]
+  * Add patch for performance degradation after repeated format.
+
+ -- Sydney Vanda <sydney.m.vanda@intel.com>  Tue, 07 Oct 2021 00:00:00 +0000
+
+spdk (21.07-4) unstable; urgency=medium
+
   [ Tom Nabarro ]
-  * Upgrade SPDK to 21.07 release + patch to enable multiple dpdk cli
-    opts on init.
+  * Add patch for ICX VMD driver update.
+
+ --  Tom Nabarro <tom.nabarro@intel.com>  Tue, 07 Sep 2021 00:00:00 +0000
+
+spdk (21.07-3) unstable; urgency=medium
+
+  [ John Malmberg ]
+  * Require dpdk >= 21.05
+
+ -- John Malmberg <John.e.malmberg@intel.com>  Fri, 13 Aug 2021 19:00:00 +0000
+
+spdk (21.07-2) unstable; urgency=medium
+
+  [ Tom Nabarro ]
+  * Add patch to enable multiple dpdk cli opts on init.
 
  --  Tom Nabarro <tom.nabarro@intel.com>  Fri, 10 Aug 2021 00:00:00 +0000
+
+spdk (21.07-1) unstable; urgency=medium
+
+  [ Tom Nabarro ]
+  * Upgrade SPDK to 21.07 release.
+
+ --  Tom Nabarro <tom.nabarro@intel.com>  Tue, 03 Aug 2021 00:00:00 +0000
+
+spdk (21.04-2) unstable; urgency=medium
+
+  [ Tom Nabarro ]
+  * Add example binaries to main package.
+
+ --  Tom Nabarro <tom.nabarro@intel.com>  Tue, 20 Jul 2021 00:00:00 +0000
 
 spdk (21.04-1) unstable; urgency=medium
 
@@ -32,13 +74,16 @@ spdk (20.01.2-1) unstable; urgency=medium
 
   [ Brian J. Murrell ]
   * Update to 20.01.2
+  * BR: dpdk-devel and R: dpdk = 19.11.6
 
  -- Brian J. Murrell <brian.murrell@intel.com>  Thu, 11 Feb 2021 13:15:59 -0500
 
 spdk (20.01.1-1) unstable; urgency=medium
 
-  [ Brian J. Murrell ]
-  * Initial build for Ubuntu
+  [ Tom Nabarro ]
+  * Upgrade to enable SPDK via VFIO as non-root w/ CentOS 7.7.
+  * Remove fio_plugin from build.
+  * Remove unused cli/rpc tool scripts from build.
 
- -- Brian J. Murrell <brian.murrell@intel.com>  Wed, 20 Aug 2020 11:27:00 -0400
+ --  Tom Nabarro <tom.nabarro@intel.com>  Fri, 03 Apr 2021 00:00:00 +0000
 
