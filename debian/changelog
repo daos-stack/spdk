@@ -1,3 +1,11 @@
+spdk (21.07-8) unstable; urgency=medium
+
+  [ Tom Nabarro ]
+  * Add patch to fix printing of correct socket-ID for VMD backing
+    devices.
+
+ --  Tom Nabarro <tom.nabarro@intel.com>  Fri, 26 Nov 2021 00:00:00 +0000
+
 spdk (21.07-7) unstable; urgency=medium
 
   [ Tom Nabarro ]
