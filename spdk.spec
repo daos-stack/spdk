@@ -9,7 +9,7 @@
 
 Name:		spdk
 Version:	21.07
-Release:	8%{?dist}
+Release:	9%{?dist}
 Epoch:		0
 
 Summary:	Set of libraries and utilities for high performance user-mode storage
@@ -23,6 +23,7 @@ Patch2:		0002-vmd-update-for-changes-in-IceLake-platform.patch
 Patch3:		0003-blob-chunk-clear-operations-in-IU-aligned-chunks.patch
 Patch4:		0004-env-dpdk-retry-SO_RCVBUF-if-SO_RCVBUFFORCE-fails.patch
 Patch5:		0005-vmd-set-socket_id-for-devices-behind-VMD-endpoint.patch
+Patch6:		0006-json-Added-support-for-8-bit-unsigned-value-converte.patch
 
 %define package_version %{epoch}:%{version}-%{release}
 
@@ -195,6 +196,9 @@ mv doc/output/html/ %{install_docdir}
 
 
 %changelog
+* Tue Dec 14 2021 Tom Nabarro <tom.nabarro@intel.com> - 0:21.07-9
+- Add patch to add uint8 JSON decode function.
+
 * Fri Nov 26 2021 Tom Nabarro <tom.nabarro@intel.com> - 0:21.07-8
 - Add patch to fix printing of correct socket-ID for VMD backing
   devices.
