@@ -158,7 +158,7 @@ mkdir -p %{install_datadir}/scripts
 cp scripts/{setup,common}.sh %{install_datadir}/scripts/
 mkdir -p %{install_datadir}/include/spdk/
 cp include/spdk/pci_ids.h %{install_datadir}/include/spdk/
-cp build/examples/{lsvmd,nvme_manage} %{buildroot}/%{_bindir}/
+cp build/examples/{lsvmd,nvme_manage,identify,perf} %{buildroot}/%{_bindir}/
 
 %if %{with doc}
 # Install doc
