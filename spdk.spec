@@ -9,7 +9,7 @@
 
 Name:		spdk
 Version:	21.07
-Release:	9%{?dist}
+Release:	10%{?dist}
 Epoch:		0
 
 Summary:	Set of libraries and utilities for high performance user-mode storage
@@ -158,7 +158,7 @@ mkdir -p %{install_datadir}/scripts
 cp scripts/{setup,common}.sh %{install_datadir}/scripts/
 mkdir -p %{install_datadir}/include/spdk/
 cp include/spdk/pci_ids.h %{install_datadir}/include/spdk/
-cp build/examples/lsvmd %{buildroot}/%{_bindir}/
+cp build/examples/{lsvmd,nvme_manage} %{buildroot}/%{_bindir}/
 
 %if %{with doc}
 # Install doc
@@ -196,6 +196,9 @@ mv doc/output/html/ %{install_docdir}
 
 
 %changelog
+* Sat Jan 01 2022 Tom Nabarro <tom.nabarro@intel.com> - 0:21.07-10
+- Add nvme_manage example app to binary directory.
+
 * Tue Dec 14 2021 Tom Nabarro <tom.nabarro@intel.com> - 0:21.07-9
 - Add patch to add uint8 JSON decode function.
 
