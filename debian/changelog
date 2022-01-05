@@ -1,3 +1,10 @@
+spdk (21.07-10) unstable; urgency=medium
+
+  [ Tom Nabarro ]
+  * Add nvme_manage example app to binary directory.
+
+ --  Tom Nabarro <tom.nabarro@intel.com>  Sat, 01 Jan 2022 00:00:00 +0000
+
 spdk (21.07-9) unstable; urgency=medium
 
   [ Tom Nabarro ]
