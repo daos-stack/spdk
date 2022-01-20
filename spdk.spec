@@ -158,7 +158,6 @@ mkdir -p %{install_datadir}/scripts
 cp scripts/{setup,common}.sh %{install_datadir}/scripts/
 mkdir -p %{install_datadir}/include/%{name}/
 cp include/%{name}/pci_ids.h %{install_datadir}/include/%{name}/
-mkdir -p %{buildroot}/%{_bindir}/%{name}
 # spdk_nvme_identify and spdk_nvme_perf are already installed by default
 cp build/examples/lsvmd %{buildroot}/%{_bindir}/spdk_nvme_lsvmd
 cp build/examples/nvme_manage %{buildroot}/%{_bindir}/spdk_nvme_manage
