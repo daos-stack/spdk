@@ -1,3 +1,10 @@
+spdk (21.07-11) unstable; urgency=medium
+
+  [ Jeff Olivier ]
+  * Rename spdk example app binaries to be consistent with those existing.
+
+ --  Jeff Olivier <jeffrey.v.olivier@intel.com>  Fri, 28 Jan 2022 00:21:07 +0000
+
 spdk (21.07-10) unstable; urgency=medium
 
   [ Tom Nabarro ]
