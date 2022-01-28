@@ -9,7 +9,7 @@
 
 Name:		spdk
 Version:	21.07
-Release:	10%{?dist}
+Release:	11%{?dist}
 Epoch:		0
 
 Summary:	Set of libraries and utilities for high performance user-mode storage
@@ -122,7 +122,7 @@ BuildArch: noarch
 
 
 %prep
-%autosetup -n spdk-%{version} -p1
+%autosetup -n %{name}-%{version} -p1
 
 
 %build
@@ -156,9 +156,11 @@ mkdir -p %{install_datadir}/scripts
 
 # install the setup tool
 cp scripts/{setup,common}.sh %{install_datadir}/scripts/
-mkdir -p %{install_datadir}/include/spdk/
-cp include/spdk/pci_ids.h %{install_datadir}/include/spdk/
-cp build/examples/{lsvmd,nvme_manage,identify,perf} %{buildroot}/%{_bindir}/
+mkdir -p %{install_datadir}/include/%{name}/
+cp include/%{name}/pci_ids.h %{install_datadir}/include/%{name}/
+# spdk_nvme_identify and spdk_nvme_perf are already installed by default
+cp build/examples/lsvmd %{buildroot}/%{_bindir}/spdk_nvme_lsvmd
+cp build/examples/nvme_manage %{buildroot}/%{_bindir}/spdk_nvme_manage
 
 %if %{with doc}
 # Install doc
@@ -196,6 +198,9 @@ mv doc/output/html/ %{install_docdir}
 
 
 %changelog
+* Fri Jan 28 2022 Jeff Olivier <jeffrey.v.olivier@intel.com> - 0:21.07-11
+- Rename spdk example app binaries to be consistent with those existing.
+
 * Sat Jan 01 2022 Tom Nabarro <tom.nabarro@intel.com> - 0:21.07-10
 - Add nvme_manage example app to binary directory.
 
