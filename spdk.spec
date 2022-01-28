@@ -158,7 +158,8 @@ mkdir -p %{install_datadir}/scripts
 cp scripts/{setup,common}.sh %{install_datadir}/scripts/
 mkdir -p %{install_datadir}/include/spdk/
 cp include/spdk/pci_ids.h %{install_datadir}/include/spdk/
-cp build/examples/{lsvmd,nvme_manage,identify,perf} %{buildroot}/%{_bindir}/
+mkdir -p %{buildroot}/%{_bindir}/spdk
+cp build/examples/{lsvmd,nvme_manage,identify,perf} %{buildroot}/%{_bindir}/spdk
 
 %if %{with doc}
 # Install doc
@@ -175,6 +176,7 @@ mv doc/output/html/ %{install_docdir}
 %dir %{_datadir}/%{name}
 %{_libdir}/*.so.*
 %{_bindir}/*
+%{_bindir}/spdk/*
 
 
 %files devel
@@ -196,6 +198,9 @@ mv doc/output/html/ %{install_docdir}
 
 
 %changelog
+* Thu Jan 27 2022 Jeff Olivier <jeffrey.v.olivier@intel.com> - 0:21.07-10
+- Move example apps to spdk subdirectory
+
 * Sat Jan 01 2022 Tom Nabarro <tom.nabarro@intel.com> - 0:21.07-10
 - Add nvme_manage example app to binary directory.
 
