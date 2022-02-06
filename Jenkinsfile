@@ -41,5 +41,5 @@
 //@Library(value="pipeline-lib@your_branch") _
 
 // el8: No matching package to install: 'fio-devel'
-packageBuildingPipelineDAOS(['distros': ['centos7', 'el8', 'leap15',
+packageBuildingPipelineDAOS(['distros': ['el7', 'el8', 'leap15',
                              'ubuntu20.04']])
