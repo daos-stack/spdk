@@ -139,7 +139,8 @@ BuildArch: noarch
             --without-iscsi-initiator \
             --without-isal \
             --without-vtune \
-            --with-shared
+            --with-shared \
+            --enable-debug
 
 %make_build all
 
