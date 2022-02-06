@@ -40,6 +40,6 @@
 // I.e. for testing library changes
 //@Library(value="pipeline-lib@your_branch") _
 
-// centos8: No matching package to install: 'fio-devel'
-packageBuildingPipelineDAOS(['distros': ['centos7', 'centos8', 'leap15',
+// el8: No matching package to install: 'fio-devel'
+packageBuildingPipelineDAOS(['distros': ['centos7', 'el8', 'leap15',
                              'ubuntu20.04']])
