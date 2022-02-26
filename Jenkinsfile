@@ -38,7 +38,7 @@
  */
 // To use a test branch (i.e. PR) until it lands to master
 // I.e. for testing library changes
-@Library(value="pipeline-lib@888ce5b5c572073d13e858e1218328b0d06e04a7") _
+@Library(value="pipeline-lib@pre-el8") _
 
 packageBuildingPipelineDAOS(['distros': ['centos7', 'centos8', 'leap15',
                              'ubuntu20.04']])
