@@ -1,0 +1,76 @@
+From a1765d24ac9bc57934c4a10ba7ef215cf3457022 Mon Sep 17 00:00:00 2001
+From: Konrad Sztyber <konrad.sztyber@intel.com>
+Date: Wed, 9 Mar 2022 15:06:23 +0100
+Subject: [PATCH] vmd: reset root port config before enumeration
+
+The root ports might have been configured by some other driver (e.g.
+Linux kernel) prior to loading the SPDK one, so we need to clear it.  We
+need to before the scanning process, as it's depth-first, so when
+scanning the initial root ports, the latter ones might still be using
+stale configuration.  This can lead to two bridges having the same
+secondary/subordinate bus configuration, meaning that their config space
+would map to the same memory area, which, of course, isn't correct.
+
+This has manifested in issue #2413, where two root ports were configured
+to use the same secondary bus.  This caused an endpoint device to be
+enumerated twice on two different root ports, with the first instance
+being broken once the second port was configured by the SPDK driver.
+
+Fixes #2413
+
+Signed-off-by: Konrad Sztyber <konrad.sztyber@intel.com>
+Change-Id: I5ce0931a84c1d23ccadb93fe39e8155ff1281474
+---
+ lib/vmd/vmd.c | 29 +++++++++++++++++++++++++++++
+ 1 file changed, 29 insertions(+)
+
+diff --git a/lib/vmd/vmd.c b/lib/vmd/vmd.c
+index c4c328144..fd5dec721 100644
+--- a/lib/vmd/vmd.c
++++ b/lib/vmd/vmd.c
+@@ -1106,6 +1106,33 @@ vmd_cache_scan_info(struct vmd_pci_device *dev)
+ 	}
+ }
+ 
++static void
++vmd_reset_root_ports(struct vmd_pci_bus *bus)
++{
++	volatile struct pci_header *header;
++	uint32_t devfn;
++
++	/*
++	 * The root ports might have been configured by some other driver (e.g.  Linux kernel) prior
++	 * to loading the SPDK one, so we need to clear it.  We need to before the scanning process,
++	 * as it's depth-first, so when scanning the initial root ports, the latter ones might still
++	 * be using stale configuration.  This can lead to two bridges having the same
++	 * secondary/subordinate bus configuration, which, of course, isn't correct.
++	 * (Note: this fixed issue #2413.)
++	 */
++	for (devfn = 0; devfn < 32; ++devfn) {
++		if (!vmd_bus_device_present(bus, devfn)) {
++			continue;
++		}
++
++		header = (volatile void *)(bus->vmd->cfg_vaddr + CONFIG_OFFSET_ADDR(bus->bus_number,
++										    devfn, 0, 0));
++		if (vmd_device_is_root_port(header) && !vmd_device_is_enumerated(header)) {
++			vmd_reset_base_limit_registers(header);
++		}
++	}
++}
++
+ static uint8_t
+ vmd_scan_pcibus(struct vmd_pci_bus *bus)
+ {
+@@ -1113,6 +1140,8 @@ vmd_scan_pcibus(struct vmd_pci_bus *bus)
+ 	struct vmd_pci_device *dev;
+ 	uint8_t dev_cnt;
+ 
++	vmd_reset_root_ports(bus);
++
+ 	g_end_device_count = 0;
+ 	TAILQ_INSERT_TAIL(&bus->vmd->bus_list, bus, tailq);
+ 	bus->vmd->next_bus_number = bus->bus_number + 1;
+-- 
+2.27.0
+
