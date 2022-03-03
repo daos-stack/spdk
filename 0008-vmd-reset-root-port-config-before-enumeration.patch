@@ -1,4 +1,4 @@
-From a1765d24ac9bc57934c4a10ba7ef215cf3457022 Mon Sep 17 00:00:00 2001
+From b41ec453e3ff3770c9b5aa206ecccbd6b754e836 Mon Sep 17 00:00:00 2001
 From: Konrad Sztyber <konrad.sztyber@intel.com>
 Date: Wed, 9 Mar 2022 15:06:23 +0100
 Subject: [PATCH] vmd: reset root port config before enumeration
@@ -25,7 +25,7 @@ Change-Id: I5ce0931a84c1d23ccadb93fe39e8155ff1281474
  1 file changed, 29 insertions(+)
 
 diff --git a/lib/vmd/vmd.c b/lib/vmd/vmd.c
-index c4c328144..fd5dec721 100644
+index c4c328144..c8a0c7906 100644
 --- a/lib/vmd/vmd.c
 +++ b/lib/vmd/vmd.c
 @@ -1106,6 +1106,33 @@ vmd_cache_scan_info(struct vmd_pci_device *dev)
@@ -52,7 +52,7 @@ index c4c328144..fd5dec721 100644
 +		}
 +
 +		header = (volatile void *)(bus->vmd->cfg_vaddr + CONFIG_OFFSET_ADDR(bus->bus_number,
-+										    devfn, 0, 0));
++					   devfn, 0, 0));
 +		if (vmd_device_is_root_port(header) && !vmd_device_is_enumerated(header)) {
 +			vmd_reset_base_limit_registers(header);
 +		}
