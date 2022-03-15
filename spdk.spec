@@ -9,7 +9,7 @@
 
 Name:		spdk
 Version:	21.07
-Release:	11%{?dist}
+Release:	12%{?dist}
 Epoch:		0
 
 Summary:	Set of libraries and utilities for high performance user-mode storage
@@ -24,6 +24,8 @@ Patch3:		0003-blob-chunk-clear-operations-in-IU-aligned-chunks.patch
 Patch4:		0004-env-dpdk-retry-SO_RCVBUF-if-SO_RCVBUFFORCE-fails.patch
 Patch5:		0005-vmd-set-socket_id-for-devices-behind-VMD-endpoint.patch
 Patch6:		0006-json-Added-support-for-8-bit-unsigned-value-converte.patch
+Patch7:		0007-vmd-pass-pci_header-instead-of-vmd_pci_device.patch
+Patch8:		0008-vmd-reset-root-port-config-before-enumeration.patch
 
 %define package_version %{epoch}:%{version}-%{release}
 
@@ -198,6 +200,9 @@ mv doc/output/html/ %{install_docdir}
 
 
 %changelog
+* Wed Mar 09 2022 Tom Nabarro <tom.nabarro@intel.com> - 0:21.07-12
+- Add patches to fix error on VMD init after reboot.
+
 * Fri Jan 28 2022 Jeff Olivier <jeffrey.v.olivier@intel.com> - 0:21.07-11
 - Rename spdk example app binaries to be consistent with those existing.
 
