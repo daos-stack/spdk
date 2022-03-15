@@ -1,9 +1,9 @@
-spdk (21.07-12) unstable; urgency=medium
+spdk (21.07-13) unstable; urgency=medium
 
-  [ Tom Nabarro ]
-  * Add patches to fix error on VMD init after reboot.
+  [ Michael MacDonald ]
+  * Revert landing of SPDK fixes for VMD.
 
- --  Tom Nabarro <tom.nabarro@intel.com>  Wed, 09 Mar 2022 00:00:00 +0000
+ --  Michael MacDonald <mjmac.macdonald@intel.com>  Tue, 15 Mar 2022 14:38:07 +0000
 
 spdk (21.07-11) unstable; urgency=medium
 
