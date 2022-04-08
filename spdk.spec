@@ -25,7 +25,6 @@ Patch4:		0004-env-dpdk-retry-SO_RCVBUF-if-SO_RCVBUFFORCE-fails.patch
 Patch5:		0005-vmd-set-socket_id-for-devices-behind-VMD-endpoint.patch
 Patch6:		0006-json-Added-support-for-8-bit-unsigned-value-converte.patch
 Patch7:		0007-setup.sh-Speed-up-the-VMD-device-unbind-by-running-i.patch
-Patch8:		0008-XXX-dbg.patch
 
 %define package_version %{epoch}:%{version}-%{release}
 
