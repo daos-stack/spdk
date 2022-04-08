@@ -1,0 +1,27 @@
+From 037de7b6bc9ece788801a62d39b30e13b43cd323 Mon Sep 17 00:00:00 2001
+From: Tom Nabarro <tom.nabarro@intel.com>
+Date: Fri, 8 Apr 2022 05:37:56 -0400
+Subject: [PATCH] debug root port changes
+
+Signed-off-by: Tom Nabarro <tom.nabarro@intel.com>
+Change-Id: Ie64f70a1b90317d3a7f044724a0194eca2cafbac
+---
+ lib/vmd/vmd.c | 2 ++
+ 1 file changed, 2 insertions(+)
+
+diff --git a/lib/vmd/vmd.c b/lib/vmd/vmd.c
+index c8a0c7906..1a6d3df3b 100644
+--- a/lib/vmd/vmd.c
++++ b/lib/vmd/vmd.c
+@@ -1127,6 +1127,8 @@ vmd_reset_root_ports(struct vmd_pci_bus *bus)
+ 
+ 		header = (volatile void *)(bus->vmd->cfg_vaddr + CONFIG_OFFSET_ADDR(bus->bus_number,
+ 					   devfn, 0, 0));
++		SPDK_ERRLOG("cfg_vaddr=%p bus_number=%d devfn=%d header=%p\n",
++			    bus->vmd->cfg_vaddr, bus->bus_number, devfn, header);
+ 		if (vmd_device_is_root_port(header) && !vmd_device_is_enumerated(header)) {
+ 			vmd_reset_base_limit_registers(header);
+ 		}
+-- 
+2.31.1
+
