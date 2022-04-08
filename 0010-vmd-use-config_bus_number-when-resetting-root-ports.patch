@@ -1,0 +1,40 @@
+From 07f2ddbcc284036c0d863107755db158ca368cdd Mon Sep 17 00:00:00 2001
+From: Konrad Sztyber <konrad.sztyber@intel.com>
+Date: Fri, 8 Apr 2022 14:34:59 +0200
+Subject: [PATCH] vmd: use config_bus_number when resetting root ports
+
+The config_bus_number is an offset within the config space reserved for
+the devices behind the VMD, while bus_number refers to the actual bus
+number assigned by VMD that depend on the VMCAP and VMCONFIG registers.
+So, to access the mapped config space we have to use config_bus_number.
+
+We didn't do that when resetting root ports', which could lead to
+segfaults if these values were different, as we'd access unmapped
+memory.
+
+Fixes #2451
+
+Change-Id: I4e7bbb81400462284014565099bec98f6171c8c9
+Signed-off-by: Konrad Sztyber <konrad.sztyber@intel.com>
+---
+ lib/vmd/vmd.c | 4 ++--
+ 1 file changed, 2 insertions(+), 2 deletions(-)
+
+diff --git a/lib/vmd/vmd.c b/lib/vmd/vmd.c
+index c8a0c7906..4066396e0 100644
+--- a/lib/vmd/vmd.c
++++ b/lib/vmd/vmd.c
+@@ -1125,8 +1125,8 @@ vmd_reset_root_ports(struct vmd_pci_bus *bus)
+ 			continue;
+ 		}
+ 
+-		header = (volatile void *)(bus->vmd->cfg_vaddr + CONFIG_OFFSET_ADDR(bus->bus_number,
+-					   devfn, 0, 0));
++		header = (volatile void *)(bus->vmd->cfg_vaddr +
++					   CONFIG_OFFSET_ADDR(bus->config_bus_number, devfn, 0, 0));
+ 		if (vmd_device_is_root_port(header) && !vmd_device_is_enumerated(header)) {
+ 			vmd_reset_base_limit_registers(header);
+ 		}
+-- 
+2.31.1
+
