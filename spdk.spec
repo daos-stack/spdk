@@ -9,7 +9,7 @@
 
 Name:		spdk
 Version:	21.07
-Release:	14%{?dist}
+Release:	15%{?dist}
 Epoch:		0
 
 Summary:	Set of libraries and utilities for high performance user-mode storage
@@ -26,6 +26,7 @@ Patch5:		0005-vmd-set-socket_id-for-devices-behind-VMD-endpoint.patch
 Patch6:		0006-json-Added-support-for-8-bit-unsigned-value-converte.patch
 Patch7:		0007-vmd-pass-pci_header-instead-of-vmd_pci_device.patch
 Patch8:		0008-vmd-reset-root-port-config-before-enumeration.patch
+Patch9:		0009-setup.sh-Speed-up-the-VMD-device-unbind-by-running-i.patch
 
 %define package_version %{epoch}:%{version}-%{release}
 
@@ -200,6 +201,9 @@ mv doc/output/html/ %{install_docdir}
 
 
 %changelog
+* Sun Apr 03 2022 Tom Nabarro <tom.nabarro@intel.com> - 0:21.07-15
+- Add patch to improve driver rebinding times when VMD is enabled.
+
 * Wed Mar 23 2022 Tom Nabarro <tom.nabarro@intel.com> - 0:21.07-14
 - Add (again) patches to fix error on VMD init after reboot.
 
