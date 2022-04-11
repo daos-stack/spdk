@@ -1,4 +1,4 @@
-From 07f2ddbcc284036c0d863107755db158ca368cdd Mon Sep 17 00:00:00 2001
+From 91aee82d74696bb70284c794db0b2b9aef4bb9ec Mon Sep 17 00:00:00 2001
 From: Konrad Sztyber <konrad.sztyber@intel.com>
 Date: Fri, 8 Apr 2022 14:34:59 +0200
 Subject: [PATCH] vmd: use config_bus_number when resetting root ports
@@ -16,12 +16,18 @@ Fixes #2451
 
 Change-Id: I4e7bbb81400462284014565099bec98f6171c8c9
 Signed-off-by: Konrad Sztyber <konrad.sztyber@intel.com>
+Reviewed-on: https://review.spdk.io/gerrit/c/spdk/spdk/+/12208
+Reviewed-by: Tom Nabarro <tom.nabarro@intel.com>
+Reviewed-by: Jim Harris <james.r.harris@intel.com>
+Reviewed-by: Changpeng Liu <changpeng.liu@intel.com>
+Community-CI: Mellanox Build Bot
+Tested-by: SPDK CI Jenkins <sys_sgci@intel.com>
 ---
  lib/vmd/vmd.c | 4 ++--
  1 file changed, 2 insertions(+), 2 deletions(-)
 
 diff --git a/lib/vmd/vmd.c b/lib/vmd/vmd.c
-index c8a0c7906..4066396e0 100644
+index d68554ebd..55ef7205c 100644
 --- a/lib/vmd/vmd.c
 +++ b/lib/vmd/vmd.c
 @@ -1125,8 +1125,8 @@ vmd_reset_root_ports(struct vmd_pci_bus *bus)
