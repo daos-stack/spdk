@@ -24,10 +24,9 @@ Patch3:		0003-blob-chunk-clear-operations-in-IU-aligned-chunks.patch
 Patch4:		0004-env-dpdk-retry-SO_RCVBUF-if-SO_RCVBUFFORCE-fails.patch
 Patch5:		0005-vmd-set-socket_id-for-devices-behind-VMD-endpoint.patch
 Patch6:		0006-json-Added-support-for-8-bit-unsigned-value-converte.patch
-Patch7:		0007-vmd-pass-pci_header-instead-of-vmd_pci_device.patch
-Patch8:		0008-vmd-reset-root-port-config-before-enumeration.patch
-Patch9:		0009-setup.sh-Speed-up-the-VMD-device-unbind-by-running-i.patch
-Patch10:	0010-vmd-use-config_bus_number-when-resetting-root-ports.patch
+Patch7:		0007-vmd-pass-pci_header-instead-of-vmd_pci_device__vmd-reset-root-port-config-before-enumeration.patch
+Patch8:		0008-setup.sh-Speed-up-the-VMD-device-unbind-by-running-i.patch
+Patch9:		0009-vmd-use-config_bus_number-when-resetting-root-ports.patch
 
 %define package_version %{epoch}:%{version}-%{release}
 
@@ -204,6 +203,7 @@ mv doc/output/html/ %{install_docdir}
 %changelog
 * Fri Apr 08 2022 Tom Nabarro <tom.nabarro@intel.com> - 0:21.07-16
 - Add patch to fix bug in previous fix for VMD init after reboot.
+- Squash patches to workaround DAOS-10291 bug.
 
 * Sun Apr 03 2022 Tom Nabarro <tom.nabarro@intel.com> - 0:21.07-15
 - Add patch to improve driver rebinding times when VMD is enabled.

@@ -40,5 +40,4 @@
 // I.e. for testing library changes
 //@Library(value="pipeline-lib@your_branch") _
 
-// unbuntu20: build disabled because of bug DAOS-10291
-packageBuildingPipelineDAOS(['distros': ['centos7', 'el8', 'leap15']])
+packageBuildingPipelineDAOS(['distros': ['centos7', 'el8', 'leap15', 'ubuntu20.04']])
