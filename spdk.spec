@@ -8,8 +8,8 @@
 %bcond_with doc
 
 Name:		spdk
-Version:	21.07
-Release:	16%{?dist}
+Version:	22.01.1
+Release:	1%{?dist}
 Epoch:		0
 
 Summary:	Set of libraries and utilities for high performance user-mode storage
@@ -18,22 +18,14 @@ License:	BSD
 URL:		http://spdk.io
 Source:		https://github.com/%{name}/%{name}/archive/v%{version}.tar.gz
 
-Patch0:		0001-env_dpdk-tokenize-env_context.patch
-Patch2:		0002-vmd-update-for-changes-in-IceLake-platform.patch
-Patch3:		0003-blob-chunk-clear-operations-in-IU-aligned-chunks.patch
-Patch4:		0004-env-dpdk-retry-SO_RCVBUF-if-SO_RCVBUFFORCE-fails.patch
-Patch5:		0005-vmd-set-socket_id-for-devices-behind-VMD-endpoint.patch
-Patch6:		0006-json-Added-support-for-8-bit-unsigned-value-converte.patch
-Patch7:		0007-vmd-pass-pci_header-instead-of-vmd_pci_device__vmd-reset-root-port-config-before-enumeration.patch
-Patch8:		0008-setup.sh-Speed-up-the-VMD-device-unbind-by-running-i.patch
-Patch9:		0009-vmd-use-config_bus_number-when-resetting-root-ports.patch
+Patch1:		0001-setup.sh-Speed-up-the-VMD-device-unbind-by-running-i.patch
 
 %define package_version %{epoch}:%{version}-%{release}
 
 %define install_datadir %{buildroot}/%{_datadir}/%{name}
 %define install_docdir %{buildroot}/%{_docdir}/%{name}
 
-%global dpdk_version 21.05
+%global dpdk_version 22.03.0
 
 # Distros that don't support python3 will use python2
 %if "%{dist}" == ".el7"
@@ -201,6 +193,9 @@ mv doc/output/html/ %{install_docdir}
 
 
 %changelog
+* Tue May 17 2022 Tom Nabarro <tom.nabarro@intel.com> - 0:22.01.1-1
+- Upgrade SPDK to 22.01.1 LTS release.
+
 * Fri Apr 08 2022 Tom Nabarro <tom.nabarro@intel.com> - 0:21.07-16
 - Add patch to fix bug in previous fix for VMD init after reboot.
 - Squash patches to workaround DAOS-10291 bug.
