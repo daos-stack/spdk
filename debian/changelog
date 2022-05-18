@@ -2,6 +2,7 @@ spdk (22.01.1-1) unstable; urgency=medium
 
   [ Tom Nabarro ]
   * Upgrade SPDK to 22.01.1 LTS release.
+  * Update DPDK dependency version to 21.11.1.
 
  --  Tom Nabarro <tom.nabarro@intel.com>  Tue, 17 May 2022 00:00:00 +0000
 

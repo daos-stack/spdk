@@ -25,7 +25,7 @@ Patch1:		0001-setup.sh-Speed-up-the-VMD-device-unbind-by-running-i.patch
 %define install_datadir %{buildroot}/%{_datadir}/%{name}
 %define install_docdir %{buildroot}/%{_docdir}/%{name}
 
-%global dpdk_version 22.03.0
+%global dpdk_version 21.11.1
 
 # Distros that don't support python3 will use python2
 %if "%{dist}" == ".el7"
@@ -195,6 +195,7 @@ mv doc/output/html/ %{install_docdir}
 %changelog
 * Tue May 17 2022 Tom Nabarro <tom.nabarro@intel.com> - 0:22.01.1-1
 - Upgrade SPDK to 22.01.1 LTS release.
+- Update DPDK dependency version to 21.11.1.
 
 * Fri Apr 08 2022 Tom Nabarro <tom.nabarro@intel.com> - 0:21.07-16
 - Add patch to fix bug in previous fix for VMD init after reboot.
