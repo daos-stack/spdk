@@ -4,6 +4,8 @@
 %define make_build  %{__make} %{?_smp_mflags}
 %endif
 
+#global _hardened_build 1
+
 # Build documentation package
 %bcond_with doc
 
@@ -18,7 +20,7 @@ License:	BSD
 URL:		http://spdk.io
 Source:		https://github.com/%{name}/%{name}/archive/v%{version}.tar.gz
 
-Patch1:		0001-setup.sh-Speed-up-the-VMD-device-unbind-by-running-i.patch
+Patch0:		0001-setup.sh-Speed-up-the-VMD-device-unbind-by-running-i.patch
 
 %define package_version %{epoch}:%{version}-%{release}
 
@@ -163,6 +165,8 @@ mkdir -p %{install_docdir}
 mv doc/output/html/ %{install_docdir}
 %endif
 
+# Remove unused static libs
+rm %{buildroot}/%{_libdir}/*.a
 
 %post -p /sbin/ldconfig
 %postun -p /sbin/ldconfig
@@ -176,7 +180,6 @@ mv doc/output/html/ %{install_docdir}
 
 %files devel
 %{_includedir}/%{name}
-%{_libdir}/*.a
 %{_libdir}/*.so
 %{_libdir}/pkgconfig
 
