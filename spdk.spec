@@ -9,7 +9,7 @@
 
 Name:		spdk
 Version:	21.07
-Release:	16%{?dist}
+Release:	17%{?dist}
 Epoch:		0
 
 Summary:	Set of libraries and utilities for high performance user-mode storage
@@ -201,6 +201,9 @@ mv doc/output/html/ %{install_docdir}
 
 
 %changelog
+* Tue May 24 2022 Tom Nabarro <tom.nabarro@intel.com> - 0:21.07-17
+- Add dpdk-dev dep to deb spdk-dev package.
+
 * Fri Apr 08 2022 Tom Nabarro <tom.nabarro@intel.com> - 0:21.07-16
 - Add patch to fix bug in previous fix for VMD init after reboot.
 - Squash patches to workaround DAOS-10291 bug.
