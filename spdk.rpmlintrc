@@ -2,4 +2,4 @@
 from Config import *
 
 addFilter('no-manual-page-for-binary')
-addFilter('devel-file-in-non-devel-package')
+addFilter('spdk-tools.noarch: W: devel-file-in-non-devel-package /usr/share/spdk/include/spdk/pci_ids.h')
