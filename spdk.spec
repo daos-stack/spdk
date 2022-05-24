@@ -168,6 +168,10 @@ mv doc/output/html/ %{install_docdir}
 # Remove unused static libs
 rm -f %{buildroot}/%{_libdir}/*.a
 
+# Remove pkgconfig dir
+# TODO: fix and re-enable
+rm -rf %{buildroot}/%{_libdir}/pkgconfig
+
 %post -p /sbin/ldconfig
 %postun -p /sbin/ldconfig
 
@@ -181,7 +185,6 @@ rm -f %{buildroot}/%{_libdir}/*.a
 %files devel
 %{_includedir}/%{name}
 %{_libdir}/*.so
-%{_libdir}/pkgconfig
 
 
 %files tools
