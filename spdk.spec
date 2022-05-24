@@ -121,6 +121,8 @@ BuildArch: noarch
 %prep
 %autosetup -n %{name}-%{version} -p1
 
+# Resolve rpath errors in leap15 rpmlint.
+sed -i -e '/-Wl,-rpath=\$(DESTDIR)\/\$(libdir)/d' mk/spdk.common.mk
 
 %build
 ./configure --with-dpdk \
@@ -147,6 +149,9 @@ make -C doc
 
 %install
 %make_install %{?_smp_mflags} prefix=%{_prefix} libdir=%{_libdir} datadir=%{_datadir}
+
+# Change /usr/bin/{env ,}bash to resolve env-script-interpreter rpmlint error.
+sed -i -e '1s/env //' %{install_datadir}/scripts/setup.sh
 
 # Install tools
 mkdir -p %{install_datadir}/scripts
