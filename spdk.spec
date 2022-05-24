@@ -4,7 +4,7 @@
 %define make_build  %{__make} %{?_smp_mflags}
 %endif
 
-#global _hardened_build 1
+%global _hardened_build 1
 
 # Build documentation package
 %bcond_with doc
