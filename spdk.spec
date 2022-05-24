@@ -46,7 +46,7 @@ Patch9:		0009-vmd-use-config_bus_number-when-resetting-root-ports.patch
 ExclusiveArch: x86_64
 
 BuildRequires: gcc gcc-c++ make
-BuildRequires: dpdk-devel >= %{dpdk_version}
+BuildRequires: dpdk-devel = %{dpdk_version}
 %if (0%{?rhel} >= 7)
 BuildRequires: numactl-devel
 BuildRequires: CUnit-devel
@@ -68,7 +68,7 @@ BuildRequires: python
 %endif
 
 # Install dependencies
-Requires: dpdk >= %{dpdk_version}
+Requires: dpdk = %{dpdk_version}
 
 Requires(post): /sbin/ldconfig
 Requires(postun): /sbin/ldconfig
@@ -82,7 +82,7 @@ applications.
 %package devel
 Summary: Storage Performance Development Kit development files
 Requires: %{name}%{?_isa} = %{package_version}
-Requires: dpdk-devel >= %{dpdk_version}
+Requires: dpdk-devel = %{dpdk_version}
 Provides: %{name}-static%{?_isa} = %{package_version}
 
 %description devel
@@ -203,6 +203,7 @@ mv doc/output/html/ %{install_docdir}
 %changelog
 * Tue May 24 2022 Tom Nabarro <tom.nabarro@intel.com> - 0:21.07-17
 - Add dpdk-dev dep to deb spdk-dev package.
+- Pin dpdk version to 21.05.
 
 * Fri Apr 08 2022 Tom Nabarro <tom.nabarro@intel.com> - 0:21.07-16
 - Add patch to fix bug in previous fix for VMD init after reboot.
