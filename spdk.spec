@@ -166,7 +166,7 @@ mv doc/output/html/ %{install_docdir}
 %endif
 
 # Remove unused static libs
-rm %{buildroot}/%{_libdir}/*.a
+rm -f %{buildroot}/%{_libdir}/*.a
 
 %post -p /sbin/ldconfig
 %postun -p /sbin/ldconfig
