@@ -2,7 +2,7 @@ spdk (21.07-17) unstable; urgency=medium
 
   [ Tom Nabarro ]
   * Add dpdk-dev dep to deb spdk-dev package.
-  * Pin dpdk version to 21.05.
+  * Restrict dpdk version to less than 21.11.
 
  --  Tom Nabarro <tom.nabarro@intel.com>  Tue, 24 May 2022 00:00:00 +0000
 
