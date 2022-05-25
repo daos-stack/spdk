@@ -4,7 +4,7 @@ Maintainer: daos-stack <daos@daos.groups.io>
 Build-Depends:
  debhelper,
  python,
- libdpdk-dev (= 21.05), libdpdk-dev (<< 21.11),
+ libdpdk-dev (>= 21.05), libdpdk-dev (<< 21.11),
  librdmacm-dev,
  libibverbs-dev,
  uuid-dev,
@@ -22,7 +22,7 @@ Package: libspdk-dev
 Section: libdevel
 Architecture: amd64 kfreebsd-amd64
 Depends:
- libspdk20 (= ${binary:Version}), libdpdk-dev (= 21.05), libdpdk-dev (<< 21.11),
+ libspdk20 (= ${binary:Version}), libdpdk-dev (>= 21.05), libdpdk-dev (<< 21.11),
  ${misc:Depends},
 Description: The Storage Performance Development Kit provides a set of tools
  and libraries for writing high performance, scalable, user-mode storage
