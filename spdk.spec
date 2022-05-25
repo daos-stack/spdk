@@ -69,7 +69,7 @@ BuildRequires: python
 %endif
 
 # Install dependencies
-Requires: dpdk = %{dpdk_version}
+Requires: dpdk >= %{dpdk_version}, dpdk < %{dpdk_version_high}
 
 Requires(post): /sbin/ldconfig
 Requires(postun): /sbin/ldconfig
