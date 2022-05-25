@@ -33,7 +33,6 @@ Patch9:		0009-vmd-use-config_bus_number-when-resetting-root-ports.patch
 %define install_datadir %{buildroot}/%{_datadir}/%{name}
 %define install_docdir %{buildroot}/%{_docdir}/%{name}
 
-%global dpdk_version 21.05
 %global dpdk_version_high 21.11
 
 # Distros that don't support python3 will use python2
@@ -47,7 +46,7 @@ Patch9:		0009-vmd-use-config_bus_number-when-resetting-root-ports.patch
 ExclusiveArch: x86_64
 
 BuildRequires: gcc gcc-c++ make
-BuildRequires: dpdk-devel >= %{dpdk_version}, dpdk-devel < %{dpdk_version_high}
+BuildRequires: dpdk-devel < %{dpdk_version_high}
 %if (0%{?rhel} >= 7)
 BuildRequires: numactl-devel
 BuildRequires: CUnit-devel
@@ -69,7 +68,7 @@ BuildRequires: python
 %endif
 
 # Install dependencies
-Requires: dpdk >= %{dpdk_version}, dpdk < %{dpdk_version_high}
+Requires: dpdk < %{dpdk_version_high}
 
 Requires(post): /sbin/ldconfig
 Requires(postun): /sbin/ldconfig
@@ -83,7 +82,7 @@ applications.
 %package devel
 Summary: Storage Performance Development Kit development files
 Requires: %{name}%{?_isa} = %{package_version}
-Requires: dpdk-devel >= %{dpdk_version}, dpdk-devel < %{dpdk_version_high}
+Requires: dpdk-devel < %{dpdk_version_high}
 Provides: %{name}-static%{?_isa} = %{package_version}
 
 %description devel
