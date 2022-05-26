@@ -3,3 +3,6 @@ from Config import *
 
 addFilter('no-manual-page-for-binary')
 addFilter('spdk-tools.noarch: W: devel-file-in-non-devel-package /usr/share/spdk/include/spdk/pci_ids.h')
+addFilter('spdk.x86_64: W: library-not-linked-against-libc /usr/lib64/libspdk_')
+# configure is not actually from autotools and doesn't have a libdir option
+addFilter('W: configure-without-libdir-spec')
