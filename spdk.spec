@@ -150,9 +150,6 @@ make -C doc
 %install
 %make_install %{?_smp_mflags} prefix=%{_prefix} libdir=%{_libdir} datadir=%{_datadir}
 
-# Change /usr/bin/{env ,}bash to resolve env-script-interpreter rpmlint error.
-sed -i -e '1s/env //' %{install_datadir}/scripts/setup.sh
-
 # Install tools
 mkdir -p %{install_datadir}/scripts
 
@@ -163,6 +160,9 @@ cp include/%{name}/pci_ids.h %{install_datadir}/include/%{name}/
 # spdk_nvme_identify and spdk_nvme_perf are already installed by default
 cp build/examples/lsvmd %{buildroot}/%{_bindir}/spdk_nvme_lsvmd
 cp build/examples/nvme_manage %{buildroot}/%{_bindir}/spdk_nvme_manage
+
+# Change /usr/bin/{env ,}bash to resolve env-script-interpreter rpmlint error.
+sed -i -e '1s/env //' %{install_datadir}/scripts/setup.sh
 
 %if %{with doc}
 # Install doc
