@@ -126,7 +126,7 @@ sed -i -e '/-Wl,-rpath=\$(DESTDIR)\/\$(libdir)/d' mk/spdk.common.mk
 
 %build
 ./configure --with-dpdk \
-            --prefix=%{_prefix} \
+            --prefix=%{_prefix}/%{_lib} \
             --disable-tests \
             --disable-unit-tests \
             --disable-apps \
@@ -148,7 +148,7 @@ make -C doc
 
 
 %install
-%make_install %{?_smp_mflags} prefix=%{_prefix} libdir=%{_libdir} datadir=%{_datadir}
+%make_install %{?_smp_mflags} prefix=%{_prefix}/%{_lib} libdir=%{_libdir} datadir=%{_datadir}
 
 # Install tools
 mkdir -p %{install_datadir}/scripts
@@ -173,10 +173,6 @@ mv doc/output/html/ %{install_docdir}
 # Remove unused static libs
 rm -f %{buildroot}/%{_libdir}/*.a
 
-# Remove pkgconfig dir
-# TODO: fix and re-enable
-rm -rf %{buildroot}/%{_libdir}/pkgconfig
-
 %post -p /sbin/ldconfig
 %postun -p /sbin/ldconfig
 
@@ -190,6 +186,7 @@ rm -rf %{buildroot}/%{_libdir}/pkgconfig
 %files devel
 %{_includedir}/%{name}
 %{_libdir}/*.so
+%{_libdir}/pkgconfig
 
 
 %files tools
