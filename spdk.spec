@@ -126,7 +126,7 @@ sed -i -e '/-Wl,-rpath=\$(DESTDIR)\/\$(libdir)/d' mk/spdk.common.mk
 
 %build
 ./configure --with-dpdk \
-            --prefix=%{_prefix}/%{_lib} \
+            --prefix=%{libdir} \
             --disable-tests \
             --disable-unit-tests \
             --disable-apps \
@@ -148,7 +148,7 @@ make -C doc
 
 
 %install
-%make_install %{?_smp_mflags} prefix=%{_prefix}/%{_lib} libdir=%{_libdir} datadir=%{_datadir}
+%make_install %{?_smp_mflags} prefix=%{_prefix} libdir=%{_libdir} datadir=%{_datadir}
 
 # Install tools
 mkdir -p %{install_datadir}/scripts
