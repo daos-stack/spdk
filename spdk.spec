@@ -126,7 +126,7 @@ sed -i -e '/-Wl,-rpath=\$(DESTDIR)\/\$(libdir)/d' mk/spdk.common.mk
 
 %build
 ./configure --with-dpdk \
-            --prefix=%{_libdir} \
+            --prefix=%{_prefix} \
             --disable-tests \
             --disable-unit-tests \
             --disable-apps \
@@ -148,6 +148,9 @@ make -C doc
 
 
 %install
+# Workaround for https://github.com/spdk/spdk/issue/2531
+sed -i -e 's/\(-L\$1\/\)lib/\1%{_lib}/' scripts/pc.sh
+
 %make_install %{?_smp_mflags} prefix=%{_prefix} libdir=%{_libdir} datadir=%{_datadir}
 
 # Install tools
