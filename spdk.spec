@@ -138,6 +138,7 @@ sed -i -e '/-Wl,-rpath=\$(DESTDIR)\/\$(libdir)/d' mk/spdk.common.mk
 CFLAGS="${CFLAGS:-%optflags}" ; export CFLAGS ; \
 CXXFLAGS="${CXXFLAGS:-%optflags}" ; export CXXFLAGS ; \
 FFLAGS="${FFLAGS:-%optflags}" ; export FFLAGS ; \
+LDFLAGS="${LDFLAGS:-%{build_ldflags}}" ; \
 ./configure --with-dpdk \
             --prefix=%{_prefix} \
             --disable-tests \
