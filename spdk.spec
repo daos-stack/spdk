@@ -4,11 +4,6 @@
 %define make_build  %{__make} %{?_smp_mflags}
 %endif
 
-%if (0%{?suse_version} > 0)
-%global __debug_package 1
-%global _debuginfo_subpackages 0
-%endif
-
 %global _hardened_build 1
 
 # Build documentation package
@@ -122,6 +117,12 @@ BuildArch: noarch
 %{summary}
 %endif
 
+
+%if (0%{?suse_version} > 0)
+%global __debug_package 1
+%global _debuginfo_subpackages 0
+%debug_package
+%endif
 
 %prep
 %autosetup -n %{name}-%{version} -p1
