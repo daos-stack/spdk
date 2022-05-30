@@ -1,16 +1,16 @@
 # doesn't seem to work on sles 12.3: #{!?make_build:#define make_build #{__make} #{?_smp_mflags}}
 # so...
-%if 0%{?suse_version} <= 1320
+%if (0%{?suse_version} <= 1320)
 %define make_build  %{__make} %{?_smp_mflags}
 %endif
-
-%global _hardened_build 1
 
 %if (0%{?suse_version} > 0)
 %global __debug_package 1
 %global _debuginfo_subpackages 0
-%debug_package
+#%debug_package
 %endif
+
+%global _hardened_build 1
 
 # Build documentation package
 %bcond_with doc
