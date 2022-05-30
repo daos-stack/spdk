@@ -126,7 +126,7 @@ sed -i -e '/-Wl,-rpath=\$(DESTDIR)\/\$(libdir)/d' mk/spdk.common.mk
 
 %build
 ./configure --with-dpdk \
-            --prefix=%{libdir} \
+            --prefix=%{_libdir} \
             --disable-tests \
             --disable-unit-tests \
             --disable-apps \
