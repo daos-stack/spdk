@@ -7,7 +7,6 @@
 %if (0%{?suse_version} > 0)
 %global __debug_package 1
 %global _debuginfo_subpackages 0
-#%debug_package
 %endif
 
 %global _hardened_build 1
