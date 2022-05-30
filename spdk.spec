@@ -128,6 +128,10 @@ sed -i -e 's/\(-L\$1\/\)lib/\1%{_lib}/' scripts/pc.sh
 sed -i -e '/-Wl,-rpath=\$(DESTDIR)\/\$(libdir)/d' mk/spdk.common.mk
 
 %build
+
+CFLAGS="${CFLAGS:-%optflags}" ; export CFLAGS ; \
+CXXFLAGS="${CXXFLAGS:-%optflags}" ; export CXXFLAGS ; \
+FFLAGS="${FFLAGS:-%optflags}" ; export FFLAGS ; \
 ./configure --with-dpdk \
             --prefix=%{_prefix} \
             --disable-tests \
