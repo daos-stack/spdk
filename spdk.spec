@@ -6,6 +6,12 @@
 
 %global _hardened_build 1
 
+%if (0%{?suse_version} > 0)
+%global __debug_package 1
+%global _debuginfo_subpackages 0
+%debug_package
+%endif
+
 # Build documentation package
 %bcond_with doc
 
