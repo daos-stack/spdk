@@ -1,12 +1,12 @@
-Name:		spdk
-Version:	22.01.1
-Release:	1%{?dist}
-Epoch:		0
-
 # doesn't seem to work on sles 12.3: #{!?make_build:#define make_build #{__make} #{?_smp_mflags}}
 # so...
 %if (0%{?suse_version} <= 1320)
 %define make_build  %{__make} %{?_smp_mflags}
+%endif
+
+%if (0%{?suse_version} > 0)
+%global __debug_package 1
+%global _debuginfo_subpackages 0
 %endif
 
 %global _hardened_build 1
@@ -14,17 +14,24 @@ Epoch:		0
 # Build documentation package
 %bcond_with doc
 
+Name:		spdk
+Version:	22.01.1
+Release:	1%{?dist}
+Epoch:		0
+
 Summary:	Set of libraries and utilities for high performance user-mode storage
 
-Group:		Development/Libraries
 License:	BSD
 URL:		http://spdk.io
 Source:		https://github.com/%{name}/%{name}/archive/v%{version}.tar.gz
+
 Patch0:		0001-setup.sh-Speed-up-the-VMD-device-unbind-by-running-i.patch
 
 %define package_version %{epoch}:%{version}-%{release}
+
 %define install_datadir %{buildroot}/%{_datadir}/%{name}
 %define install_docdir %{buildroot}/%{_docdir}/%{name}
+
 %global dpdk_version 21.11.1
 
 # Distros that don't support python3 will use python2
@@ -116,14 +123,7 @@ BuildArch: noarch
 %endif
 
 
-%if (0%{?suse_version} > 0)
-%global __debug_package 1
-%global _debuginfo_subpackages 0
-%debug_package
-%endif
-
 %prep
-
 %autosetup -n %{name}-%{version} -p1
 
 # Workaround for https://github.com/spdk/spdk/issue/2531
