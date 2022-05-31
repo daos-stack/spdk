@@ -135,10 +135,19 @@ sed -i -e '/-Wl,-rpath=\$(DESTDIR)\/\$(libdir)/d' mk/spdk.common.mk
 
 %build
 
-CFLAGS="${CFLAGS:-%optflags}" ; export CFLAGS ; \
-CXXFLAGS="${CXXFLAGS:-%optflags}" ; export CXXFLAGS ; \
-FFLAGS="${FFLAGS:-%optflags}" ; export FFLAGS ; \
-LDFLAGS="${LDFLAGS:-%{build_ldflags}}" ; export LDFLAGS ; \
+%if (0%{?suse_version} > 0)
+export CFLAGS="%{optflags} -fPIC -pie"
+export CXXFLAGS="%{optflags} -fPIC -pie"
+# this results in compiler errors, so we are unable to produce PIEs on Leap15
+#export LDFLAGS="$LDFLAGS -pie"
+%else
+export CFLAGS="${CFLAGS:-%optflags}"
+export CXXFLAGS="${CXXFLAGS:-%optflags}"
+export FFLAGS="${FFLAGS:-%optflags}"
+%if "%{?build_ldflags}" != ""
+export LDFLAGS="${LDFLAGS:-%{build_ldflags}}"
+%endif
+%endif
 ./configure --with-dpdk \
             --prefix=%{_prefix} \
             --disable-tests \
