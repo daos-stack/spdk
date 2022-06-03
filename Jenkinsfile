@@ -40,4 +40,5 @@
 // I.e. for testing library changes
 //@Library(value="pipeline-lib@your_branch") _
 
-packageBuildingPipelineDAOS(['distros': ['centos7', 'el8', 'leap15']])
+/* groovylint-disable-next-line CompileStatic */
+packageBuildingPipelineDAOS(['distros': ['centos7', 'el8', 'leap15', 'ubuntu20.04']])

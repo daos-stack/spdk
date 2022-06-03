@@ -1,11 +1,18 @@
 # This line is mandatory to access the configuration functions
 from Config import *
 
+addFilter('no-documentation')
 addFilter('no-manual-page-for-binary')
 addFilter('spdk-tools.noarch: W: devel-file-in-non-devel-package /usr/share/spdk/include/spdk/pci_ids.h')
 addFilter('spdk.x86_64: W: library-not-linked-against-libc /usr/lib64/libspdk_')
+
 # configure is not actually from autotools and doesn't have a libdir option
 addFilter('W: configure-without-libdir-spec')
-addFilter('spdk.x86_64: W: library-not-linked-against-libc /usr/lib64/libspdk_')
-# configure is not actually from autotools and doesn't have a libdir option
-addFilter('W: configure-without-libdir-spec')
+
+# https://github.com/rpm-software-management/rpmlint/issues/879
+addFilter(r'spdk-devel\.x86_64: W: missing-dependency-on spdk\*\/spdk-libs\/libspdk\* =')
+
+# https://github.com/rpm-software-management/rpmlint/issues/856
+addFilter(r'spdk\.x86_64: W: incoherent-version-in-changelog .* \[\'.*\.suse\.lp[0-9]*\', \'.*\.suse\.lp[0-9]*\'\]')
+
+addFilter('spdk.x86_64: W: position-independent-executable-suggested /usr/bin/spdk_nvme_')
