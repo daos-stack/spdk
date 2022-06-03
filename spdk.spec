@@ -9,18 +9,18 @@
 # Build documentation package
 %bcond_with doc
 
-Name:		spdk
-Version:	22.01.1
-Release:	1%{?dist}
-Epoch:		0
+Name:     spdk
+Version:  22.01.1
+Release:  1%{?dist}
+Epoch:    0
 
-Summary:	Set of libraries and utilities for high performance user-mode storage
+Summary:  Set of libraries and utilities for high performance user-mode storage
 
-License:	BSD
-URL:		http://spdk.io
-Source:		https://github.com/%{name}/%{name}/archive/v%{version}.tar.gz
+License:  BSD
+URL:      http://spdk.io
+Source:   https://github.com/%{name}/%{name}/archive/v%{version}.tar.gz
 
-Patch0:		0001-setup.sh-Speed-up-the-VMD-device-unbind-by-running-i.patch
+Patch0:   0001-setup.sh-Speed-up-the-VMD-device-unbind-by-running-i.patch
 
 %define package_version %{epoch}:%{version}-%{release}
 
