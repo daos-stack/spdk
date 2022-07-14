@@ -1,39 +1,33 @@
 # doesn't seem to work on sles 12.3: #{!?make_build:#define make_build #{__make} #{?_smp_mflags}}
 # so...
-%if 0%{?suse_version} <= 1320
+%if (0%{?suse_version} <= 1320)
 %define make_build  %{__make} %{?_smp_mflags}
 %endif
+
+%global _hardened_build 1
 
 # Build documentation package
 %bcond_with doc
 
-Name:		spdk
-Version:	21.07
-Release:	16%{?dist}
-Epoch:		0
+Name:     spdk
+Version:  22.01.1
+Release:  1%{?dist}
+Epoch:    0
 
-Summary:	Set of libraries and utilities for high performance user-mode storage
+Summary:  Set of libraries and utilities for high performance user-mode storage
 
-License:	BSD
-URL:		http://spdk.io
-Source:		https://github.com/%{name}/%{name}/archive/v%{version}.tar.gz
+License:  BSD
+URL:      http://spdk.io
+Source:   https://github.com/%{name}/%{name}/archive/v%{version}.tar.gz
 
-Patch0:		0001-env_dpdk-tokenize-env_context.patch
-Patch2:		0002-vmd-update-for-changes-in-IceLake-platform.patch
-Patch3:		0003-blob-chunk-clear-operations-in-IU-aligned-chunks.patch
-Patch4:		0004-env-dpdk-retry-SO_RCVBUF-if-SO_RCVBUFFORCE-fails.patch
-Patch5:		0005-vmd-set-socket_id-for-devices-behind-VMD-endpoint.patch
-Patch6:		0006-json-Added-support-for-8-bit-unsigned-value-converte.patch
-Patch7:		0007-vmd-pass-pci_header-instead-of-vmd_pci_device__vmd-reset-root-port-config-before-enumeration.patch
-Patch8:		0008-setup.sh-Speed-up-the-VMD-device-unbind-by-running-i.patch
-Patch9:		0009-vmd-use-config_bus_number-when-resetting-root-ports.patch
+Patch0:   0001-setup.sh-Speed-up-the-VMD-device-unbind-by-running-i.patch
 
 %define package_version %{epoch}:%{version}-%{release}
 
 %define install_datadir %{buildroot}/%{_datadir}/%{name}
 %define install_docdir %{buildroot}/%{_docdir}/%{name}
 
-%global dpdk_version 21.05
+%global dpdk_version 21.11.1
 
 # Distros that don't support python3 will use python2
 %if "%{dist}" == ".el7"
@@ -124,11 +118,36 @@ BuildArch: noarch
 %endif
 
 
+%if (0%{?suse_version} > 0)
+%global __debug_package 1
+%global _debuginfo_subpackages 0
+%debug_package
+%endif
+
 %prep
 %autosetup -n %{name}-%{version} -p1
 
+# Workaround for https://github.com/spdk/spdk/issue/2531
+sed -i -e 's/\(-L\$1\/\)lib/\1%{_lib}/' scripts/pc.sh
+
+# Resolve rpath errors in leap15 rpmlint.
+sed -i -e '/-Wl,-rpath=\$(DESTDIR)\/\$(libdir)/d' mk/spdk.common.mk
 
 %build
+
+%if (0%{?suse_version} > 0)
+export CFLAGS="%{optflags} -fPIC -pie"
+export CXXFLAGS="%{optflags} -fPIC -pie"
+# this results in compiler errors, so we are unable to produce PIEs on Leap15
+#export LDFLAGS="$LDFLAGS -pie"
+%else
+export CFLAGS="${CFLAGS:-%optflags}"
+export CXXFLAGS="${CXXFLAGS:-%optflags}"
+export FFLAGS="${FFLAGS:-%optflags}"
+%if "%{?build_ldflags}" != ""
+export LDFLAGS="${LDFLAGS:-%{build_ldflags}}"
+%endif
+%endif
 ./configure --with-dpdk \
             --prefix=%{_prefix} \
             --disable-tests \
@@ -165,12 +184,17 @@ cp include/%{name}/pci_ids.h %{install_datadir}/include/%{name}/
 cp build/examples/lsvmd %{buildroot}/%{_bindir}/spdk_nvme_lsvmd
 cp build/examples/nvme_manage %{buildroot}/%{_bindir}/spdk_nvme_manage
 
+# Change /usr/bin/{env ,}bash to resolve env-script-interpreter rpmlint error.
+sed -i -e '1s/env //' %{install_datadir}/scripts/setup.sh
+
 %if %{with doc}
 # Install doc
 mkdir -p %{install_docdir}
 mv doc/output/html/ %{install_docdir}
 %endif
 
+# Remove unused static libs
+rm -f %{buildroot}/%{_libdir}/*.a
 
 %post -p /sbin/ldconfig
 %postun -p /sbin/ldconfig
@@ -184,7 +208,6 @@ mv doc/output/html/ %{install_docdir}
 
 %files devel
 %{_includedir}/%{name}
-%{_libdir}/*.a
 %{_libdir}/*.so
 %{_libdir}/pkgconfig
 
@@ -201,6 +224,10 @@ mv doc/output/html/ %{install_docdir}
 
 
 %changelog
+* Tue May 17 2022 Tom Nabarro <tom.nabarro@intel.com> - 0:22.01.1-1
+- Upgrade SPDK to 22.01.1 LTS release.
+- Update DPDK dependency version to 21.11.1.
+
 * Fri Apr 08 2022 Tom Nabarro <tom.nabarro@intel.com> - 0:21.07-16
 - Add patch to fix bug in previous fix for VMD init after reboot.
 - Squash patches to workaround DAOS-10291 bug.
