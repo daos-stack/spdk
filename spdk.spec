@@ -11,7 +11,7 @@
 
 Name:     spdk
 Version:  22.01.1
-Release:  1%{?dist}
+Release:  2%{?dist}
 Epoch:    0
 
 Summary:  Set of libraries and utilities for high performance user-mode storage
@@ -224,6 +224,9 @@ rm -f %{buildroot}/%{_libdir}/*.a
 
 
 %changelog
+* Thu Jul 28 2022 Tom Nabarro <tom.nabarro@intel.com> - 0:22.01.1-2
+- Add back a patch referenced by previous DAOS release.
+
 * Tue May 17 2022 Tom Nabarro <tom.nabarro@intel.com> - 0:22.01.1-1
 - Upgrade SPDK to 22.01.1 LTS release.
 - Update DPDK dependency version to 21.11.1.
