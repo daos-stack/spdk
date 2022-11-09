@@ -223,7 +223,7 @@ rm -f %{buildroot}/%{_libdir}/*.a
 
 
 %changelog
-* Wed Nov 22 2022 Tom Nabarro <tom.nabarro@intel.com> - 0:22.01.1-3
+* Wed Nov 09 2022 Tom Nabarro <tom.nabarro@intel.com> - 0:22.01.1-3
 - Remove unnecessary --with-rdma configure option.
 
 * Thu Jul 28 2022 Tom Nabarro <tom.nabarro@intel.com> - 0:22.01.1-2

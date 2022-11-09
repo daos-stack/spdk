@@ -3,7 +3,7 @@ spdk (22.01.1-3) unstable; urgency=medium
   [ Tom Nabarro ]
   * Remove unnecessary --with-rdma configure option.
 
- --  Tom Nabarro <tom.nabarro@intel.com>  Wed, 22 Nov 2022 00:00:00 +0000
+ --  Tom Nabarro <tom.nabarro@intel.com>  Wed, 09 Nov 2022 00:00:00 +0000
 
 spdk (22.01.1-2) unstable; urgency=medium
 
