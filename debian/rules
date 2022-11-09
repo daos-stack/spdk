@@ -32,7 +32,6 @@ override_dh_auto_configure:
 	            --without-crypto \
 	            --without-pmdk \
 	            --without-rbd \
-	            --with-rdma \
 	            --with-shared \
 	            --without-iscsi-initiator \
 	            --without-isal \
