@@ -42,4 +42,4 @@
 
 /* groovylint-disable-next-line CompileStatic */
 packageBuildingPipelineDAOSTest(['distros': ['centos7', 'el8', 'leap15', 'ubuntu20.04'],
-				 'test-tag': 'daily_regression'])
+				 'test-tag': 'pr'])
