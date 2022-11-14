@@ -11,7 +11,7 @@
 
 Name:     spdk
 Version:  22.01.1
-Release:  2%{?dist}
+Release:  3%{?dist}
 Epoch:    0
 
 Summary:  Set of libraries and utilities for high performance user-mode storage
@@ -157,7 +157,6 @@ export LDFLAGS="${LDFLAGS:-%{build_ldflags}}"
             --without-crypto \
             --without-pmdk \
             --without-rbd \
-            --with-rdma \
             --without-iscsi-initiator \
             --without-isal \
             --without-vtune \
@@ -224,6 +223,9 @@ rm -f %{buildroot}/%{_libdir}/*.a
 
 
 %changelog
+* Wed Nov 09 2022 Tom Nabarro <tom.nabarro@intel.com> - 0:22.01.1-3
+- Remove unnecessary --with-rdma configure option.
+
 * Thu Jul 28 2022 Tom Nabarro <tom.nabarro@intel.com> - 0:22.01.1-2
 - Add back a patch referenced by previous DAOS release.
 
