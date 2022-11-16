@@ -38,7 +38,7 @@
  */
 // To use a test branch (i.e. PR) until it lands to master
 // I.e. for testing library changes
-//@Library(value="pipeline-lib@your_branch") _
+@Library(value="pipeline-lib@bmurrell/stop-testing-with-2.0") _
 
 /* groovylint-disable-next-line CompileStatic */
 packageBuildingPipelineDAOSTest(['distros': ['centos7', 'el8', 'leap15', 'ubuntu20.04'],
