@@ -4,7 +4,7 @@ Maintainer: daos-stack <daos@daos.groups.io>
 Build-Depends:
  debhelper,
  python,
- libdpdk-dev (>= 21.11.1),
+ libdpdk-dev (>= 21.11.2),
  librdmacm-dev,
  libibverbs-dev,
  uuid-dev,
