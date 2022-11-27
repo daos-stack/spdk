@@ -22,7 +22,7 @@ Package: libspdk-dev
 Section: libdevel
 Architecture: amd64 kfreebsd-amd64
 Depends:
- libspdk3 (= ${binary:Version}),
+ libspdk20 (= ${binary:Version}),
  ${misc:Depends},
 Description: The Storage Performance Development Kit provides a set of tools
  and libraries for writing high performance, scalable, user-mode storage
@@ -31,7 +31,7 @@ Description: The Storage Performance Development Kit provides a set of tools
  This package contains the development files needed to build against the shared
  library.
 
-Package: libspdk3
+Package: libspdk20
 Architecture: amd64 kfreebsd-amd64
 Depends:
  ${misc:Depends},
