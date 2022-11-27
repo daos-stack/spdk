@@ -11,7 +11,7 @@
 
 Name:     spdk
 Version:  22.01.2
-Release:  1%{?dist}
+Release:  2%{?dist}
 Epoch:    0
 
 Summary:  Set of libraries and utilities for high performance user-mode storage
@@ -30,10 +30,10 @@ Patch0:   0001-setup.sh-Speed-up-the-VMD-device-unbind-by-running-i.patch
 %global dpdk_version 21.11.2
 
 # Distros that don't support python3 will use python2
-%if "%{dist}" == ".el7"
+%if "%{dist}" == ".el7" || (0%{?suse_version} > 0 && 9999999%{?sle_version} < 150400)
 %define use_python2 1
 %else
-%define use_python2 0
+%define use_python3 1
 %endif
 
 # Only x86_64 is supported
@@ -88,14 +88,19 @@ developing applications with the Storage Performance Development Kit.
 Summary: Storage Performance Development Kit tools files
 Requires: %{name}%{?_isa} = %{package_version}
 %if (0%{?rhel} >= 7)
-%if "%{use_python2}" == "0"
+%if "0%{?use_python3}" == "1"
 Requires: python3 python3-configshell python3-pexpect
 %else
 Requires: python python-configshell pexpect
 %endif
 %else
 %if (0%{?suse_version} >= 1500)
+%if "0%{?use_python2}" == "1"
 Requires: python2-configshell-fb
+%endif
+%if "0%{?use_python3}" == "1"
+Requires: python3-configshell-fb
+%endif
 %else
 %if (0%{?suse_version} >= 1315)
 Requires: python python-configshell
@@ -223,6 +228,10 @@ rm -f %{buildroot}/%{_libdir}/*.a
 
 
 %changelog
+* Sun Nov 27 2022 Brian J. Murrell <brian.murrell@intel.com> - 0:22.01.2-2
+- Build on Leap 15.4 build
+  - Leap 15.4 drops much python2 support
+
 * Thu Nov 24 2022 Tom Nabarro <tom.nabarro@intel.com> - 0:22.01.2-1
 - Upgrade SPDK to 22.01.2 maintenance release (VMD-hotplug fixes).
 - Update DPDK dependency version to 21.11.2 (CVE fix).
