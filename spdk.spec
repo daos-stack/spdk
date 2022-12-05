@@ -10,8 +10,8 @@
 %bcond_with doc
 
 Name:     spdk
-Version:  22.01.1
-Release:  3%{?dist}
+Version:  22.01.2
+Release:  1%{?dist}
 Epoch:    0
 
 Summary:  Set of libraries and utilities for high performance user-mode storage
@@ -27,7 +27,7 @@ Patch0:   0001-setup.sh-Speed-up-the-VMD-device-unbind-by-running-i.patch
 %define install_datadir %{buildroot}/%{_datadir}/%{name}
 %define install_docdir %{buildroot}/%{_docdir}/%{name}
 
-%global dpdk_version 21.11.1
+%global dpdk_version 21.11.2
 
 # Distros that don't support python3 will use python2
 %if "%{dist}" == ".el7"
@@ -223,6 +223,10 @@ rm -f %{buildroot}/%{_libdir}/*.a
 
 
 %changelog
+* Thu Nov 24 2022 Tom Nabarro <tom.nabarro@intel.com> - 0:22.01.2-1
+- Upgrade SPDK to 22.01.2 maintenance release (VMD-hotplug fixes).
+- Update DPDK dependency version to 21.11.2 (CVE fix).
+
 * Wed Nov 09 2022 Tom Nabarro <tom.nabarro@intel.com> - 0:22.01.1-3
 - Remove unnecessary --with-rdma configure option.
 
