@@ -20,7 +20,9 @@ RUN apt-get update && DEBIAN_FRONTEND=noninteractive apt-get install -y \
             python3-distutils rpm scons wget cmake valgrind
 
 # rpmdevtools
-RUN echo "deb [trusted=yes] ${REPO_URL}${REPO_UBUNTU_20_04} focal main" > /etc/apt/sources.list.d/daos-stack-ubuntu-stable-local.list
+ARG REPO_FILE_URL=""
+RUN echo "deb [trusted=yes] ${REPO_FILE_URL%repo-files/}daos-stack-daos-ubuntu-20.04-x86_64-stable-local focal main\n\
+deb [trusted=yes] ${REPO_FILE_URL%repo-files/}daos-stack-deps-ubuntu-20.04-x86_64-stable-local focal main" > /etc/apt/sources.list.d/daos-stack-ubuntu-stable-local.list
 RUN apt-get update && DEBIAN_FRONTEND=noninteractive apt-get install -y \
             rpmdevtools
 
