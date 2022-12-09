@@ -332,7 +332,7 @@ chrootbuild: $(DEB_TOP)/$(DEB_DSC)
 	DEB_TOP="$(DEB_TOP)"                                    \
 	DEB_DSC="$(DEB_DSC)"                                    \
 	DISTRO_ID_OPT="$(DISTRO_ID_OPT)"                        \
-	DISTRO_REPOS='$(DISTRO_REPOS)'                          \
+	LOCAL_REPOS='$(LOCAL_REPOS)'                            \
 	ARTIFACTORY_URL="$(ARTIFACTORY_URL)"                    \
 	packaging/debian_chrootbuild
 else
@@ -348,7 +348,7 @@ chrootbuild: $(SRPM) $(CALLING_MAKEFILE)
 	REPO_FILE_URL="$(REPO_FILE_URL)"                        \
 	MOCK_OPTIONS="$(MOCK_OPTIONS)"                          \
 	RPM_BUILD_OPTIONS='$(RPM_BUILD_OPTIONS)'                \
-	DISTRO_REPOS='$(DISTRO_REPOS)'                          \
+	LOCAL_REPOS='$(LOCAL_REPOS)'                            \
 	ARTIFACTORY_URL="$(ARTIFACTORY_URL)"                    \
 	DISTRO_VERSION="$(DISTRO_VERSION)"                      \
 	TARGET="$<"                                             \

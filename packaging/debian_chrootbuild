@@ -2,8 +2,7 @@
 
 set -uex
 
-if [ -n "${ARTIFACTORY_URL:-}" ] &&
-   [ -n "$DISTRO_REPOS" ]; then
+if [ -n "${ARTIFACTORY_URL:-}" ] && "$LOCAL_REPOS"; then
     cat <<EOF > ~/.pbuilderrc
 MIRRORSITE=${ARTIFACTORY_URL}artifactory/ubuntu-proxy
 EOF
