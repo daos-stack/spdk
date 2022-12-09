@@ -3,7 +3,7 @@
 set -uex
 
 if [ -n "${ARTIFACTORY_URL:-}" ] && "$LOCAL_REPOS"; then
-    echo "MIRRORSITE=${ARTIFACTORY_URL}artifactory/ubuntu-proxy" | sudo bash -c "cat > ~/.pbuilderrc"
+    echo "MIRRORSITE=${ARTIFACTORY_URL}artifactory/ubuntu-proxy" | sudo tee ~/.pbuilderrc
 fi
 
 # shellcheck disable=SC2086
