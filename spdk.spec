@@ -229,7 +229,7 @@ rm -f %{buildroot}/%{_libdir}/*.a
 
 
 %changelog
-* Tue Jan 10 2022 Tom Nabarro <tom.nabarro@intel.com> - 0:22.01.2-3
+* Tue Jan 10 2023 Tom Nabarro <tom.nabarro@intel.com> - 0:22.01.2-3
 - Add patch to fix build with glib 2.3.
 
 * Sun Nov 27 2022 Brian J. Murrell <brian.murrell@intel.com> - 0:22.01.2-2
