@@ -11,7 +11,7 @@
 
 Name:     spdk
 Version:  22.01.2
-Release:  2%{?dist}
+Release:  3%{?dist}
 Epoch:    0
 
 Summary:  Set of libraries and utilities for high performance user-mode storage
@@ -21,6 +21,7 @@ URL:      http://spdk.io
 Source:   https://github.com/%{name}/%{name}/archive/v%{version}.tar.gz
 
 Patch0:   0001-setup.sh-Speed-up-the-VMD-device-unbind-by-running-i.patch
+Patch1:   0002-configure-add-CONFIG_HAVE_ARC4RANDOM.patch
 
 %define package_version %{epoch}:%{version}-%{release}
 
@@ -228,6 +229,9 @@ rm -f %{buildroot}/%{_libdir}/*.a
 
 
 %changelog
+* Tue Jan 10 2022 Tom Nabarro <tom.nabarro@intel.com> - 0:22.01.2-3
+- Add patch to fix build with glib 2.3.
+
 * Sun Nov 27 2022 Brian J. Murrell <brian.murrell@intel.com> - 0:22.01.2-2
 - Build on Leap 15.4 build
   - Leap 15.4 drops much python2 support
