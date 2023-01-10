@@ -88,17 +88,17 @@ developing applications with the Storage Performance Development Kit.
 Summary: Storage Performance Development Kit tools files
 Requires: %{name}%{?_isa} = %{package_version}
 %if (0%{?rhel} >= 7)
-%if "0%{?use_python3}" == "1"
+%if 0%{?use_python3}
 Requires: python3 python3-configshell python3-pexpect
 %else
 Requires: python python-configshell pexpect
 %endif
 %else
 %if (0%{?suse_version} >= 1500)
-%if "0%{?use_python2}" == "1"
+%if 0%{?use_python2}
 Requires: python2-configshell-fb
 %endif
-%if "0%{?use_python3}" == "1"
+%if 0%{?use_python3}
 Requires: python3-configshell-fb
 %endif
 %else
