@@ -5,6 +5,7 @@ prefix := /usr
 sysconfdir := /etc
 exec_prefix := $(prefix)
 buildroot := debian/tmp
+cflags := -O2 -g -pipe -Wall -Werror=format-security -Wp,-D_FORTIFY_SOURCE=2 -Wp,-D_GLIBCXX_ASSERTIONS -fexceptions -fstack-protector-strong -grecord-gcc-switches -m64 -mtune=generic -fasynchronous-unwind-tables -fstack-clash-protection -fcf-protection
 
 #export DH_VERBOSE = 1
 
@@ -34,6 +35,8 @@ override_dh_auto_clean:
 override_dh_auto_configure:
 	./configure --prefix=$(prefix) \
 	            --disable-tests \
+                --disable-unit-tests \
+                --disable-apps \
 	            --without-vhost \
 	            --without-crypto \
 	            --without-pmdk \
@@ -44,8 +47,8 @@ override_dh_auto_configure:
 	            --without-vtune \
 	            --with-dpdk # =$$PWD/dpdk
 
-#override_dh_auto_build:
-#	make V=1 # -j 8
+override_dh_auto_build:
+	dh_auto_build -- CFLAGS='$(cflags)' CXXFLAGS='$(cflags)' FFLAGS='$(cflags)' LDFLAGS='-Wl,-z,relro -Wl,-z,now'
 
 override_dh_auto_install:
 	dh_auto_install -- prefix=$(prefix) libdir=/lib/x86_64-linux-gnu/ datadir=$(prefix)/share
