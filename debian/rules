@@ -48,7 +48,11 @@ override_dh_auto_configure:
 	            --with-dpdk # =$$PWD/dpdk
 
 override_dh_auto_build:
-	dh_auto_build -- CFLAGS='$(cflags)' CXXFLAGS='$(cflags)' FFLAGS='$(cflags)' LDFLAGS='-Wl,-z,relro -Wl,-z,now'
+	export CFLAGS='$(cflags)'
+	export CXXFLAGS='$(cflags)'
+	export FFLAGS='$(cflags)'
+	export LDFLAGS='-Wl,-z,relro -Wl,-z,now'
+	dh_auto_build
 
 override_dh_auto_install:
 	dh_auto_install -- prefix=$(prefix) libdir=/lib/x86_64-linux-gnu/ datadir=$(prefix)/share
