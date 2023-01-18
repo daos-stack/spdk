@@ -33,19 +33,20 @@ override_dh_auto_clean:
 #endif
 #
 override_dh_auto_configure:
-	./configure --prefix=$(prefix) \
-	            --disable-tests \
-                --disable-unit-tests \
-                --disable-apps \
-	            --without-vhost \
-	            --without-crypto \
-	            --without-pmdk \
-	            --without-rbd \
-	            --with-shared \
+	./configure --prefix=$(prefix)        \
+	            --target-arch=haswell     \
+	            --disable-tests           \
+                --disable-unit-tests      \
+                --disable-apps            \
+	            --without-vhost           \
+	            --without-crypto          \
+	            --without-pmdk            \
+	            --without-rbd             \
+	            --with-shared             \
 	            --without-iscsi-initiator \
-	            --without-isal \
-	            --without-vtune \
-	            --with-dpdk # =$$PWD/dpdk
+	            --without-isal            \
+	            --without-vtune           \
+	            --with-dpdk
 
 override_dh_auto_build:
 	export CFLAGS='$(cflags)'

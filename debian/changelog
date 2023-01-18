@@ -1,4 +1,4 @@
-spdk (22.01.2-4) unstable; urgency=medium
+spdk (22.01.2-4.01) unstable; urgency=medium
 
   [ Brian J. Murrell ]
   * Install setup.sh and friends
