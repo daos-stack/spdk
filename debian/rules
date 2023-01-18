@@ -1,5 +1,12 @@
 #!/usr/bin/make -f
 
+name := spdk
+prefix := /usr
+sysconfdir := /etc
+exec_prefix := $(prefix)
+buildroot := debian/tmp
+cflags := -O2 -g -pipe -Wall -Werror=format-security -Wp,-D_FORTIFY_SOURCE=2 -Wp,-D_GLIBCXX_ASSERTIONS -fexceptions -fstack-protector-strong -grecord-gcc-switches -m64 -mtune=generic -fasynchronous-unwind-tables -fstack-clash-protection -fcf-protection
+
 #export DH_VERBOSE = 1
 
 export DEB_BUILD_MAINT_OPTIONS = hardening=+all
@@ -26,23 +33,44 @@ override_dh_auto_clean:
 #endif
 #
 override_dh_auto_configure:
-	./configure --prefix=/usr \
-	            --disable-tests \
-	            --without-vhost \
-	            --without-crypto \
-	            --without-pmdk \
-	            --without-rbd \
-	            --with-shared \
+	./configure --prefix=$(prefix)        \
+	            --target-arch=haswell     \
+	            --disable-tests           \
+                --disable-unit-tests      \
+                --disable-apps            \
+	            --without-vhost           \
+	            --without-crypto          \
+	            --without-pmdk            \
+	            --without-rbd             \
+	            --with-shared             \
 	            --without-iscsi-initiator \
-	            --without-isal \
-	            --without-vtune \
-	            --with-dpdk # =$$PWD/dpdk
+	            --without-isal            \
+	            --without-vtune           \
+	            --with-dpdk
 
-#override_dh_auto_build:
-#	make V=1 # -j 8
+override_dh_auto_build:
+	export CFLAGS='$(cflags)'
+	export CXXFLAGS='$(cflags)'
+	export FFLAGS='$(cflags)'
+	export LDFLAGS='-Wl,-z,relro -Wl,-z,now'
+	dh_auto_build -- CONFIG_ARCH=haswell V=1
 
 override_dh_auto_install:
-	dh_auto_install -- prefix=/usr libdir=/lib/x86_64-linux-gnu/ datadir=/usr/share
+	dh_auto_install -- prefix=$(prefix) libdir=/lib/x86_64-linux-gnu/ datadir=$(prefix)/share
+
+	# Install tools
+	mkdir -p ${buildroot}$(prefix)/share/$(name)/scripts
+
+	# install the setup tool
+	cp scripts/setup.sh scripts/common.sh ${buildroot}$(prefix)/share/$(name)/scripts/
+	mkdir -p ${buildroot}$(prefix)/include/$(name)/
+	cp include/$(name)/pci_ids.h ${buildroot}$(prefix)/include/$(name)/
+	# spdk_nvme_identify and spdk_nvme_perf are already installed by default
+	cp build/examples/lsvmd ${buildroot}/$(prefix)/bin/spdk_nvme_lsvmd
+	cp build/examples/nvme_manage ${buildroot}/$(prefix)/bin/spdk_nvme_manage
+
+	# Change $(prefix)/bin/{env ,}bash
+	sed -i -e '1s/env //' ${buildroot}$(prefix)/share/$(name)/scripts/setup.sh
 
 override_dh_missing:
 	dh_missing --fail-missing
