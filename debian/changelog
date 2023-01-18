@@ -1,9 +1,24 @@
+spdk (22.01.2-4) unstable; urgency=medium
+
+  [ Brian J. Murrell ]
+  * Install setup.sh and friends
+
+ -- Brian J. Murrell <brian.murrell@intel.com>  Wed, 18 Jan 2023 10:10:22 -0500
+
 spdk (22.01.2-3) unstable; urgency=medium
 
   [ Tom Nabarro ]
   * Add patch to fix build with glib 2.3.
 
  --  Tom Nabarro <tom.nabarro@intel.com>  Tue, 10 Jan 2023 00:00:00 +0000
+
+
+spdk (22.01.2-2) unstable; urgency=medium
+
+  [ Brian J. Murrell ]
+  * Keep in sync with RPM
+
+ -- Brian J. Murrell <brian.murrell@intel.com>  Sun, 27 Nov 2022 00:00:00 -0500
 
 spdk (22.01.2-1) unstable; urgency=medium
 

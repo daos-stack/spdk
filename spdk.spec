@@ -11,7 +11,7 @@
 
 Name:     spdk
 Version:  22.01.2
-Release:  3%{?dist}
+Release:  4%{?dist}
 Epoch:    0
 
 Summary:  Set of libraries and utilities for high performance user-mode storage
@@ -229,6 +229,9 @@ rm -f %{buildroot}/%{_libdir}/*.a
 
 
 %changelog
+* Wed Jan 18 2023 Brian J. Murrell <brian.murrell@intel.com> - 0:22.01.2-4
+  - Keep in sync with Debian build
+
 * Tue Jan 10 2023 Tom Nabarro <tom.nabarro@intel.com> - 0:22.01.2-3
 - Add patch to fix build with glib 2.3.
 
