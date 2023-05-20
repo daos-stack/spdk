@@ -26,17 +26,20 @@ override_dh_auto_clean:
 #endif
 #
 override_dh_auto_configure:
-	./configure --prefix=/usr \
-	            --disable-tests \
-	            --without-vhost \
-	            --without-crypto \
-	            --without-pmdk \
-	            --without-rbd \
-	            --with-shared \
+	./configure --with-dpdk               \
+	            --prefix=%{_prefix}       \
+	            --target-arch=haswell     \
+	            --disable-tests           \
+	            --disable-unit-tests      \
+	            --disable-apps            \
+	            --without-vhost           \
+	            --without-crypto          \
+	            --without-pmdk            \
+	            --without-rbd             \
 	            --without-iscsi-initiator \
-	            --without-isal \
-	            --without-vtune \
-	            --with-dpdk # =$$PWD/dpdk
+	            --without-isal            \
+	            --without-vtune           \
+	            --with-shared
 
 #override_dh_auto_build:
 #	make V=1 # -j 8

@@ -16,3 +16,5 @@ addFilter(r'spdk-devel\.x86_64: W: missing-dependency-on spdk\*\/spdk-libs\/libs
 addFilter(r'spdk\.x86_64: W: incoherent-version-in-changelog .* \[\'.*\.suse\.lp[0-9]*\', \'.*\.suse\.lp[0-9]*\'\]')
 
 addFilter('spdk.x86_64: W: position-independent-executable-suggested /usr/bin/spdk_nvme_')
+
+addFilter('spdk.x86_64: E: shared-library-without-dependency-information /usr/lib64/libspdk_ut_mock.so.')
