@@ -11,7 +11,7 @@
 
 Name:     spdk
 Version:  22.01.2
-Release:  3%{?dist}
+Release:  4%{?dist}
 Epoch:    0
 
 Summary:  Set of libraries and utilities for high performance user-mode storage
@@ -29,6 +29,7 @@ Patch1:   0002-configure-add-CONFIG_HAVE_ARC4RANDOM.patch
 %define install_docdir %{buildroot}/%{_docdir}/%{name}
 
 %global dpdk_version 21.11.2
+%global next_dpdk_major_version 22
 
 # Distros that don't support python3 will use python2
 %if "%{dist}" == ".el7" || (0%{?suse_version} > 0 && 9999999%{?sle_version} < 150400)
@@ -41,7 +42,7 @@ Patch1:   0002-configure-add-CONFIG_HAVE_ARC4RANDOM.patch
 ExclusiveArch: x86_64
 
 BuildRequires: gcc gcc-c++ make
-BuildRequires: dpdk-devel >= %{dpdk_version}
+BuildRequires: dpdk-daos-devel >= %{dpdk_version}, dpdk-daos-devel < %{next_dpdk_major_version}
 %if (0%{?rhel} >= 7)
 BuildRequires: numactl-devel
 BuildRequires: CUnit-devel
@@ -56,7 +57,7 @@ BuildRequires: libibverbs-devel, librdmacm-devel
 %if %{with doc}
 BuildRequires: doxygen mscgen graphviz
 %endif
-%if (0%{?rhel} >= 8)
+%if (0%{?rhel} >= 8) && (0%{?rhel} < 9) 
 BuildRequires: python36
 %else
 BuildRequires: python
@@ -154,18 +155,23 @@ export FFLAGS="${FFLAGS:-%optflags}"
 export LDFLAGS="${LDFLAGS:-%{build_ldflags}}"
 %endif
 %endif
-./configure --with-dpdk \
-            --prefix=%{_prefix} \
-            --disable-tests \
-            --disable-unit-tests \
-            --disable-apps \
-            --without-vhost \
-            --without-crypto \
-            --without-pmdk \
-            --without-rbd \
+./configure --with-dpdk               \
+            --prefix=%{_prefix}       \
+%if (0%{?rhel} && 0%{?rhel} < 8)
+            --target-arch=core-avx2   \
+%else
+            --target-arch=haswell     \
+%endif
+            --disable-tests           \
+            --disable-unit-tests      \
+            --disable-apps            \
+            --without-vhost           \
+            --without-crypto          \
+            --without-pmdk            \
+            --without-rbd             \
             --without-iscsi-initiator \
-            --without-isal \
-            --without-vtune \
+            --without-isal            \
+            --without-vtune           \
             --with-shared
 
 %make_build all
@@ -229,6 +235,12 @@ rm -f %{buildroot}/%{_libdir}/*.a
 
 
 %changelog
+* Thu Jun 22 2023 Brian J. Murrell <brian.murrell@intel.com> - 0:22.01.2-4
+- Build on EL9
+- Change BR: dpdk-devel to dpdk-daos-devel to ensure we get the
+  daos-targetted dpdk build
+- Target core-avx2 instruction set on EL7 and haswell on everything else
+
 * Tue Jan 10 2023 Tom Nabarro <tom.nabarro@intel.com> - 0:22.01.2-3
 - Add patch to fix build with glib 2.3.
 
