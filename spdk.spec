@@ -11,7 +11,7 @@
 
 Name:     spdk
 Version:  22.01.2
-Release:  4%{?dist}
+Release:  5%{?dist}
 Epoch:    0
 
 Summary:  Set of libraries and utilities for high performance user-mode storage
@@ -57,7 +57,7 @@ BuildRequires: libibverbs-devel, librdmacm-devel
 %if %{with doc}
 BuildRequires: doxygen mscgen graphviz
 %endif
-%if (0%{?rhel} >= 8) && (0%{?rhel} < 9) 
+%if (0%{?rhel} >= 8) && (0%{?rhel} < 9)
 BuildRequires: python36
 %else
 BuildRequires: python
@@ -78,7 +78,7 @@ applications.
 %package devel
 Summary: Storage Performance Development Kit development files
 Requires: %{name}%{?_isa} = %{package_version}
-Requires: dpdk-devel >= %{dpdk_version}
+Requires: dpdk-daos-devel >= %{dpdk_version}, dpdk-daos-devel < %{next_dpdk_major_version}
 Provides: %{name}-static%{?_isa} = %{package_version}
 
 %description devel
@@ -235,6 +235,10 @@ rm -f %{buildroot}/%{_libdir}/*.a
 
 
 %changelog
+* Mon Oct 16 2023 Brian J. Murrell <brian.murrell@intel.com> - 0:22.01.2-5
+- Change spdk-devel's R: dpdk-devel to dpdk-daos-devel to ensure we get the
+  daos-targetted dpdk build
+
 * Thu Jun 22 2023 Brian J. Murrell <brian.murrell@intel.com> - 0:22.01.2-4
 - Build on EL9
 - Change BR: dpdk-devel to dpdk-daos-devel to ensure we get the
