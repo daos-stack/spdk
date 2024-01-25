@@ -11,7 +11,7 @@
 
 Name:     spdk
 Version:  22.01.2
-Release:  5%{?dist}
+Release:  6%{?dist}
 Epoch:    0
 
 Summary:  Set of libraries and utilities for high performance user-mode storage
@@ -198,6 +198,11 @@ cp build/examples/nvme_manage %{buildroot}/%{_bindir}/spdk_nvme_manage
 # Change /usr/bin/{env ,}bash to resolve env-script-interpreter rpmlint error.
 sed -i -e '1s/env //' %{install_datadir}/scripts/setup.sh
 
+# Install rpc.py tool
+cp scripts/rpc.py %{install_datadir}/scripts/
+mkdir -p %{install_datadir}/python/spdk
+cp -r python/spdk/rpc %{install_datadir}/python/spdk/
+
 %if %{with doc}
 # Install doc
 mkdir -p %{install_docdir}
@@ -226,7 +231,7 @@ rm -f %{buildroot}/%{_libdir}/*.a
 %files tools
 %{_datadir}/%{name}/include
 %{_datadir}/%{name}/scripts
-
+%{_datadir}/%{name}/python
 
 %if %{with doc}
 %files doc
@@ -235,6 +240,9 @@ rm -f %{buildroot}/%{_libdir}/*.a
 
 
 %changelog
+* Thu Jan 25 2024 Makito Kano <makito.kano@intel.com> - 0:22.01.2-6
+- Add rpc.py to spdk-tools package
+
 * Mon Oct 16 2023 Brian J. Murrell <brian.murrell@intel.com> - 0:22.01.2-5
 - Change spdk-devel's R: dpdk-devel to dpdk-daos-devel to ensure we get the
   daos-targetted dpdk build
