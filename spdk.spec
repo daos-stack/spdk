@@ -241,7 +241,7 @@ rm -f %{buildroot}/%{_libdir}/*.a
 
 %changelog
 * Thu Jan 25 2024 Makito Kano <makito.kano@intel.com> - 0:22.01.2-6
-- Add rpc.py to spdk-tools package
+- Add rpc.py to spdk-tools package.
 
 * Mon Oct 16 2023 Brian J. Murrell <brian.murrell@intel.com> - 0:22.01.2-5
 - Change spdk-devel's R: dpdk-devel to dpdk-daos-devel to ensure we get the
