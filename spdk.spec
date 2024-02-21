@@ -200,8 +200,8 @@ sed -i -e '1s/env //' %{install_datadir}/scripts/setup.sh
 
 # Install rpc.py tool
 cp scripts/rpc.py %{install_datadir}/scripts/
-mkdir -p %{install_datadir}/python/spdk
-cp -r python/spdk/rpc %{install_datadir}/python/spdk/
+mkdir -p %{install_datadir}/scripts/rpc
+cp scripts/rpc/*.py %{install_datadir}/scripts/rpc/
 
 %if %{with doc}
 # Install doc
@@ -231,7 +231,6 @@ rm -f %{buildroot}/%{_libdir}/*.a
 %files tools
 %{_datadir}/%{name}/include
 %{_datadir}/%{name}/scripts
-%{_datadir}/%{name}/python
 
 %if %{with doc}
 %files doc
