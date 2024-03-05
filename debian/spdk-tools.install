@@ -1,1 +1,3 @@
 usr/bin/*
+scripts/rpc.py usr/share/spdk-tools/python
+scripts/rpc/*.py usr/share/spdk-tools/python/rpc
