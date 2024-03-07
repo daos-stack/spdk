@@ -1,1 +1,2 @@
 lib/x86_64-linux-gnu/lib*.so.*
+scripts/{setup,common}.sh usr/share/spdk/scripts

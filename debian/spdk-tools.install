@@ -1,3 +1,6 @@
 usr/bin/*
 scripts/rpc.py usr/share/spdk-tools/python
 scripts/rpc/*.py usr/share/spdk-tools/python/rpc
+include/spdk/pci_ids.h usr/include/spdk
+build/examples/spdk_lsvmd usr/bin/
+build/examples/spdk_nvme_manage usr/bin/

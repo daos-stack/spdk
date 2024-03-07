@@ -3,7 +3,7 @@ Priority: optional
 Maintainer: daos-stack <daos@daos.groups.io>
 Build-Depends:
  debhelper,
- python,
+ python3,
  libdpdk-dev (>= 21.11.2),
  librdmacm-dev,
  libibverbs-dev,
