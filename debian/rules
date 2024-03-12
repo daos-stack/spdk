@@ -6,6 +6,13 @@ export DEB_BUILD_MAINT_OPTIONS = hardening=+all
 # https://github.com/spdk/spdk/issues/2011
 export DEB_CFLAGS_MAINT_APPEND = $(shell pkg-config --cflags libdpdk)
 
+prefix := /usr
+
+cflags := -O2 -g -pipe -Wall -Werror=format-security -Wp,-D_FORTIFY_SOURCE=2 \
+	-Wp,-D_GLIBCXX_ASSERTIONS -fexceptions -fstack-protector-strong \
+	-grecord-gcc-switches -m64 -mtune=generic -fasynchronous-unwind-tables \
+	-fstack-clash-protection -fcf-protection
+
 %:
 	dh $@
 
@@ -41,11 +48,17 @@ override_dh_auto_configure:
 	            --without-vtune           \
 	            --with-shared
 
-#override_dh_auto_build:
-#	make V=1 # -j 8
+override_dh_auto_build:
+	export CFLAGS='$(cflags)'
+	export CXXFLAGS='$(cflags)'
+	export FFLAGS='$(cflags)'
+	export LDFLAGS='-Wl,-z,relro -Wl,-z,now'
+	dh_auto_build -- CONFIG_ARCH=haswell V=1
 
 override_dh_auto_install:
-	dh_auto_install -- prefix=/usr libdir=/lib/x86_64-linux-gnu/ datadir=/usr/share
+	mv build/examples/lsvmd build/examples/spdk_lsvmd
+	mv build/examples/nvme_manage build/examples/spdk_nvme_manage
+	dh_auto_install -- prefix=$(prefix) libdir=/lib/x86_64-linux-gnu/ datadir=$(prefix)/share
 
 override_dh_missing:
 	dh_missing --fail-missing
