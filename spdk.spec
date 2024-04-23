@@ -239,7 +239,7 @@ rm -f %{buildroot}/%{_libdir}/*.a
 
 
 %changelog
-* Tue Mar 12 2024 Tomasz Gromadzki <tomasz.gromadzki@intel.com> - 0:22.01.2-6
+* Tue Apr 23 2024 Tomasz Gromadzki <tomasz.gromadzki@intel.com> - 0:22.01.2-6
 - Add rpc.py to spdk-tools package.
 
 * Mon Oct 16 2023 Brian J. Murrell <brian.murrell@intel.com> - 0:22.01.2-5
