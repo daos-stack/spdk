@@ -1,1 +1,7 @@
 usr/bin/*
+scripts/{setup,common}.sh usr/share/spdk-tools/scripts
+include/spdk/pci_ids.h usr/include/spdk
+scripts/rpc.py usr/share/spdk-tools/python
+scripts/rpc/*.py usr/share/spdk-tools/python/rpc
+build/examples/spdk_lsvmd usr/bin/
+build/examples/spdk_nvme_manage usr/bin/
