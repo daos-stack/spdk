@@ -8,7 +8,7 @@ Copyright: 2011-2017, Intel Corporation <https://lists.01.org/hyperkitty/list/sp
 License: BSD-3-clause
 
 Files: debian/*
-Copyright: 2019 Intel Corporation <daos@daos.groups.io>
+Copyright: 2019-2024 Intel Corporation <daos@daos.groups.io>
 License: GPL-2+
  This package is free software; you can redistribute it and/or modify
  it under the terms of the GNU General Public License as published by

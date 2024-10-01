@@ -1,3 +1,6 @@
+# SPDX-License-Identifier: BSD-2-Clause-Patent
+# Copyright (C) 2019-2024 Intel Corporation
+
 # doesn't seem to work on sles 12.3: #{!?make_build:#define make_build #{__make} #{?_smp_mflags}}
 # so...
 %if (0%{?suse_version} <= 1320)
@@ -16,7 +19,7 @@ Epoch:    0
 
 Summary:  Set of libraries and utilities for high performance user-mode storage
 
-License:  BSD
+License:  BSD-3-Clause
 URL:      http://spdk.io
 Source:   https://github.com/%{name}/%{name}/archive/v%{version}.tar.gz
 
