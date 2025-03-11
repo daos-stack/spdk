@@ -5,6 +5,7 @@ addFilter('no-documentation')
 addFilter('no-manual-page-for-binary')
 addFilter('spdk-tools.noarch: W: devel-file-in-non-devel-package /usr/share/spdk/include/spdk/pci_ids.h')
 addFilter('spdk.x86_64: W: library-not-linked-against-libc /usr/lib64/libspdk_')
+addFilter("spdk\.spec: W: invalid-url Source0: spdk-[\d\.]+\.tar\.gz")
 
 # configure is not actually from autotools and doesn't have a libdir option
 addFilter('W: configure-without-libdir-spec')
@@ -18,3 +19,5 @@ addFilter(r'spdk\.x86_64: W: incoherent-version-in-changelog .* \[\'.*\.suse\.lp
 addFilter('spdk.x86_64: W: position-independent-executable-suggested /usr/bin/spdk_nvme_')
 
 addFilter('spdk.x86_64: E: shared-library-without-dependency-information /usr/lib64/libspdk_ut_mock.so.')
+addFilter('spdk-devel\.x86_64: E: static-library-without-debuginfo /usr/lib64/spdk/lib')
+addFilter('spdk.x86_64: E: env-script-interpreter')

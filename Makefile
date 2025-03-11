@@ -3,7 +3,7 @@
 
 NAME    := spdk
 SRC_EXT := gz
-SOURCE   = https://github.com/spdk/$(NAME)/archive/v$(VERSION).tar.$(SRC_EXT)
+SOURCE   = $(NAME)-$(VERSION).tar.$(SRC_EXT)
 
 # this needs to be formalized into packaging/Makefile_packaging.mk
 #GIT_COMMIT := 7232c450f97cf925a521a60ef2561eca4b65c41a
@@ -30,3 +30,12 @@ include packaging/Makefile_packaging.mk
 #   git diff $(VERSION)..$(GIT_COMMIT)              \
 #       > ../$@
 #   git add $@
+
+$(NAME)-$(VERSION).tar.gz: $(shell git ls-files :/:)
+	echo Creating $@
+	echo $(basename $@)
+	rm -f $@
+	git submodule update --init --recursive
+	git ls-files --recurse-submodules $(NAME)-$(VERSION) | tar caf $(NAME)-$(VERSION).tar.gz -T-
+
+tarball: $(NAME)-$(VERSION).tar.gz
