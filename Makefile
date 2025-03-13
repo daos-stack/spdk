@@ -31,11 +31,11 @@ include packaging/Makefile_packaging.mk
 #       > ../$@
 #   git add $@
 
-$(NAME)-$(VERSION).tar.gz: $(shell git ls-files :/:)
+$(NAME)-$(VERSION).tar.gz: $(shell git ls-files src --recurse-submodules)
 	echo Creating $@
 	echo $(basename $@)
 	rm -f $@
 	git submodule update --init --recursive
-	git ls-files --recurse-submodules $(NAME)-$(VERSION) | tar caf $(NAME)-$(VERSION).tar.gz -T-
+	git ls-files --recurse-submodules src | tar --transform='s/^src/$(NAME)-$(VERSION)/' -czf $(NAME)-$(VERSION).tar.gz -T -
 
 tarball: $(NAME)-$(VERSION).tar.gz

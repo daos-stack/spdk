@@ -147,6 +147,7 @@ export FFLAGS="${FFLAGS:-%optflags}"
 export LDFLAGS="${LDFLAGS:-%{build_ldflags}}"
 %endif
 %endif
+alias pip=pip3
 ./configure                           \
             --prefix=%{_prefix}       \
 %if (0%{?rhel} && 0%{?rhel} < 8)
@@ -168,7 +169,6 @@ export LDFLAGS="${LDFLAGS:-%{build_ldflags}}"
             --without-usdt          \
             --without-wpdk          \
             --with-shared
-alias pip=pip3
 %make_build all
 
 %if %{with doc}
@@ -177,6 +177,7 @@ make -C doc
 
 
 %install
+alias pip=pip3
 %make_install %{?_smp_mflags} prefix=%{_prefix} libdir=%{_libdir} datadir=%{_datadir}
 
 # Remove some dpdk stuff we don't need
@@ -184,6 +185,7 @@ rm -f %{buildroot}/usr/bin/dpdk-*.py
 rm -rf %{buildroot}/usr/share/dpdk
 rm -rf %{buildroot}/usr/share/doc/dpdk
 mv %{buildroot}/usr/lib/python* %{buildroot}/%{_libdir}
+chmod o+x %{buildroot}/%{_libdir}/python*/*/spdk/sma/qmp.py
 mv %{buildroot}/usr/lib %{buildroot}/%{_libdir}/spdk
 mkdir -p %{buildroot}/etc
 mkdir -p %{buildroot}/etc/ld.so.conf.d
