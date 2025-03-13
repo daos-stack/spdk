@@ -34,6 +34,7 @@ ExclusiveArch: x86_64
 
 BuildRequires: kernel-headers
 BuildRequires: gcc gcc-c++ make
+BuildRequires: python3-pyelftools
 %if (0%{?rhel} >= 7)
 BuildRequires: numactl-devel
 %else
@@ -43,15 +44,16 @@ BuildRequires: libnuma-devel
 %endif
 BuildRequires: libaio-devel, openssl-devel, libuuid-devel
 %if (0%{?rhel} >= 8) && (0%{?rhel} < 9)
-BuildRequires: python36
+BuildRequires: python3.11
+BuildRequires: python3.11-pip
 %else
 BuildRequires: python
+BuildRequires: python3-pip
 %endif
 BuildRequires: meson
-BuildRequires: python3-pip
-BuildRequires: python3-pyelftools
 BuildRequires: patchelf
 BuildRequires: libcmocka-devel
+BuildRequires: procps
 
 Requires(post): /sbin/ldconfig
 Requires(postun): /sbin/ldconfig
@@ -74,12 +76,13 @@ developing applications with the Storage Performance Development Kit.
 Summary: Storage Performance Development Kit tools files
 Requires: %{name}%{?_isa} = %{package_version}
 %if (0%{?rhel} >= 7)
+%if (0%{?rhel} <= 8)
+Requires: python3.11 python3.11-configshell python3.11-pexpect
+%else
 Requires: python3 python3-configshell python3-pexpect
+%endif
 %else
 %if (0%{?suse_version} >= 1500)
-%if 0%{?use_python2}
-Requires: python2-configshell-fb
-%endif
 Requires: python3-configshell-fb
 %else
 %if (0%{?suse_version} >= 1315)
@@ -133,7 +136,7 @@ export FFLAGS="${FFLAGS:-%optflags}"
 export LDFLAGS="${LDFLAGS:-%{build_ldflags}}"
 %endif
 %endif
-alias pip=pip3
+alias pip="python3 -m pip"
 ./configure                           \
             --prefix=%{_prefix}       \
 %if (0%{?rhel} && 0%{?rhel} < 8)
@@ -164,7 +167,7 @@ make -C doc
 
 
 %install
-alias pip=pip3
+alias pip="python3 -m pip"
 %make_install %{?_smp_mflags} prefix=%{_prefix} libdir=%{_libdir} datadir=%{_datadir}
 
 # Remove some dpdk stuff we don't need
