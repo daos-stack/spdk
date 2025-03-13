@@ -32,6 +32,15 @@ Source0:  %{name}-%{version}.tar.gz
 # Only x86_64 is supported
 ExclusiveArch: x86_64
 
+%if (0%{?rhel} >= 8) && (0%{?rhel} < 9)
+BuildRequires: python3.11
+BuildRequires: python3.11-pip
+%define pip_version=pip-3.11
+%else
+%define pip_version=pip3
+BuildRequires: python
+BuildRequires: python3-pip
+%endif
 BuildRequires: kernel-headers
 BuildRequires: gcc gcc-c++ make
 BuildRequires: python3-pyelftools
@@ -43,13 +52,6 @@ BuildRequires: libnuma-devel
 %endif
 %endif
 BuildRequires: libaio-devel, openssl-devel, libuuid-devel
-%if (0%{?rhel} >= 8) && (0%{?rhel} < 9)
-BuildRequires: python3.11
-BuildRequires: python3.11-pip
-%else
-BuildRequires: python
-BuildRequires: python3-pip
-%endif
 BuildRequires: meson
 BuildRequires: patchelf
 BuildRequires: libcmocka-devel
@@ -136,7 +138,7 @@ export FFLAGS="${FFLAGS:-%optflags}"
 export LDFLAGS="${LDFLAGS:-%{build_ldflags}}"
 %endif
 %endif
-alias pip="python3 -m pip"
+alias pip=%{pip_version}
 ./configure                           \
             --prefix=%{_prefix}       \
 %if (0%{?rhel} && 0%{?rhel} < 8)
@@ -167,7 +169,7 @@ make -C doc
 
 
 %install
-alias pip="python3 -m pip"
+alias pip=%{pip_version}
 %make_install %{?_smp_mflags} prefix=%{_prefix} libdir=%{_libdir} datadir=%{_datadir}
 
 # Remove some dpdk stuff we don't need
