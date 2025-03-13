@@ -8,7 +8,6 @@
 
 %define debug_package %{nil}
 %global _hardened_build 1
-%global __python %{__python3}
 
 
 # Build documentation package
@@ -30,13 +29,6 @@ Source0:  %{name}-%{version}.tar.gz
 %define install_datadir %{buildroot}/%{_datadir}/%{name}
 %define install_docdir %{buildroot}/%{_docdir}/%{name}
 
-# Distros that don't support python3 will use python2
-%if "%{dist}" == ".el7" || (0%{?suse_version} > 0 && 9999999%{?sle_version} < 150400)
-%define use_python2 1
-%else
-%define use_python3 1
-%endif
-
 # Only x86_64 is supported
 ExclusiveArch: x86_64
 
@@ -56,10 +48,10 @@ BuildRequires: python36
 BuildRequires: python
 %endif
 BuildRequires: meson
-
-BuildRequires: python3-pyelftools
 BuildRequires: python3-pip
+BuildRequires: python3-pyelftools
 BuildRequires: patchelf
+BuildRequires: libcmocka-devel
 
 Requires(post): /sbin/ldconfig
 Requires(postun): /sbin/ldconfig
@@ -82,19 +74,13 @@ developing applications with the Storage Performance Development Kit.
 Summary: Storage Performance Development Kit tools files
 Requires: %{name}%{?_isa} = %{package_version}
 %if (0%{?rhel} >= 7)
-%if 0%{?use_python3}
 Requires: python3 python3-configshell python3-pexpect
-%else
-Requires: python python-configshell pexpect
-%endif
 %else
 %if (0%{?suse_version} >= 1500)
 %if 0%{?use_python2}
 Requires: python2-configshell-fb
 %endif
-%if 0%{?use_python3}
 Requires: python3-configshell-fb
-%endif
 %else
 %if (0%{?suse_version} >= 1315)
 Requires: python python-configshell
@@ -163,6 +149,7 @@ alias pip=pip3
             --without-rbd             \
             --without-iscsi-initiator \
             --without-vtune           \
+            --without-sma             \
             --without-nvme-cuse       \
             --without-raid5f          \
             --without-avahi          \
