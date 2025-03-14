@@ -1,0 +1,26 @@
+diff --git a/lib/Makefile b/lib/Makefile
+index b0791040b..c1d8ea43c 100644
+--- a/lib/Makefile
++++ b/lib/Makefile
+@@ -10,7 +10,7 @@ include $(SPDK_ROOT_DIR)/mk/spdk.lib_deps.mk
+ 
+ DIRS-y += bdev blob blobfs conf dma accel event json jsonrpc \
+           log lvol rpc sock thread trace util nvme vmd nvmf scsi \
+-          ioat ut_mock iscsi notify init trace_parser keyring
++          ioat iscsi notify init trace_parser keyring
+ ifeq ($(OS),Linux)
+ DIRS-y += nbd ftl vfio_user
+ ifeq ($(CONFIG_UBLK),y)
+diff --git a/mk/spdk.app_vars.mk b/mk/spdk.app_vars.mk
+index 33e00245d..e7001e400 100644
+--- a/mk/spdk.app_vars.mk
++++ b/mk/spdk.app_vars.mk
+@@ -30,7 +30,4 @@ SPDK_LIB_LINKER_ARGS = \
+ # library with whole-archive, to keep its functions from getting stripped out
+ # when LTO is enabled.
+ SPDK_STATIC_LIB_LINKER_ARGS = \
+-	$(SPDK_LIB_FILES) \
+-	-Wl,--whole-archive \
+-	$(SPDK_ROOT_DIR)/build/lib/libspdk_ut_mock.a \
+-	-Wl,--no-whole-archive
++	$(SPDK_LIB_FILES)

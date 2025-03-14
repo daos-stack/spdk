@@ -23,6 +23,7 @@ Summary:  Set of libraries and utilities for high performance user-mode storage
 License:  BSD
 URL:      http://spdk.io
 Source0:  %{name}-%{version}.tar.gz
+Patch0: 0000RemoveBrokenMockLib.patch
 
 %define package_version %{epoch}:%{version}-%{release}
 
