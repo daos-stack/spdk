@@ -56,6 +56,7 @@ BuildRequires: libnuma-devel
 BuildRequires: libaio-devel, openssl-devel, libuuid-devel
 BuildRequires: meson
 BuildRequires: patchelf
+BuildRequires: libarchive-devel
 BuildRequires: libcmocka-devel
 BuildRequires: procps
 
