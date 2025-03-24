@@ -1,5 +1,6 @@
 # SPDX-License-Identifier: BSD-2-Clause-Patent
 # Copyright (c) 2019-2024 Intel Corporation
+# Copyright (c) 2025 Google LLC
 
 NAME    := spdk
 SRC_EXT := gz
@@ -35,7 +36,7 @@ $(NAME)-$(VERSION).tar.gz: $(shell git ls-files src --recurse-submodules)
 	echo Creating $@
 	echo $(basename $@)
 	rm -f $@
-	git submodule update --init --recursive
-	git ls-files --recurse-submodules src | tar --transform='s/^src/$(NAME)-$(VERSION)/' --hard-dereference -hczf $(NAME)-$(VERSION).tar.gz -T -
+	cd src && ../archive.sh ../ $(NAME) $(VERSION) tar
+	gzip $(basename $@)
 
-tarball: $(NAME)-$(VERSION).tar.gz
+tarball: $(NAME)-$(VERSION).tar.tz
