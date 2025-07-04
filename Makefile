@@ -1,9 +1,10 @@
 # SPDX-License-Identifier: BSD-2-Clause-Patent
 # Copyright (c) 2019-2024 Intel Corporation
+# Copyright (c) 2025 Google LLC
 
 NAME    := spdk
 SRC_EXT := gz
-SOURCE   = https://github.com/spdk/$(NAME)/archive/v$(VERSION).tar.$(SRC_EXT)
+SOURCE   = $(NAME)-$(VERSION).tar.$(SRC_EXT)
 
 # this needs to be formalized into packaging/Makefile_packaging.mk
 #GIT_COMMIT := 7232c450f97cf925a521a60ef2561eca4b65c41a
@@ -30,3 +31,12 @@ include packaging/Makefile_packaging.mk
 #   git diff $(VERSION)..$(GIT_COMMIT)              \
 #       > ../$@
 #   git add $@
+
+$(NAME)-$(VERSION).tar.gz: $(shell git ls-files src --recurse-submodules)
+	echo Creating $@
+	echo $(basename $@)
+	rm -f $@
+	cd src && ../archive.sh ../ $(NAME) $(VERSION) tar
+	gzip $(basename $@)
+
+tarball: $(NAME)-$(VERSION).tar.tz

@@ -4,67 +4,61 @@
 %define make_build  %{__make} %{?_smp_mflags}
 %endif
 
+%{!?libdir:%define libdir /usr/local/lib}
+
+%define debug_package %{nil}
 %global _hardened_build 1
+
 
 # Build documentation package
 %bcond_with doc
 
 Name:     spdk
-Version:  22.01.2
-Release:  6%{?dist}
+Version:  24.09
+Release:  1%{?dist}
 Epoch:    0
 
 Summary:  Set of libraries and utilities for high performance user-mode storage
 
 License:  BSD
 URL:      http://spdk.io
-Source:   https://github.com/%{name}/%{name}/archive/v%{version}.tar.gz
-
-Patch0:   0001-setup.sh-Speed-up-the-VMD-device-unbind-by-running-i.patch
-Patch1:   0002-configure-add-CONFIG_HAVE_ARC4RANDOM.patch
+Source0:  %{name}-%{version}.tar.gz
+Patch0: 0000RWF_NOWAIT.patch
+Patch1: 0001PythonPip.patch
 
 %define package_version %{epoch}:%{version}-%{release}
 
 %define install_datadir %{buildroot}/%{_datadir}/%{name}
 %define install_docdir %{buildroot}/%{_docdir}/%{name}
 
-%global dpdk_version 21.11.2
-%global next_dpdk_major_version 22
-
-# Distros that don't support python3 will use python2
-%if "%{dist}" == ".el7" || (0%{?suse_version} > 0 && 9999999%{?sle_version} < 150400)
-%define use_python2 1
-%else
-%define use_python3 1
-%endif
-
 # Only x86_64 is supported
 ExclusiveArch: x86_64
 
+%if (0%{?rhel} >= 8) && (0%{?rhel} < 9)
+BuildRequires: python3.11
+BuildRequires: python3.11-pip
+%define pip_version=pip-3.11
+%else
+%define pip_version=pip3
+BuildRequires: python
+BuildRequires: python3-pip
+%endif
+BuildRequires: kernel-headers
 BuildRequires: gcc gcc-c++ make
-BuildRequires: dpdk-daos-devel >= %{dpdk_version}, dpdk-daos-devel < %{next_dpdk_major_version}
+BuildRequires: python3-pyelftools
 %if (0%{?rhel} >= 7)
 BuildRequires: numactl-devel
-BuildRequires: CUnit-devel
 %else
 %if (0%{?suse_version} >= 1315)
 BuildRequires: libnuma-devel
-BuildRequires: cunit-devel
 %endif
 %endif
-BuildRequires: libiscsi-devel, libaio-devel, openssl-devel, libuuid-devel
-BuildRequires: libibverbs-devel, librdmacm-devel
-%if %{with doc}
-BuildRequires: doxygen mscgen graphviz
-%endif
-%if (0%{?rhel} >= 8) && (0%{?rhel} < 9)
-BuildRequires: python36
-%else
-BuildRequires: python
-%endif
-
-# Install dependencies
-Requires: dpdk >= %{dpdk_version}
+BuildRequires: libaio-devel, openssl-devel, libuuid-devel
+BuildRequires: meson
+BuildRequires: patchelf
+BuildRequires: libarchive-devel
+BuildRequires: libcmocka-devel
+BuildRequires: procps
 
 Requires(post): /sbin/ldconfig
 Requires(postun): /sbin/ldconfig
@@ -77,9 +71,6 @@ applications.
 
 %package devel
 Summary: Storage Performance Development Kit development files
-Requires: %{name}%{?_isa} = %{package_version}
-Requires: dpdk-daos-devel >= %{dpdk_version}, dpdk-daos-devel < %{next_dpdk_major_version}
-Provides: %{name}-static%{?_isa} = %{package_version}
 
 %description devel
 This package contains the headers and other files needed for
@@ -90,19 +81,14 @@ developing applications with the Storage Performance Development Kit.
 Summary: Storage Performance Development Kit tools files
 Requires: %{name}%{?_isa} = %{package_version}
 %if (0%{?rhel} >= 7)
-%if 0%{?use_python3}
-Requires: python3 python3-configshell python3-pexpect
+%if (0%{?rhel} <= 8)
+Requires: python3.11 python3.11-configshell python3.11-pexpect
 %else
-Requires: python python-configshell pexpect
+Requires: python3 python3-configshell python3-pexpect
 %endif
 %else
 %if (0%{?suse_version} >= 1500)
-%if 0%{?use_python2}
-Requires: python2-configshell-fb
-%endif
-%if 0%{?use_python3}
 Requires: python3-configshell-fb
-%endif
 %else
 %if (0%{?suse_version} >= 1315)
 Requires: python python-configshell
@@ -155,7 +141,8 @@ export FFLAGS="${FFLAGS:-%optflags}"
 export LDFLAGS="${LDFLAGS:-%{build_ldflags}}"
 %endif
 %endif
-./configure --with-dpdk               \
+alias pip=%{pip_version}
+./configure                           \
             --prefix=%{_prefix}       \
 %if (0%{?rhel} && 0%{?rhel} < 8)
             --target-arch=core-avx2   \
@@ -167,13 +154,16 @@ export LDFLAGS="${LDFLAGS:-%{build_ldflags}}"
             --disable-apps            \
             --without-vhost           \
             --without-crypto          \
-            --without-pmdk            \
             --without-rbd             \
             --without-iscsi-initiator \
-            --without-isal            \
             --without-vtune           \
+            --without-sma             \
+            --without-nvme-cuse       \
+            --without-raid5f          \
+            --without-avahi          \
+            --without-usdt          \
+            --without-wpdk          \
             --with-shared
-
 %make_build all
 
 %if %{with doc}
@@ -182,7 +172,28 @@ make -C doc
 
 
 %install
+alias pip=%{pip_version}
 %make_install %{?_smp_mflags} prefix=%{_prefix} libdir=%{_libdir} datadir=%{_datadir}
+
+# Remove some dpdk stuff we don't need
+rm -f %{buildroot}/usr/bin/dpdk-*.py
+rm -rf %{buildroot}/usr/share/dpdk
+rm -rf %{buildroot}/usr/share/doc/dpdk
+mv %{buildroot}/usr/lib/python* %{buildroot}/%{_libdir}
+chmod o+x %{buildroot}/%{_libdir}/python*/*/spdk/sma/qmp.py
+mv %{buildroot}/usr/lib %{buildroot}/%{_libdir}/spdk
+mkdir -p %{buildroot}/etc
+mkdir -p %{buildroot}/etc/ld.so.conf.d
+cat <<-EOF > %{buildroot}/etc/ld.so.conf.d/spdk.conf
+%{_libdir}/spdk
+EOF
+rm -rf %{buildroot}/%{_libdir}/pkgconfig/*
+cat <<-EOF > %{buildroot}/%{_libdir}/pkgconfig/spdk.pc
+Description: SPDK General
+Version: %{version}
+Name: spdk
+Libs: -L%{_libdir}/spdk
+EOF
 
 # Install tools
 mkdir -p %{install_datadir}/scripts
@@ -192,13 +203,19 @@ cp scripts/{setup,common}.sh %{install_datadir}/scripts/
 mkdir -p %{install_datadir}/include/%{name}/
 cp include/%{name}/pci_ids.h %{install_datadir}/include/%{name}/
 # spdk_nvme_identify and spdk_nvme_perf are already installed by default
+strip -s build/examples/lsvmd
+patchelf --remove-rpath build/examples/lsvmd
+strip -s build/examples/nvme_manage
+patchelf --remove-rpath build/examples/nvme_manage
 cp build/examples/lsvmd %{buildroot}/%{_bindir}/spdk_nvme_lsvmd
 cp build/examples/nvme_manage %{buildroot}/%{_bindir}/spdk_nvme_manage
+strip -s %{buildroot}/%{_libdir}/*.so.*.* || true
+strip -s %{buildroot}/%{_libdir}/spdk/*.so.*.* || true
+strip -s %{buildroot}/%{_libdir}/spdk/*/*.so.*.* || true
+
 
 # Install rpc.py tool
 cp scripts/rpc.py %{install_datadir}/scripts/
-mkdir -p %{install_datadir}/scripts/rpc
-cp scripts/rpc/*.py %{install_datadir}/scripts/rpc/
 
 # Change /usr/bin/{env ,}bash/python to resolve env-script-interpreter rpmlint error.
 sed -i -e '1s/env //' %{install_datadir}/scripts/{setup.sh,rpc.py}
@@ -220,13 +237,20 @@ rm -f %{buildroot}/%{_libdir}/*.a
 %dir %{_datadir}/%{name}
 %{_libdir}/*.so.*
 %{_bindir}/*
+%{_libdir}/spdk/*.so.*
+%{_libdir}/python*/*
+/etc/ld.so.conf.d/spdk.conf
+%{_libdir}/spdk/dpdk/pmds*/*.so.*
 
 
 %files devel
-%{_includedir}/%{name}
+%{_includedir}/*
 %{_libdir}/*.so
 %{_libdir}/pkgconfig
-
+%{_libdir}/spdk/*.a
+%{_libdir}/spdk/*.so
+%{_libdir}/spdk/dpdk/pmds*/*.so
+%{_libdir}/spdk/pkgconfig
 
 %files tools
 %{_datadir}/%{name}/include
@@ -239,6 +263,9 @@ rm -f %{buildroot}/%{_libdir}/*.a
 
 
 %changelog
+* Tue Mar 11 2025 Jeff Olivier <jeffolivier@google.com> - 0:24.09-1
+- Upgrade to SPDK 24.09. Use source snapshot and deprecate separate dpdk RPM
+
 * Tue Apr 23 2024 Tomasz Gromadzki <tomasz.gromadzki@intel.com> - 0:22.01.2-6
 - Add rpc.py to spdk-tools package.
 
