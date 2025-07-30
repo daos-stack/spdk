@@ -10,8 +10,8 @@
 %bcond_with doc
 
 Name:     spdk
-Version:  22.01.2
-Release:  6%{?dist}
+Version:  24.09
+Release:  1%{?dist}
 Epoch:    0
 
 Summary:  Set of libraries and utilities for high performance user-mode storage
@@ -20,8 +20,8 @@ License:  BSD
 URL:      http://spdk.io
 Source:   https://github.com/%{name}/%{name}/archive/v%{version}.tar.gz
 
-Patch0:   0001-setup.sh-Speed-up-the-VMD-device-unbind-by-running-i.patch
-Patch1:   0002-configure-add-CONFIG_HAVE_ARC4RANDOM.patch
+Patch0:   0001-b0aba3fcd5aceceea530a702922153bc75664978.patch
+Patch1:   0002-445a4c808badbad3942696ecf16fa60e8129a747.patch
 
 %define package_version %{epoch}:%{version}-%{release}
 
@@ -164,14 +164,12 @@ export LDFLAGS="${LDFLAGS:-%{build_ldflags}}"
 %endif
             --disable-tests           \
             --disable-unit-tests      \
-            --disable-apps            \
             --without-vhost           \
             --without-crypto          \
-            --without-pmdk            \
             --without-rbd             \
             --without-iscsi-initiator \
-            --without-isal            \
             --without-vtune           \
+            --without-nvme-cuse       \
             --with-shared
 
 %make_build all
@@ -239,6 +237,9 @@ rm -f %{buildroot}/%{_libdir}/*.a
 
 
 %changelog
+* Wed Jul 30 2025 Tomasz Gromadzki <tomasz.gromadzki@intel.com> - 0:24.09.0-1
+- Update to SPDK 24.09
+
 * Tue Apr 23 2024 Tomasz Gromadzki <tomasz.gromadzki@intel.com> - 0:22.01.2-6
 - Add rpc.py to spdk-tools package.
 

@@ -23,7 +23,7 @@ Tested-by: SPDK CI Jenkins <sys_sgci@intel.com>
  1 file changed, 24 insertions(+), 5 deletions(-)
 
 diff --git a/scripts/setup.sh b/scripts/setup.sh
-index d0c09430a..a56c74dd6 100755
+index d0c09430a6f..a56c74dd686 100755
 --- a/scripts/setup.sh
 +++ b/scripts/setup.sh
 @@ -141,6 +141,10 @@ function linux_bind_driver() {
@@ -83,6 +83,3 @@ index d0c09430a..a56c74dd6 100755
  	fi
  
  	for bdf in "${!all_devices_d[@]}"; do
--- 
-2.31.1
-

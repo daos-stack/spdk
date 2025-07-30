@@ -37,7 +37,7 @@ Reviewed-by: Shuhei Matsumoto <smatsumoto@nvidia.com>
  4 files changed, 11 insertions(+), 4 deletions(-)
 
 diff --git a/CONFIG b/CONFIG
-index 5f552fe81..481643dcc 100644
+index 5f552fe81df..481643dcc3b 100644
 --- a/CONFIG
 +++ b/CONFIG
 @@ -195,3 +195,6 @@ CONFIG_USDT=n
@@ -48,7 +48,7 @@ index 5f552fe81..481643dcc 100644
 +# arc4random is available in stdlib.h
 +CONFIG_HAVE_ARC4RANDOM=n
 diff --git a/configure b/configure
-index a18f34a00..688d72bfb 100755
+index a18f34a004d..688d72bfbf6 100755
 --- a/configure
 +++ b/configure
 @@ -850,6 +850,11 @@ if [[ "${CONFIG[TSAN]}" = "y" ]]; then
@@ -64,7 +64,7 @@ index a18f34a00..688d72bfb 100755
  	# If OCF_PATH is a file, assume it is a library and use it to compile with
  	if [ -f ${CONFIG[OCF_PATH]} ]; then
 diff --git a/lib/iscsi/iscsi.c b/lib/iscsi/iscsi.c
-index 00b1d62e2..3c403b972 100644
+index 00b1d62e26b..3c403b972f3 100644
 --- a/lib/iscsi/iscsi.c
 +++ b/lib/iscsi/iscsi.c
 @@ -62,7 +62,6 @@
@@ -94,7 +94,7 @@ index 00b1d62e2..3c403b972 100644
  static void
  gen_random(uint8_t *buf, size_t len)
 diff --git a/scripts/check_format.sh b/scripts/check_format.sh
-index 1dbc25d20..e2e471315 100755
+index 1dbc25d205e..e2e47131537 100755
 --- a/scripts/check_format.sh
 +++ b/scripts/check_format.sh
 @@ -270,7 +270,7 @@ function check_posix_includes() {
@@ -106,6 +106,3 @@ index 1dbc25d20..e2e471315 100755
  	if [ -s scripts/posix.log ]; then
  		echo "POSIX includes detected. Please include spdk/stdinc.h instead."
  		cat scripts/posix.log
--- 
-2.31.1
-
